@@ -45,7 +45,7 @@ const scenarios = [
             temperature_f: 85,
             altitude_ft: 5280,
             humidity_pct: 25,
-            pressure_inhg: 29.5
+            pressure_inhg: 24.6  // Typical pressure at 5,280 ft altitude
         },
         standardClub: "6-Iron",
         targetCarry: 175
@@ -283,9 +283,12 @@ async function loadScenario(index) {
     const scenario = scenarios[index];
 
     // Update active state on sidebar
-    document.querySelectorAll('.scenario-card').forEach((card, i) => {
+    // Select only non-custom scenario cards (exclude the custom-card)
+    document.querySelectorAll('.scenario-card:not(.custom-card)').forEach((card, i) => {
         card.classList.toggle('active', i === index);
     });
+    // Ensure custom card is not active when a preset scenario is selected
+    document.querySelector('.custom-card')?.classList.remove('active');
 
     // Update header
     document.getElementById('scenario-title').textContent = scenario.title;
@@ -747,13 +750,19 @@ async function simulateCustom() {
         // Extract city name for display
         locationName = fetchedWeatherData.location.split(',')[0];
     } else {
+        const altitudeFt = parseFloat(document.getElementById('altitude').value);
+        // Estimate pressure at altitude using barometric formula
+        // P = P0 * exp(-altitude_m / 8500), where 8500m is scale height
+        const altitudeM = altitudeFt * 0.3048;
+        const pressureInhg = 29.92 * Math.exp(-altitudeM / 8500);
+
         conditions = {
             wind_speed_mph: parseFloat(document.getElementById('wind-speed').value),
             wind_direction_deg: parseFloat(document.getElementById('wind-direction').value),
             temperature_f: parseFloat(document.getElementById('temperature').value),
-            altitude_ft: parseFloat(document.getElementById('altitude').value),
+            altitude_ft: altitudeFt,
             humidity_pct: parseFloat(document.getElementById('humidity').value),
-            pressure_inhg: 29.92
+            pressure_inhg: pressureInhg
         };
     }
 

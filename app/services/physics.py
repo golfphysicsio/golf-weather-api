@@ -32,6 +32,26 @@ METERS_TO_YARDS = 1.09361
 GRAVITY = 9.81  # m/s²
 
 
+def estimate_pressure_at_altitude(altitude_ft: float, sea_level_pressure_inhg: float = 29.92) -> float:
+    """
+    Estimate atmospheric pressure at a given altitude using the barometric formula.
+
+    This is used for isolating altitude effects when we need to simulate what
+    pressure would be at a given altitude (rather than using observed pressure).
+
+    Args:
+        altitude_ft: Altitude in feet
+        sea_level_pressure_inhg: Sea level pressure in inches of mercury (default 29.92)
+
+    Returns:
+        Estimated pressure in inches of mercury at the given altitude
+    """
+    altitude_m = altitude_ft * FEET_TO_METERS
+    # Barometric formula: P = P0 * exp(-altitude / scale_height)
+    # Scale height ~8500m for Earth's atmosphere
+    return sea_level_pressure_inhg * math.exp(-altitude_m / 8500)
+
+
 def calculate_air_density(
     temperature_f: float,
     altitude_ft: float,
@@ -75,9 +95,16 @@ def calculate_air_density(
     # Air density from ideal gas law
     rho = (p_d / (R_d * temp_k)) + (e / (R_v * temp_k))
 
-    # Altitude adjustment (barometric formula approximation)
-    # Scale height of atmosphere is approximately 8500m
-    rho = rho * math.exp(-altitude_m / 8500)
+    # Note: We do NOT apply an additional altitude adjustment here.
+    # The input pressure (pressure_inhg) already reflects the actual atmospheric
+    # pressure at the user's location, which inherently accounts for altitude.
+    # Applying an exponential barometric correction would double-count altitude effects.
+    #
+    # At higher altitudes, the observed pressure is naturally lower, which reduces
+    # p_d in the calculation above, giving us the correct lower air density.
+    #
+    # For reference, at 5,280 ft (Denver), typical pressure is ~24.6 inHg vs 29.92 at sea level,
+    # which naturally produces ~6% lower air density - matching industry benchmarks.
 
     return rho
 
@@ -406,7 +433,9 @@ def calculate_impact_breakdown(shot: ShotData, conditions: WeatherConditions) ->
     temp_effect = temp_result["carry_yards"] - baseline_result["carry_yards"]
 
     # Isolate altitude effect only
-    alt_density = calculate_air_density(70, conditions.altitude_ft, 50, 29.92)
+    # Use estimated pressure at altitude to properly isolate the altitude effect
+    alt_pressure = estimate_pressure_at_altitude(conditions.altitude_ft)
+    alt_density = calculate_air_density(70, conditions.altitude_ft, 50, alt_pressure)
     alt_result = calculate_trajectory(
         ball_speed_mph=shot.ball_speed_mph,
         launch_angle_deg=shot.launch_angle_deg,
