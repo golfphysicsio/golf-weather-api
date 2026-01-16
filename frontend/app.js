@@ -309,10 +309,11 @@ function updateDisplay(data, scenario) {
     document.getElementById('std-club').textContent = standardClub;
 
     // Adjusted stats (with weather)
-    // The ball will carry a different distance due to weather
-    const adjustedCarry = effectiveDistance + weatherEffect;
-    document.getElementById('adj-carry').textContent = adjustedCarry;
-    document.getElementById('adj-total').textContent = adjustedCarry + 10;
+    // Show what happens when you hit the RECOMMENDED club in these conditions
+    // The adjusted club's stock distance + weather effect should land near the target
+    const adjustedClubCarryWithWeather = adjustedClubDistance + weatherEffect;
+    document.getElementById('adj-carry').textContent = adjustedClubCarryWithWeather;
+    document.getElementById('adj-total').textContent = adjustedClubCarryWithWeather + 10;
     document.getElementById('adj-apex').textContent = Math.round(adjusted.apex_height_yards);
     document.getElementById('adj-drift').textContent = Math.round(Math.abs(adjusted.lateral_drift_yards));
     document.getElementById('adj-flight').textContent = adjusted.flight_time_seconds.toFixed(1);
@@ -331,9 +332,10 @@ function updateDisplay(data, scenario) {
     const physicsExplanation = generatePhysicsExplanation(scenario, impact);
     document.getElementById('physics-text').innerHTML = physicsExplanation;
 
-    // Deltas (show weather effect)
-    updateDelta('delta-carry', weatherEffect);
-    updateDelta('delta-total', weatherEffect);
+    // Deltas (show difference from target - positive means overshoots, negative means short)
+    const carryDelta = adjustedClubCarryWithWeather - effectiveDistance;
+    updateDelta('delta-carry', carryDelta);
+    updateDelta('delta-total', carryDelta);
     updateDelta('delta-apex', adjusted.apex_height_yards - baseline.apex_height_yards);
     updateDelta('delta-drift', driftYards, true);
     updateDelta('delta-flight', adjusted.flight_time_seconds - baseline.flight_time_seconds);
