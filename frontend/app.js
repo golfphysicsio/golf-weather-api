@@ -273,7 +273,7 @@ function updateDisplay(data, scenario) {
     // Calculate recommended club and generate explanation
     const carryDiff = adjusted.carry_yards - baseline.carry_yards;
     const driftYards = adjusted.lateral_drift_yards;
-    const elevationFt = scenario.elevation_change_ft || 0;
+    // elevationFt already declared at top of function
     const recommendation = getClubRecommendation(scenario.standardClub, carryDiff, driftYards, scenario.targetCarry, elevationFt);
     document.getElementById('adj-club').textContent = recommendation.text;
 
