@@ -239,16 +239,18 @@ def calculate_trajectory(
         cd = calculate_drag_coefficient(spin_rate_rpm, v_rel)
         cl = calculate_lift_coefficient(spin_rate_rpm, v_rel)
 
-        # Drag force factor (0.5 * rho * A * Cd * v)
-        drag_factor = 0.5 * air_density * BALL_AREA_M2 * cd * v_rel
+        # Drag force magnitude: F_drag = 0.5 * rho * A * Cd * v^2
+        # Note: v^2 is critical for correct physics - wind effects scale quadratically
+        drag_force = 0.5 * air_density * BALL_AREA_M2 * cd * v_rel * v_rel
 
-        # Drag acceleration components (opposite to relative velocity)
-        ax_drag = -drag_factor * vx_rel / BALL_MASS_KG
-        ay_drag = -drag_factor * vy / BALL_MASS_KG
-        az_drag = -drag_factor * vz_rel / BALL_MASS_KG
+        # Drag acceleration components (opposite to relative velocity direction)
+        # a = F/m, and we need to multiply by unit vector (v_component / v_rel)
+        ax_drag = -drag_force * vx_rel / (BALL_MASS_KG * v_rel)
+        ay_drag = -drag_force * vy / (BALL_MASS_KG * v_rel)
+        az_drag = -drag_force * vz_rel / (BALL_MASS_KG * v_rel)
 
-        # Lift force factor
-        lift_factor = 0.5 * air_density * BALL_AREA_M2 * cl * v_rel
+        # Lift force magnitude: F_lift = 0.5 * rho * A * Cl * v^2
+        lift_force = 0.5 * air_density * BALL_AREA_M2 * cl * v_rel * v_rel
 
         # Spin axis determines lift direction
         # Pure backspin (axis_deg = 0) creates vertical lift
@@ -256,9 +258,9 @@ def calculate_trajectory(
         backspin_ratio = math.cos(spin_axis_rad)
         sidespin_ratio = math.sin(spin_axis_rad)
 
-        # Lift accelerations
-        ay_lift = lift_factor * backspin_ratio / BALL_MASS_KG
-        az_lift = lift_factor * sidespin_ratio / BALL_MASS_KG
+        # Lift accelerations (a = F/m)
+        ay_lift = lift_force * backspin_ratio / BALL_MASS_KG
+        az_lift = lift_force * sidespin_ratio / BALL_MASS_KG
 
         # Total acceleration
         ax = ax_drag

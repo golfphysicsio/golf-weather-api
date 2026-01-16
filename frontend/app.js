@@ -884,9 +884,11 @@ async function fetchWeatherByCurrentLocation() {
 
     navigator.geolocation.getCurrentPosition(
         async (position) => {
-            const { latitude, longitude } = position.coords;
+            const { latitude, longitude, accuracy } = position.coords;
 
-            showWeatherStatus('loading', 'Fetching weather data...');
+            // Log coordinates for debugging
+            console.log(`Geolocation: lat=${latitude}, lon=${longitude}, accuracy=${accuracy}m`);
+            showWeatherStatus('loading', `Found location (${latitude.toFixed(4)}, ${longitude.toFixed(4)}). Fetching weather...`);
 
             try {
                 // Try the dedicated coordinates endpoint first, fall back to city endpoint with lat,lon
