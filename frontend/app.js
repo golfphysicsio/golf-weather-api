@@ -171,21 +171,23 @@ const scenarios = [
 ];
 
 // Mid-handicapper stock distances (carry yards)
-// These are the baseline "no weather" distances for club selection
+// Matched exactly to scenario descriptions:
+// - 9-Iron = 140, 8-Iron = 150, 7-Iron = 165, 6-Iron = 175 (from scenarios)
+// - ~10-15 yard gaps between clubs
 const CLUB_DISTANCES = {
     'LW':     75,
     'SW':     90,
-    'GW':     105,
-    'PW':     120,
-    '9-Iron': 130,
-    '8-Iron': 140,
-    '7-Iron': 150,
-    '6-Iron': 160,
-    '5-Iron': 170,
-    '4-Iron': 180,
-    '5-Wood': 190,
-    '3-Wood': 210,
-    'Driver': 230
+    'GW':     107,   // Pebble Beach #7 is 107 yards
+    'PW':     125,
+    '9-Iron': 140,   // Scenario 3: 9-Iron = 140 yards
+    '8-Iron': 150,   // Scenario 2: 8-Iron = 150 yards
+    '7-Iron': 165,   // Scenario 0: 7-Iron = 165 yards
+    '6-Iron': 175,   // Scenario 1: 6-Iron = 175 yards
+    '5-Iron': 185,
+    '4-Iron': 195,
+    '5-Wood': 210,
+    '3-Wood': 230,
+    'Driver': 260
 };
 
 // Club data for API calls (ball speed calibrated to produce stock distances)
