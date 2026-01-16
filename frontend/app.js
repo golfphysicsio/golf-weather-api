@@ -33,7 +33,7 @@ const scenarios = [
         description: "Playing at 5,280 feet in the Colorado summer. The thin, warm air means your ball will fly much further than the yardage suggests - but how much further?",
         // Calibrated to produce ~175 yard baseline carry
         shot: {
-            ball_speed_mph: 168,
+            ball_speed_mph: 172,
             launch_angle_deg: 15,
             spin_rate_rpm: 5000,
             spin_axis_deg: 0,
@@ -56,7 +56,7 @@ const scenarios = [
         description: "An early morning tee time in 45°F weather. Cold air is dense air, and your ball won't fly as far. Plus the ball itself is colder and less responsive.",
         // Calibrated to produce ~150 yard baseline carry
         shot: {
-            ball_speed_mph: 148,
+            ball_speed_mph: 144,
             launch_angle_deg: 17,
             spin_rate_rpm: 6000,
             spin_axis_deg: 0,
@@ -79,7 +79,7 @@ const scenarios = [
         description: "A 15 mph left-to-right crosswind. The ball will drift sideways during flight. How much should you aim left to compensate?",
         // Calibrated to produce ~140 yard baseline carry
         shot: {
-            ball_speed_mph: 140,
+            ball_speed_mph: 133,
             launch_angle_deg: 18,
             spin_rate_rpm: 6500,
             spin_axis_deg: 0,
@@ -102,7 +102,7 @@ const scenarios = [
         description: "The famous downhill par 3 overlooking the Pacific Ocean. Coastal winds swirl around this exposed green, making club selection tricky even for the pros.",
         // Calibrated to produce ~107 yard baseline carry
         shot: {
-            ball_speed_mph: 112,
+            ball_speed_mph: 102,
             launch_angle_deg: 22,
             spin_rate_rpm: 8000,
             spin_axis_deg: 0,
@@ -125,7 +125,7 @@ const scenarios = [
         description: "The Old Course's famous par 3, with its hidden Strath bunker and swirling Scottish winds. Links golf at its finest - and most unpredictable.",
         // Calibrated to produce ~172 yard baseline carry
         shot: {
-            ball_speed_mph: 166,
+            ball_speed_mph: 170,
             launch_angle_deg: 15,
             spin_rate_rpm: 5200,
             spin_axis_deg: 0,
@@ -148,7 +148,7 @@ const scenarios = [
         description: "The most famous island green in golf. Wind swirls in the amphitheater setting, and there's no bailout. Miss the green and you're wet.",
         // Calibrated to produce ~137 yard baseline carry
         shot: {
-            ball_speed_mph: 137,
+            ball_speed_mph: 129,
             launch_angle_deg: 19,
             spin_rate_rpm: 6800,
             spin_axis_deg: 0,
