@@ -555,3 +555,228 @@ async def get_request_logs(
         )
         for row in rows
     ]
+
+
+# ============================================
+# SYSTEM HEALTH & MONITORING
+# ============================================
+
+@router.get("/system/stats")
+async def get_system_stats(admin_email: str = Depends(verify_google_token)):
+    """Get database and system statistics."""
+    pool = await get_admin_db_pool()
+    if not pool:
+        raise HTTPException(status_code=503, detail="Database not available")
+
+    async with pool.acquire() as conn:
+        # API Keys stats
+        api_keys_stats = await conn.fetchrow("""
+            SELECT
+                COUNT(*) as total_keys,
+                COUNT(*) FILTER (WHERE status = 'active') as active_keys,
+                COUNT(*) FILTER (WHERE status = 'disabled') as disabled_keys,
+                COUNT(*) FILTER (WHERE status = 'revoked') as revoked_keys,
+                SUM(total_requests) as total_requests_all_time
+            FROM admin_api_keys
+        """)
+
+        # Request logs stats (last 24h)
+        logs_stats = await conn.fetchrow("""
+            SELECT
+                COUNT(*) as requests_24h,
+                COUNT(*) FILTER (WHERE status_code >= 400) as errors_24h,
+                ROUND(AVG(latency_ms)::numeric, 2) as avg_latency_24h
+            FROM admin_request_logs
+            WHERE created_at > NOW() - INTERVAL '24 hours'
+        """)
+
+        # Request logs stats (last hour)
+        hourly_stats = await conn.fetchrow("""
+            SELECT
+                COUNT(*) as requests_1h,
+                COUNT(*) FILTER (WHERE status_code >= 400) as errors_1h
+            FROM admin_request_logs
+            WHERE created_at > NOW() - INTERVAL '1 hour'
+        """)
+
+        # Database size
+        db_size = await conn.fetchrow("""
+            SELECT pg_database_size(current_database()) as size_bytes
+        """)
+
+        # Table sizes
+        table_sizes = await conn.fetch("""
+            SELECT
+                relname as table_name,
+                pg_total_relation_size(relid) as size_bytes,
+                n_live_tup as row_count
+            FROM pg_stat_user_tables
+            ORDER BY pg_total_relation_size(relid) DESC
+        """)
+
+    # Calculate error rate
+    requests_1h = hourly_stats["requests_1h"] or 0
+    errors_1h = hourly_stats["errors_1h"] or 0
+    error_rate_1h = round((errors_1h / requests_1h * 100) if requests_1h > 0 else 0, 2)
+
+    return {
+        "api_keys": {
+            "total": api_keys_stats["total_keys"] or 0,
+            "active": api_keys_stats["active_keys"] or 0,
+            "disabled": api_keys_stats["disabled_keys"] or 0,
+            "revoked": api_keys_stats["revoked_keys"] or 0,
+            "total_requests_all_time": api_keys_stats["total_requests_all_time"] or 0
+        },
+        "requests": {
+            "last_24h": logs_stats["requests_24h"] or 0,
+            "errors_24h": logs_stats["errors_24h"] or 0,
+            "avg_latency_ms_24h": float(logs_stats["avg_latency_24h"] or 0),
+            "last_1h": requests_1h,
+            "errors_1h": errors_1h,
+            "error_rate_1h_percent": error_rate_1h
+        },
+        "database": {
+            "size_bytes": db_size["size_bytes"],
+            "size_mb": round(db_size["size_bytes"] / (1024 * 1024), 2),
+            "tables": [
+                {
+                    "name": t["table_name"],
+                    "size_bytes": t["size_bytes"],
+                    "size_mb": round(t["size_bytes"] / (1024 * 1024), 2),
+                    "rows": t["row_count"]
+                }
+                for t in table_sizes
+            ]
+        },
+        "alerts": {
+            "high_error_rate": error_rate_1h > 5,
+            "error_rate_threshold": 5
+        },
+        "timestamp": datetime.utcnow().isoformat() + "Z"
+    }
+
+
+@router.get("/system/error-rate")
+async def get_error_rate(
+    hours: int = Query(default=1, ge=1, le=24),
+    admin_email: str = Depends(verify_google_token)
+):
+    """Get error rate for the last N hours with breakdown by endpoint."""
+    pool = await get_admin_db_pool()
+    if not pool:
+        raise HTTPException(status_code=503, detail="Database not available")
+
+    async with pool.acquire() as conn:
+        # Overall stats
+        overall = await conn.fetchrow(f"""
+            SELECT
+                COUNT(*) as total_requests,
+                COUNT(*) FILTER (WHERE status_code >= 400) as error_requests,
+                COUNT(*) FILTER (WHERE status_code >= 500) as server_errors,
+                COUNT(*) FILTER (WHERE status_code >= 400 AND status_code < 500) as client_errors
+            FROM admin_request_logs
+            WHERE created_at > NOW() - INTERVAL '{hours} hours'
+        """)
+
+        # Breakdown by endpoint
+        by_endpoint = await conn.fetch(f"""
+            SELECT
+                endpoint,
+                COUNT(*) as total_requests,
+                COUNT(*) FILTER (WHERE status_code >= 400) as errors,
+                ROUND(AVG(latency_ms)::numeric, 2) as avg_latency
+            FROM admin_request_logs
+            WHERE created_at > NOW() - INTERVAL '{hours} hours'
+            GROUP BY endpoint
+            ORDER BY errors DESC
+            LIMIT 10
+        """)
+
+        # Recent errors
+        recent_errors = await conn.fetch(f"""
+            SELECT endpoint, status_code, error_message, created_at
+            FROM admin_request_logs
+            WHERE created_at > NOW() - INTERVAL '{hours} hours'
+            AND status_code >= 400
+            ORDER BY created_at DESC
+            LIMIT 20
+        """)
+
+    total = overall["total_requests"] or 0
+    errors = overall["error_requests"] or 0
+    error_rate = round((errors / total * 100) if total > 0 else 0, 2)
+
+    return {
+        "period_hours": hours,
+        "total_requests": total,
+        "error_requests": errors,
+        "server_errors": overall["server_errors"] or 0,
+        "client_errors": overall["client_errors"] or 0,
+        "error_rate_percent": error_rate,
+        "is_critical": error_rate > 5,
+        "by_endpoint": [
+            {
+                "endpoint": e["endpoint"],
+                "total": e["total_requests"],
+                "errors": e["errors"],
+                "error_rate": round((e["errors"] / e["total_requests"] * 100) if e["total_requests"] > 0 else 0, 2),
+                "avg_latency_ms": float(e["avg_latency"] or 0)
+            }
+            for e in by_endpoint
+        ],
+        "recent_errors": [
+            {
+                "endpoint": e["endpoint"],
+                "status_code": e["status_code"],
+                "message": e["error_message"],
+                "timestamp": e["created_at"].isoformat() if e["created_at"] else None
+            }
+            for e in recent_errors
+        ],
+        "timestamp": datetime.utcnow().isoformat() + "Z"
+    }
+
+
+@router.post("/system/cleanup")
+async def trigger_cleanup(admin_email: str = Depends(verify_google_token)):
+    """Manually trigger cleanup of old request logs."""
+    pool = await get_admin_db_pool()
+    if not pool:
+        raise HTTPException(status_code=503, detail="Database not available")
+
+    async with pool.acquire() as conn:
+        deleted = await conn.fetchval("SELECT cleanup_old_request_logs()")
+
+    return {
+        "status": "success",
+        "deleted_rows": deleted or 0,
+        "timestamp": datetime.utcnow().isoformat() + "Z"
+    }
+
+
+@router.post("/system/aggregate-usage")
+async def trigger_usage_aggregation(
+    date: Optional[str] = Query(default=None, description="Date to aggregate (YYYY-MM-DD), defaults to today"),
+    admin_email: str = Depends(verify_google_token)
+):
+    """Manually trigger daily usage aggregation."""
+    pool = await get_admin_db_pool()
+    if not pool:
+        raise HTTPException(status_code=503, detail="Database not available")
+
+    try:
+        if date:
+            target_date = datetime.strptime(date, "%Y-%m-%d").date()
+        else:
+            target_date = datetime.utcnow().date()
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid date format. Use YYYY-MM-DD")
+
+    async with pool.acquire() as conn:
+        await conn.execute("SELECT aggregate_daily_usage($1)", target_date)
+
+    return {
+        "status": "success",
+        "aggregated_date": target_date.isoformat(),
+        "timestamp": datetime.utcnow().isoformat() + "Z"
+    }

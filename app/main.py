@@ -23,6 +23,7 @@ from app.redis_client import init_redis, close_redis
 from app.routers import trajectory, conditions, health, admin, admin_dashboard
 from app.middleware.authentication import AuthMiddleware
 from app.middleware.rate_limiting import RateLimitMiddleware
+from app.middleware.security import SecurityHeadersMiddleware
 from app.middleware.errors import setup_exception_handlers
 from app.middleware.logging_config import setup_logging, logger
 
@@ -97,9 +98,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Custom middleware (order matters: auth runs first, then rate limiting)
+# Custom middleware (order matters: security headers, then auth, then rate limiting)
 app.add_middleware(RateLimitMiddleware)
 app.add_middleware(AuthMiddleware)
+app.add_middleware(SecurityHeadersMiddleware)
 
 # Setup error handlers
 setup_exception_handlers(app)
@@ -233,3 +235,18 @@ if ADMIN_DASHBOARD_PATH.exists():
         if index_file.exists():
             return FileResponse(index_file)
         return {"error": "Admin dashboard not found"}
+
+
+# ==================== CLIENT DOCUMENTATION ====================
+# Serve the client API documentation at /docs/client
+
+CLIENT_DOCS_PATH = Path(__file__).parent.parent / "static" / "docs"
+
+if CLIENT_DOCS_PATH.exists():
+    @app.get("/docs/client", include_in_schema=False)
+    async def serve_client_docs():
+        """Serve client-facing API documentation."""
+        docs_file = CLIENT_DOCS_PATH / "client.html"
+        if docs_file.exists():
+            return FileResponse(docs_file, media_type="text/html")
+        return {"error": "Documentation not found"}
