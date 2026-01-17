@@ -7,6 +7,10 @@ Loads settings from environment variables with sensible defaults.
 from pydantic_settings import BaseSettings
 from typing import List, Dict
 import os
+from dotenv import load_dotenv
+
+# Load .env file into os.environ BEFORE creating settings
+load_dotenv()
 
 
 class Settings(BaseSettings):

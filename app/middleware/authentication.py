@@ -9,13 +9,15 @@ from starlette.middleware.base import BaseHTTPMiddleware
 import hashlib
 from app.config import settings
 
-# Paths that don't require authentication
+# Paths that don't require X-API-Key authentication
+# (admin routes have their own X-Admin-Key authentication)
 PUBLIC_PATHS = [
     "/",
     "/docs",
     "/redoc",
     "/openapi.json",
     "/api/v1/health",
+    "/api/v1/admin",
 ]
 
 
