@@ -122,6 +122,7 @@ async def add_request_context(request: Request, call_next):
     # Log request
     latency_ms = (time.time() - start_time) * 1000
     client_id = getattr(request.state, "client_id", "anonymous")
+    api_key_id = getattr(request.state, "api_key_id", None)
 
     logger.info(
         "Request completed",
@@ -132,6 +133,38 @@ async def add_request_context(request: Request, call_next):
         latency_ms=round(latency_ms, 2),
         client=client_id,
     )
+
+    # Log to database for API requests (skip admin, health, static files)
+    path = request.url.path
+    if (api_key_id or client_id != "anonymous") and not path.startswith(("/admin", "/docs", "/redoc", "/openapi")):
+        try:
+            from app.routers.admin_dashboard import get_admin_db_pool
+            pool = await get_admin_db_pool()
+            if pool:
+                # Get client IP
+                client_ip = request.client.host if request.client else None
+                forwarded = request.headers.get("x-forwarded-for")
+                if forwarded:
+                    client_ip = forwarded.split(",")[0].strip()
+
+                async with pool.acquire() as conn:
+                    await conn.execute(
+                        """
+                        INSERT INTO admin_request_logs
+                        (api_key_id, client_name, endpoint, method, status_code, latency_ms, request_ip, user_agent)
+                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+                        """,
+                        api_key_id,
+                        client_id if client_id != "anonymous" else None,
+                        path,
+                        request.method,
+                        response.status_code,
+                        round(latency_ms, 2),
+                        client_ip,
+                        request.headers.get("user-agent", "")[:500]
+                    )
+        except Exception as e:
+            logger.warning("Failed to log request to database", error=str(e))
 
     return response
 
