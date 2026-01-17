@@ -1,4 +1,4 @@
-# Core
+# Core - updated 2026-01-17 to invalidate Docker cache
 fastapi>=0.109.0
 uvicorn[standard]>=0.27.0
 pydantic>=2.5.0
