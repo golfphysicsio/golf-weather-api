@@ -1,0 +1,36 @@
+{
+  "title": "System Health",
+  "status": {
+    "healthy": "Healthy",
+    "degraded": "Degraded",
+    "down": "Down"
+  },
+  "metrics": {
+    "api_status": "API Status",
+    "database": "Database",
+    "cache": "Cache",
+    "error_rate": "Error Rate",
+    "avg_latency": "Avg. Latency",
+    "uptime": "Uptime"
+  },
+  "database": {
+    "title": "Database Statistics",
+    "size": "Database Size",
+    "connections": "Active Connections",
+    "tables": "Tables"
+  },
+  "actions": {
+    "cleanup": "Cleanup Old Logs",
+    "aggregate": "Aggregate Daily Usage",
+    "refresh": "Refresh Stats"
+  },
+  "recent_errors": {
+    "title": "Recent Errors",
+    "no_errors": "No recent errors"
+  },
+  "maintenance": {
+    "title": "Maintenance",
+    "last_backup": "Last Backup",
+    "last_cleanup": "Last Cleanup"
+  }
+}

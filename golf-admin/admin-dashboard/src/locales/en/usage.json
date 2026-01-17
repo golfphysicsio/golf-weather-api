@@ -1,0 +1,32 @@
+{
+  "title": "Usage Statistics",
+  "period": {
+    "label": "Time Period",
+    "7_days": "Last 7 days",
+    "30_days": "Last 30 days",
+    "60_days": "Last 60 days",
+    "90_days": "Last 90 days"
+  },
+  "stats": {
+    "total_requests": "Total Requests",
+    "unique_clients": "Unique Clients",
+    "avg_daily": "Avg. Daily Requests",
+    "peak_hour": "Peak Hour"
+  },
+  "charts": {
+    "daily_requests": "Daily Requests",
+    "by_client": "Usage by Client",
+    "by_endpoint": "Usage by Endpoint"
+  },
+  "table": {
+    "date": "Date",
+    "client": "Client",
+    "requests": "Requests",
+    "errors": "Errors",
+    "avg_latency": "Avg. Latency"
+  },
+  "export": {
+    "csv": "Export CSV",
+    "json": "Export JSON"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "title": "API Keys",
+  "create_new": "Create New Key",
+  "table": {
+    "client_name": "Client Name",
+    "key_prefix": "Key Prefix",
+    "tier": "Tier",
+    "status": "Status",
+    "created": "Created",
+    "last_used": "Last Used",
+    "requests_today": "Today",
+    "total_requests": "Total",
+    "actions": "Actions"
+  },
+  "tiers": {
+    "free": "Free",
+    "standard": "Standard",
+    "enterprise": "Enterprise"
+  },
+  "form": {
+    "client_name": "Client Name",
+    "client_name_placeholder": "Enter client or company name",
+    "tier": "Tier",
+    "notes": "Notes",
+    "notes_placeholder": "Optional notes about this client"
+  },
+  "actions": {
+    "copy_key": "Copy Key",
+    "disable": "Disable",
+    "enable": "Enable",
+    "revoke": "Revoke",
+    "edit": "Edit"
+  },
+  "messages": {
+    "key_created": "API key created successfully",
+    "key_copied": "API key copied to clipboard",
+    "key_disabled": "API key disabled",
+    "key_enabled": "API key enabled",
+    "key_revoked": "API key revoked",
+    "copy_warning": "Make sure to copy your API key now. You won't be able to see it again!"
+  },
+  "confirm": {
+    "revoke": "Are you sure you want to revoke this API key? This action cannot be undone.",
+    "disable": "Are you sure you want to disable this API key?"
+  }
+}

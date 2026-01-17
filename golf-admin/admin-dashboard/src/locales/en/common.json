@@ -1,0 +1,77 @@
+{
+  "app_name": "Golf Physics Admin",
+  "navigation": {
+    "dashboard": "Dashboard",
+    "api_keys": "API Keys",
+    "usage": "Usage",
+    "logs": "Logs",
+    "system": "System",
+    "playground": "API Test"
+  },
+  "actions": {
+    "create": "Create",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "refresh": "Refresh",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "logout": "Logout",
+    "login": "Login",
+    "send": "Send",
+    "close": "Close",
+    "view": "View",
+    "download": "Download"
+  },
+  "units": {
+    "toggle": "Toggle Units",
+    "imperial": "Imperial",
+    "metric": "Metric",
+    "imperial_label": "°F / yds",
+    "metric_label": "°C / m"
+  },
+  "time": {
+    "just_now": "Just now",
+    "seconds_ago": "{{count}} second ago",
+    "seconds_ago_plural": "{{count}} seconds ago",
+    "minutes_ago": "{{count}} minute ago",
+    "minutes_ago_plural": "{{count}} minutes ago",
+    "hours_ago": "{{count}} hour ago",
+    "hours_ago_plural": "{{count}} hours ago",
+    "days_ago": "{{count}} day ago",
+    "days_ago_plural": "{{count}} days ago"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "disabled": "Disabled",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "pending": "Pending"
+  },
+  "errors": {
+    "generic": "An error occurred",
+    "network": "Network error. Please try again.",
+    "unauthorized": "Unauthorized. Please log in again.",
+    "not_found": "Not found",
+    "rate_limited": "Too many requests. Please wait."
+  },
+  "language": {
+    "en": "English",
+    "ja": "Japanese",
+    "ko": "Korean",
+    "de": "German",
+    "es": "Spanish",
+    "select": "Select Language"
+  },
+  "auth": {
+    "signing_in": "Signing in...",
+    "login_failed": "Login failed",
+    "restricted": "Restricted to authorized administrators only"
+  }
+}

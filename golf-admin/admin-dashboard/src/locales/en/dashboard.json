@@ -1,0 +1,22 @@
+{
+  "title": "Dashboard",
+  "welcome": "Welcome to Golf Physics Admin",
+  "overview": "Overview",
+  "stats": {
+    "total_requests": "Total Requests",
+    "active_keys": "Active API Keys",
+    "requests_today": "Requests Today",
+    "error_rate": "Error Rate"
+  },
+  "charts": {
+    "requests_over_time": "Requests Over Time",
+    "requests_by_endpoint": "Requests by Endpoint",
+    "top_clients": "Top Clients"
+  },
+  "quick_actions": {
+    "title": "Quick Actions",
+    "create_key": "Create API Key",
+    "view_logs": "View Logs",
+    "check_health": "Check System Health"
+  }
+}

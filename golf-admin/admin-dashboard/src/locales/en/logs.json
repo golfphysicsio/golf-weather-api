@@ -1,0 +1,26 @@
+{
+  "title": "Request Logs",
+  "filter": {
+    "all": "All",
+    "success": "Success (2xx)",
+    "client_error": "Client Error (4xx)",
+    "server_error": "Server Error (5xx)"
+  },
+  "table": {
+    "timestamp": "Timestamp",
+    "method": "Method",
+    "endpoint": "Endpoint",
+    "status": "Status",
+    "client": "Client",
+    "latency": "Latency",
+    "ip": "IP Address"
+  },
+  "details": {
+    "title": "Request Details",
+    "request_id": "Request ID",
+    "headers": "Headers",
+    "request_body": "Request Body",
+    "response": "Response"
+  },
+  "no_logs": "No logs found for the selected filters"
+}

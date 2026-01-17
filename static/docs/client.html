@@ -45,6 +45,7 @@
             <div class="flex space-x-8 overflow-x-auto">
                 <a href="#quickstart" class="py-4 border-b-2 border-transparent hover:border-green-500 text-gray-600 hover:text-gray-900">Quick Start</a>
                 <a href="#authentication" class="py-4 border-b-2 border-transparent hover:border-green-500 text-gray-600 hover:text-gray-900">Authentication</a>
+                <a href="#units" class="py-4 border-b-2 border-transparent hover:border-green-500 text-gray-600 hover:text-gray-900">Units</a>
                 <a href="#endpoints" class="py-4 border-b-2 border-transparent hover:border-green-500 text-gray-600 hover:text-gray-900">Endpoints</a>
                 <a href="#examples" class="py-4 border-b-2 border-transparent hover:border-green-500 text-gray-600 hover:text-gray-900">Examples</a>
                 <a href="#errors" class="py-4 border-b-2 border-transparent hover:border-green-500 text-gray-600 hover:text-gray-900">Errors</a>
@@ -156,6 +157,136 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+        </section>
+
+        <!-- Units -->
+        <section id="units" class="mb-16">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Units (Imperial & Metric)</h2>
+
+            <div class="bg-white rounded-xl shadow-sm p-8 mb-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">Global Support</span>
+                </div>
+                <p class="text-gray-600 mb-6">
+                    All API responses include <strong>both imperial and metric units</strong>, allowing you to display
+                    values in your users' preferred unit system without additional API calls.
+                </p>
+
+                <h3 class="text-lg font-semibold mb-3">The <code>units</code> Parameter</h3>
+                <p class="text-gray-600 mb-4">
+                    All endpoints accept an optional <code class="bg-gray-100 px-2 py-1 rounded">units</code> query parameter:
+                </p>
+                <table class="w-full text-left text-sm mb-6">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-2">Value</th>
+                            <th class="px-4 py-2">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y">
+                        <tr>
+                            <td class="px-4 py-2 font-mono">imperial</td>
+                            <td class="px-4 py-2">Default. Indicates preference for Fahrenheit, yards, mph</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-2 font-mono">metric</td>
+                            <td class="px-4 py-2">Indicates preference for Celsius, meters, km/h</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="bg-blue-50 rounded-lg p-4 mb-6">
+                    <p class="text-blue-800 text-sm">
+                        <strong>Note:</strong> The <code>units</code> parameter sets <code>units_preference</code> in the response,
+                        but all responses include both unit systems regardless of this parameter.
+                    </p>
+                </div>
+
+                <h3 class="text-lg font-semibold mb-3">Dual-Unit Response Format</h3>
+                <p class="text-gray-600 mb-4">
+                    Measurements are returned as objects containing both units:
+                </p>
+                <div class="code-block mb-6">
+<pre>{
+  <span class="string">"adjusted"</span>: {
+    <span class="string">"carry"</span>: {
+      <span class="string">"yards"</span>: <span class="number">220.9</span>,
+      <span class="string">"meters"</span>: <span class="number">202.0</span>
+    },
+    <span class="string">"total"</span>: {
+      <span class="string">"yards"</span>: <span class="number">249.6</span>,
+      <span class="string">"meters"</span>: <span class="number">228.3</span>
+    }
+  },
+  <span class="string">"conditions_used"</span>: {
+    <span class="string">"temperature"</span>: {
+      <span class="string">"fahrenheit"</span>: <span class="number">72</span>,
+      <span class="string">"celsius"</span>: <span class="number">22.2</span>
+    },
+    <span class="string">"wind_speed"</span>: {
+      <span class="string">"mph"</span>: <span class="number">10</span>,
+      <span class="string">"kmh"</span>: <span class="number">16.1</span>
+    },
+    <span class="string">"altitude"</span>: {
+      <span class="string">"feet"</span>: <span class="number">500</span>,
+      <span class="string">"meters"</span>: <span class="number">152</span>
+    }
+  },
+  <span class="string">"units_preference"</span>: <span class="string">"imperial"</span>
+}</pre>
+                </div>
+
+                <h3 class="text-lg font-semibold mb-3">Supported Unit Conversions</h3>
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-2">Measurement</th>
+                            <th class="px-4 py-2">Imperial</th>
+                            <th class="px-4 py-2">Metric</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y">
+                        <tr>
+                            <td class="px-4 py-2">Temperature</td>
+                            <td class="px-4 py-2">Fahrenheit (°F)</td>
+                            <td class="px-4 py-2">Celsius (°C)</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-2">Distance</td>
+                            <td class="px-4 py-2">Yards</td>
+                            <td class="px-4 py-2">Meters</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-2">Speed</td>
+                            <td class="px-4 py-2">Miles per hour (mph)</td>
+                            <td class="px-4 py-2">Kilometers per hour (km/h)</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-2">Altitude</td>
+                            <td class="px-4 py-2">Feet</td>
+                            <td class="px-4 py-2">Meters</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-2">Pressure</td>
+                            <td class="px-4 py-2">Inches of mercury (inHg)</td>
+                            <td class="px-4 py-2">Hectopascals (hPa)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-8">
+                <h3 class="text-lg font-semibold mb-3">Example: Using Metric Units</h3>
+                <div class="code-block">
+<pre>curl -X POST "https://api.golfphysics.io/api/v1/trajectory?units=metric" \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -d '{ ... }'</pre>
+                </div>
+                <p class="text-gray-600 mt-4">
+                    The response will have <code>"units_preference": "metric"</code> and include both unit systems in all measurements.
+                </p>
             </div>
         </section>
 
@@ -517,6 +648,25 @@ console.log(`Adjusted carry: ${result.adjusted.carry_yards} yards`);</pre>
                         which is sufficient for development and testing.
                     </p>
                 </details>
+
+                <details class="bg-white rounded-xl shadow-sm p-6">
+                    <summary class="font-semibold cursor-pointer">Do you support metric units?</summary>
+                    <p class="mt-4 text-gray-600">
+                        Yes! All API responses include <strong>both imperial and metric units</strong> in every response.
+                        You can use the <code>units=metric</code> query parameter to indicate your preference, but the
+                        response will always contain both unit systems. This allows you to display values in your users'
+                        preferred units without additional API calls.
+                    </p>
+                </details>
+
+                <details class="bg-white rounded-xl shadow-sm p-6">
+                    <summary class="font-semibold cursor-pointer">How do I display distances in meters?</summary>
+                    <p class="mt-4 text-gray-600">
+                        All distance measurements are returned as objects with both units:
+                        <code class="block bg-gray-100 p-2 rounded mt-2 text-sm">{"yards": 220.9, "meters": 202.0}</code>
+                        Simply access the <code>meters</code> property to display metric values. No conversion needed!
+                    </p>
+                </details>
             </div>
         </section>
 
@@ -534,7 +684,7 @@ console.log(`Adjusted carry: ${result.adjusted.carry_yards} yards`);</pre>
     <footer class="bg-gray-900 text-gray-400 py-8 mt-16">
         <div class="max-w-6xl mx-auto px-6 text-center">
             <p>Golf Physics API - Professional Golf Ball Flight Calculations</p>
-            <p class="mt-2 text-sm">Version 1.0.6</p>
+            <p class="mt-2 text-sm">Version 1.1.0 - Now with Global Units Support</p>
         </div>
     </footer>
 

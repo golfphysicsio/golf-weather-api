@@ -3,6 +3,54 @@ from typing import List, Optional
 from datetime import datetime
 
 
+# ============================================================================
+# DUAL-UNIT VALUE MODELS
+# These models contain both imperial and metric values
+# ============================================================================
+
+
+class DualTemperature(BaseModel):
+    """Temperature in both Fahrenheit and Celsius."""
+    fahrenheit: float
+    celsius: float
+
+
+class DualDistance(BaseModel):
+    """Distance in both yards and meters."""
+    yards: float
+    meters: float
+
+
+class DualAltitude(BaseModel):
+    """Altitude in both feet and meters."""
+    feet: float
+    meters: float
+
+
+class DualSpeed(BaseModel):
+    """Speed in both mph and km/h."""
+    mph: float
+    kmh: float
+
+
+class DualPressure(BaseModel):
+    """Pressure in both inHg and hPa."""
+    inhg: float
+    hpa: float
+
+
+class DualTrajectoryPoint(BaseModel):
+    """Trajectory point with dual-unit coordinates."""
+    x: DualDistance  # Distance downrange
+    y: DualDistance  # Height
+    z: DualDistance  # Lateral position (positive = right)
+
+
+# ============================================================================
+# LEGACY SINGLE-UNIT MODELS (kept for backward compatibility)
+# ============================================================================
+
+
 class TrajectoryPoint(BaseModel):
     x: float  # Distance downrange (yards)
     y: float  # Height (yards)
@@ -58,6 +106,80 @@ class ConditionsResponse(BaseModel):
     pressure_inhg: float
     conditions_text: str
     fetched_at: datetime
+
+
+# ============================================================================
+# DUAL-UNIT RESPONSE MODELS
+# These contain both imperial and metric values in every response
+# ============================================================================
+
+
+class DualAdjustedResults(BaseModel):
+    """Trajectory results with both imperial and metric units."""
+    carry: DualDistance
+    total: DualDistance
+    lateral_drift: DualDistance
+    apex_height: DualDistance
+    flight_time_seconds: float
+    landing_angle_deg: float
+
+
+class DualImpactBreakdown(BaseModel):
+    """Impact breakdown with both imperial and metric units."""
+    wind_effect: DualDistance
+    wind_lateral: DualDistance
+    temperature_effect: DualDistance
+    altitude_effect: DualDistance
+    humidity_effect: DualDistance
+    total_adjustment: DualDistance
+
+
+class DualConditionsUsed(BaseModel):
+    """Conditions with both imperial and metric units."""
+    location: Optional[str] = None
+    wind_speed: DualSpeed
+    wind_direction_deg: float
+    temperature: DualTemperature
+    altitude: DualAltitude
+    humidity_pct: float
+    pressure: DualPressure
+    conditions_text: Optional[str] = None
+    fetched_at: Optional[datetime] = None
+
+
+class DualTrajectoryResponse(BaseModel):
+    """
+    Full trajectory response with both imperial and metric units.
+
+    This response format returns all measurements in both unit systems,
+    allowing clients to display values in their preferred units without
+    additional API calls.
+    """
+    adjusted: DualAdjustedResults
+    baseline: DualAdjustedResults
+    impact_breakdown: DualImpactBreakdown
+    equivalent_calm_distance: DualDistance
+    trajectory_points: List[DualTrajectoryPoint]
+    conditions_used: Optional[DualConditionsUsed] = None
+    units_preference: str = "imperial"  # Indicates client's stated preference
+
+
+class DualConditionsResponse(BaseModel):
+    """
+    Conditions response with both imperial and metric units.
+
+    Returns weather conditions in both unit systems.
+    """
+    location: str
+    wind_speed: DualSpeed
+    wind_direction_deg: float
+    temperature: DualTemperature
+    altitude: DualAltitude
+    humidity_pct: float
+    pressure: DualPressure
+    conditions_text: str
+    fetched_at: datetime
+    units_preference: str = "imperial"  # Indicates client's stated preference
 
 
 class HealthResponse(BaseModel):
