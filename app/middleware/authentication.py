@@ -10,7 +10,7 @@ import hashlib
 from app.config import settings
 
 # Paths that don't require X-API-Key authentication
-# (admin routes have their own X-Admin-Key authentication)
+# (admin routes have their own authentication)
 PUBLIC_PATHS = [
     "/",
     "/docs",
@@ -18,6 +18,8 @@ PUBLIC_PATHS = [
     "/openapi.json",
     "/api/v1/health",
     "/api/v1/admin",
+    "/admin-api",    # Admin dashboard API (uses Google OAuth)
+    "/admin-ui",     # Admin dashboard static files
 ]
 
 

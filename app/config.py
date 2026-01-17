@@ -49,6 +49,10 @@ class Settings(BaseSettings):
     # Logging
     LOG_LEVEL: str = "INFO"
 
+    # Admin Dashboard (Google OAuth)
+    GOOGLE_CLIENT_ID: str = ""
+    ADMIN_EMAIL: str = "golfphysicsio@gmail.com"
+
     @property
     def cors_origins_list(self) -> List[str]:
         """Parse CORS_ORIGINS as comma-separated list."""
