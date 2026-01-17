@@ -10,9 +10,9 @@ const scenarios = [
         description: "Your standard 7-iron flies 165 yards in calm conditions. But what happens when you're facing a 20 mph headwind at sea level? The ball fights through dense air and loses significant distance.",
         // Calibrated to produce ~165 yard baseline carry
         shot: {
-            ball_speed_mph: 160,
+            ball_speed_mph: 110,
             launch_angle_deg: 16,
-            spin_rate_rpm: 5500,
+            spin_rate_rpm: 6000,
             spin_axis_deg: 0,
             direction_deg: 0
         },
@@ -30,18 +30,18 @@ const scenarios = [
     {
         id: 1,
         title: "6-Iron • 175 Yards • Denver Summer",
-        description: "Playing at 5,280 feet in the Colorado summer. The thin, warm air means your ball will fly much further than the yardage suggests - but how much further?",
+        description: "Playing at 5,280 feet in the Colorado summer. The thin, warm air means your ball will fly further than the yardage suggests - but how much further?",
         // Calibrated to produce ~175 yard baseline carry
         shot: {
-            ball_speed_mph: 172,
-            launch_angle_deg: 15,
-            spin_rate_rpm: 5000,
+            ball_speed_mph: 114,
+            launch_angle_deg: 16,
+            spin_rate_rpm: 6000,
             spin_axis_deg: 0,
             direction_deg: 0
         },
         conditions: {
-            wind_speed_mph: 5,
-            wind_direction_deg: 180,  // Slight tailwind
+            wind_speed_mph: 0,
+            wind_direction_deg: 0,
             temperature_f: 85,
             altitude_ft: 5280,
             humidity_pct: 25,
@@ -56,8 +56,8 @@ const scenarios = [
         description: "An early morning tee time in 45°F weather. Cold air is dense air, and your ball won't fly as far. Plus the ball itself is colder and less responsive.",
         // Calibrated to produce ~150 yard baseline carry
         shot: {
-            ball_speed_mph: 144,
-            launch_angle_deg: 17,
+            ball_speed_mph: 104,
+            launch_angle_deg: 16,
             spin_rate_rpm: 6000,
             spin_axis_deg: 0,
             direction_deg: 0
@@ -79,9 +79,9 @@ const scenarios = [
         description: "A 15 mph left-to-right crosswind. The ball will drift sideways during flight. How much should you aim left to compensate?",
         // Calibrated to produce ~140 yard baseline carry
         shot: {
-            ball_speed_mph: 133,
-            launch_angle_deg: 18,
-            spin_rate_rpm: 6500,
+            ball_speed_mph: 100,
+            launch_angle_deg: 16,
+            spin_rate_rpm: 6000,
             spin_axis_deg: 0,
             direction_deg: 0
         },
@@ -102,7 +102,7 @@ const scenarios = [
         description: "The famous downhill par 3 overlooking the Pacific Ocean. With a dramatic 50-foot drop from tee to green, the ball stays airborne longer. Coastal winds swirl around this exposed green, making club selection tricky even for the pros.",
         // Calibrated to produce ~107 yard baseline carry (but plays ~90 with elevation)
         shot: {
-            ball_speed_mph: 102,
+            ball_speed_mph: 79,
             launch_angle_deg: 22,
             spin_rate_rpm: 8000,
             spin_axis_deg: 0,
@@ -126,9 +126,9 @@ const scenarios = [
         description: "The Old Course's famous par 3, with its hidden Strath bunker and swirling Scottish winds. The hole plays slightly uphill (~8 feet), requiring extra club in the already challenging Scottish conditions.",
         // Calibrated to produce ~172 yard baseline carry (plays ~175 with elevation)
         shot: {
-            ball_speed_mph: 170,
-            launch_angle_deg: 15,
-            spin_rate_rpm: 5200,
+            ball_speed_mph: 113,
+            launch_angle_deg: 16,
+            spin_rate_rpm: 6000,
             spin_axis_deg: 0,
             direction_deg: 0
         },
@@ -150,9 +150,9 @@ const scenarios = [
         description: "The most famous island green in golf. The hole is essentially flat (no elevation change), but wind swirls unpredictably in the amphitheater setting. There's no bailout - miss the green and you're wet.",
         // Calibrated to produce ~137 yard baseline carry
         shot: {
-            ball_speed_mph: 129,
-            launch_angle_deg: 19,
-            spin_rate_rpm: 6800,
+            ball_speed_mph: 99,
+            launch_angle_deg: 16,
+            spin_rate_rpm: 6000,
             spin_axis_deg: 0,
             direction_deg: 0
         },

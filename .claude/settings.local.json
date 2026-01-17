@@ -6,7 +6,11 @@
       "Bash(git commit:*)",
       "Bash(git push)",
       "Bash(python:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(pip install:*)",
+      "Bash(chcp 6500)",
+      "Bash(git ls-tree:*)",
+      "Bash(npx vercel:*)"
     ]
   }
 }
