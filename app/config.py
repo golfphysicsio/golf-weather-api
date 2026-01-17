@@ -5,7 +5,8 @@ Loads settings from environment variables with sensible defaults.
 """
 
 from pydantic_settings import BaseSettings
-from typing import List, Dict
+from pydantic import field_validator
+from typing import List, Dict, Any
 import os
 from dotenv import load_dotenv
 
@@ -35,12 +36,8 @@ class Settings(BaseSettings):
     RATE_LIMIT_PER_MINUTE: int = 1000
     RATE_LIMIT_BURST: int = 100
 
-    # CORS
-    CORS_ORIGINS: List[str] = [
-        "https://app.inrangegolf.com",
-        "https://admin.inrangegolf.com",
-        "http://localhost:3000",
-    ]
+    # CORS - stored as string, parsed by validator
+    CORS_ORIGINS: str = "https://app.inrangegolf.com,https://admin.inrangegolf.com,http://localhost:3000"
 
     # Weather API
     WEATHER_API_KEY: str = ""
@@ -51,6 +48,13 @@ class Settings(BaseSettings):
 
     # Logging
     LOG_LEVEL: str = "INFO"
+
+    @property
+    def cors_origins_list(self) -> List[str]:
+        """Parse CORS_ORIGINS as comma-separated list."""
+        if not self.CORS_ORIGINS:
+            return []
+        return [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
 
     class Config:
         env_file = ".env"
