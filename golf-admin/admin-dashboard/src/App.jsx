@@ -14,6 +14,7 @@ import LanguageSelector from './components/LanguageSelector'
 import { UnitProvider } from './contexts/UnitContext'
 
 // Use current origin so it works on staging, production, and localhost
+// Build timestamp: 2026-01-18-v2
 const API_BASE = import.meta.env.VITE_API_BASE_URL || window.location.origin
 
 function App() {
