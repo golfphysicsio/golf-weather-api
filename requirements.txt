@@ -1,4 +1,4 @@
-# Core - updated 2026-01-18 to add SendGrid email support
+# Core - updated 2026-01-18 v2 - force fresh pip install
 fastapi>=0.109.0
 uvicorn[standard]>=0.27.0
 pydantic>=2.5.0

@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     && rm -rf /var/lib/apt/lists/*
 
-# Cache bust: 2026-01-18-sendgrid
+# Cache bust: 2026-01-18-v3-force-rebuild
 ARG CACHEBUST=1
 
 # Install Python dependencies
