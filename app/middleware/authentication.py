@@ -29,6 +29,8 @@ PUBLIC_PATHS = [
     "/api/v1/gaming/presets",         # Gaming presets (read-only reference)
     "/api/v1/gaming/clubs",           # Valid clubs (read-only reference)
     "/api/v1/gaming/stock-distances", # Stock distances (read-only reference)
+    "/api/v1/calculate",              # TEMP: Correctness testing
+    "/api/v1/gaming/trajectory",      # TEMP: Correctness testing
 ]
 
 # Database connection pool for API key lookups
