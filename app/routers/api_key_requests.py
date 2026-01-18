@@ -18,7 +18,7 @@ from datetime import datetime
 from app.database import get_db
 from app.models.database import APIKey, Lead
 from app.utils.recaptcha import verify_recaptcha
-from app.services.email import send_api_key_email, send_admin_notification
+from app.services.email import send_api_key_email, send_api_key_reissue_email, send_admin_notification
 
 router = APIRouter(tags=["api-key-requests"])
 logger = logging.getLogger(__name__)
@@ -106,11 +106,60 @@ async def request_api_key(
         existing = result.scalar_one_or_none()
 
         if existing:
-            logger.info(f"[API KEY] Existing key requested for: {request.email}")
-            # TODO: Implement resend existing key email
+            logger.info(f"[API KEY] Existing key found for: {request.email}, reissuing new key")
+
+            # Store original creation date before deactivating
+            original_created_at = existing.created_at.strftime("%B %d, %Y") if existing.created_at else "a previous date"
+
+            # Deactivate the existing key
+            existing.is_active = False
+            existing.status = "replaced"
+
+            # Generate new API key
+            new_raw_key = f"golf_{secrets.token_urlsafe(32)}"
+            new_key_hash = hashlib.sha256(new_raw_key.encode()).hexdigest()
+            new_client_id = f"client_{secrets.token_urlsafe(8)}"
+
+            # Create new API key record
+            new_api_key = APIKey(
+                client_id=new_client_id,
+                key_hash=new_key_hash,
+                tier=existing.tier or 'developer',
+                is_active=True,
+                name=existing.name or request.name,
+                email=request.email,
+                company=request.company or existing.company,
+                use_case=request.use_case or existing.use_case,
+                description=request.description or existing.description,
+                expected_volume=request.expected_volume or existing.expected_volume,
+                status='active'
+            )
+            db.add(new_api_key)
+
+            try:
+                await db.commit()
+                logger.info(f"[API KEY] Old key deactivated, new key created for {request.email}")
+            except Exception as e:
+                await db.rollback()
+                logger.error(f"[API KEY] Failed to reissue key: {str(e)}")
+                raise HTTPException(status_code=500, detail="Failed to reissue API key")
+
+            # Send reissue email with the new key
+            email_sent = await send_api_key_reissue_email(
+                email=request.email,
+                name=existing.name or request.name,
+                api_key=new_raw_key,
+                original_created_at=original_created_at
+            )
+
+            if email_sent:
+                logger.info(f"[API KEY] Reissue email sent to {request.email}")
+            else:
+                logger.warning(f"[API KEY] Failed to send reissue email to {request.email}")
+
             return ApiKeyResponse(
                 success=True,
-                message="API key sent to your email",
+                message="A new API key has been issued and sent to your email. Your previous key has been deactivated.",
                 email=request.email
             )
 

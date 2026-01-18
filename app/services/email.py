@@ -245,6 +245,159 @@ P.S. We'd love to hear about your project! Reply to this email and tell us what 
         return False
 
 
+async def send_api_key_reissue_email(
+    email: str,
+    name: str,
+    api_key: str,
+    original_created_at: str
+) -> bool:
+    """Send email with reissued API key when user requests a duplicate."""
+
+    if not SENDGRID_API_KEY:
+        logger.warning(f"[EMAIL] SendGrid not configured, would send reissued API key to {email}")
+        logger.info(f"[EMAIL] Reissued API Key for {email}: {api_key}")
+        return False
+
+    subject = "Your Golf Physics API Key Has Been Reissued"
+
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+
+        <div style="background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%); color: white; padding: 30px; border-radius: 8px 8px 0 0; text-align: center;">
+            <h1 style="margin: 0; font-size: 28px;">Golf Physics API</h1>
+            <p style="margin: 10px 0 0 0; opacity: 0.9;">API Key Reissued</p>
+        </div>
+
+        <div style="background: white; padding: 30px; border: 1px solid #e0e0e0; border-top: none; border-radius: 0 0 8px 8px;">
+            <p style="font-size: 18px; margin-top: 0;">Hi {name},</p>
+
+            <p>We noticed you already had an API key registered with this email address (originally created on <strong>{original_created_at}</strong>).</p>
+
+            <p>For your security, we've deactivated your previous key and issued a new one below:</p>
+
+            <div style="background: #fff3e0; border-left: 4px solid #ff9800; padding: 15px; margin: 20px 0; border-radius: 4px;">
+                <p style="margin: 0; color: #e65100; font-weight: bold;">
+                    ⚠️ Important: Your previous API key has been deactivated and will no longer work.
+                </p>
+            </div>
+
+            <div style="background: #f5f5f5; border-left: 4px solid #2E7D32; padding: 20px; margin: 25px 0; border-radius: 4px;">
+                <p style="margin: 0 0 10px 0; font-weight: bold; color: #2E7D32;">Your New API Key:</p>
+                <code style="background: white; padding: 12px; display: block; font-size: 14px; border: 1px solid #ddd; border-radius: 4px; word-break: break-all; font-family: 'Courier New', monospace;">
+                    {api_key}
+                </code>
+                <p style="color: #d32f2f; font-size: 13px; margin: 10px 0 0 0;">
+                    <strong>Keep this key secure</strong> - treat it like a password. It won't be shown again.
+                </p>
+            </div>
+
+            <h2 style="color: #2E7D32; font-size: 20px; margin-top: 30px;">What You Need to Do:</h2>
+            <ol style="line-height: 1.8;">
+                <li>Update any applications using your old API key</li>
+                <li>Replace the old key with the new one above</li>
+                <li>Test your integration to ensure it's working</li>
+            </ol>
+
+            <div style="background: #e8f5e9; border: 1px solid #a5d6a7; padding: 20px; margin: 25px 0; border-radius: 8px;">
+                <h3 style="margin-top: 0; color: #2E7D32;">Quick Test</h3>
+                <p style="margin: 15px 0 10px 0;"><strong>Verify your new key works:</strong></p>
+                <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; overflow-x: auto; font-size: 13px; border: 1px solid #ddd;">curl "{BACKEND_URL}/api/v1/health" \\
+  -H "X-API-Key: {api_key}"</pre>
+            </div>
+
+            <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 30px 0;">
+
+            <h3 style="color: #2E7D32;">Need Help?</h3>
+            <p>If you didn't request this key reissue, or if you have any questions:</p>
+            <ul style="line-height: 1.8;">
+                <li>Email: <a href="mailto:support@golfphysics.io" style="color: #2E7D32;">support@golfphysics.io</a></li>
+                <li>Documentation: <a href="{FRONTEND_URL}/docs" style="color: #2E7D32;">{FRONTEND_URL}/docs</a></li>
+            </ul>
+
+            <p style="margin-top: 30px;">Best regards,</p>
+
+            <p style="margin: 5px 0;">
+                <strong>The Golf Physics Team</strong><br>
+                <span style="color: #666; font-size: 14px;">Professional Weather Intelligence for Golf Technology</span>
+            </p>
+        </div>
+
+        <div style="text-align: center; padding: 20px; font-size: 12px; color: #666;">
+            <p>&copy; 2026 Golf Physics API. All rights reserved.</p>
+            <p>
+                <a href="{FRONTEND_URL}" style="color: #2E7D32; text-decoration: none;">Website</a> |
+                <a href="{FRONTEND_URL}/docs" style="color: #2E7D32; text-decoration: none;">Documentation</a> |
+                <a href="{FRONTEND_URL}/pricing" style="color: #2E7D32; text-decoration: none;">Pricing</a>
+            </p>
+        </div>
+    </body>
+    </html>
+    """
+
+    text_content = f"""
+Golf Physics API - Your API Key Has Been Reissued
+
+Hi {name},
+
+We noticed you already had an API key registered with this email address (originally created on {original_created_at}).
+
+For your security, we've deactivated your previous key and issued a new one.
+
+IMPORTANT: Your previous API key has been deactivated and will no longer work.
+
+YOUR NEW API KEY:
+{api_key}
+
+Keep this key secure - treat it like a password. It won't be shown again.
+
+WHAT YOU NEED TO DO:
+1. Update any applications using your old API key
+2. Replace the old key with the new one above
+3. Test your integration to ensure it's working
+
+QUICK TEST:
+curl "{BACKEND_URL}/api/v1/health" \\
+  -H "X-API-Key: {api_key}"
+
+NEED HELP?
+If you didn't request this key reissue, or if you have any questions:
+- Email: support@golfphysics.io
+- Docs: {FRONTEND_URL}/docs
+
+Best regards,
+
+The Golf Physics Team
+Professional Weather Intelligence for Golf Technology
+    """
+
+    try:
+        message = Mail(
+            from_email=Email(FROM_EMAIL, "Golf Physics API"),
+            to_emails=To(email),
+            subject=subject,
+            plain_text_content=Content("text/plain", text_content),
+            html_content=Content("text/html", html_content)
+        )
+
+        message.reply_to = Email(REPLY_TO_EMAIL)
+
+        sg = SendGridAPIClient(SENDGRID_API_KEY)
+        response = sg.send(message)
+
+        logger.info(f"[EMAIL] Reissued API key sent to {email}, status: {response.status_code}")
+        return response.status_code == 202
+
+    except Exception as e:
+        logger.error(f"[EMAIL] Failed to send reissued key to {email}: {str(e)}")
+        return False
+
+
 async def send_contact_confirmation(
     email: str,
     name: str,
