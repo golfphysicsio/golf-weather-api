@@ -13,6 +13,8 @@ from app.models.requests import (
     TrajectoryLocationRequest,
     TrajectoryCourseRequest,
     WeatherConditions,
+    CalculateRequest,
+    ConditionsOverride,
 )
 from app.models.responses import (
     TrajectoryResponse,
@@ -31,8 +33,9 @@ from app.models.responses import (
     DualAltitude,
     DualPressure,
 )
+from app.models.requests import ShotData
 from app.services.physics import calculate_impact_breakdown
-from app.services.weather import fetch_weather_by_city
+from app.services.weather import fetch_weather_by_city, fetch_weather_by_coords
 from app.services.courses import get_course_location
 from app.utils.conversions import (
     UnitConverter,
@@ -327,3 +330,175 @@ async def calculate_trajectory_by_course(
     dual_conditions = build_dual_conditions_used(weather_with_altitude)
 
     return build_dual_trajectory_response(result, dual_conditions, validated_units)
+
+
+@router.post("/calculate", response_model=DualTrajectoryResponse)
+async def calculate_trajectory_professional(
+    request: CalculateRequest,
+    units: Optional[str] = Query(
+        default="imperial",
+        description="Preferred unit system: 'imperial' or 'metric'. Response includes both.",
+    ),
+) -> DualTrajectoryResponse:
+    """
+    Professional trajectory calculation endpoint.
+
+    Calculates golf ball trajectory with either:
+    - **Real weather** from GPS coordinates (`location` with lat/lng)
+    - **Custom conditions** via `conditions_override`
+
+    **Priority:** If `conditions_override` is provided, it takes precedence over `location`.
+
+    **Example with location (real weather):**
+    ```json
+    {
+      "ball_speed": 165,
+      "launch_angle": 12.5,
+      "spin_rate": 2800,
+      "location": {"lat": 33.45, "lng": -112.07}
+    }
+    ```
+
+    **Example with conditions_override:**
+    ```json
+    {
+      "ball_speed": 165,
+      "launch_angle": 12.5,
+      "spin_rate": 2800,
+      "conditions_override": {
+        "wind_speed": 30,
+        "wind_direction": 180,
+        "temperature": 85,
+        "humidity": 60,
+        "altitude": 5000,
+        "air_pressure": 29.0
+      }
+    }
+    ```
+
+    **Response includes:**
+    - `conditions_used.source`: "override" or "real"
+    - All trajectory data in both imperial and metric units
+    """
+    # Validate units parameter
+    try:
+        validated_units = validate_units_param(units)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    # Build shot data from flat parameters
+    shot = ShotData(
+        ball_speed_mph=request.ball_speed,
+        launch_angle_deg=request.launch_angle,
+        spin_rate_rpm=request.spin_rate,
+        spin_axis_deg=request.spin_axis,
+        direction_deg=request.direction,
+    )
+
+    # Determine weather conditions
+    if request.conditions_override:
+        # Use custom override conditions
+        override = request.conditions_override
+        conditions = WeatherConditions(
+            wind_speed_mph=override.wind_speed,
+            wind_direction_deg=override.wind_direction,
+            temperature_f=override.temperature,
+            altitude_ft=override.altitude,
+            humidity_pct=override.humidity,
+            pressure_inhg=override.air_pressure,
+        )
+
+        # Calculate trajectory
+        result = calculate_impact_breakdown(shot, conditions)
+
+        # Build conditions_used with source = "override"
+        from datetime import datetime
+        dual_conditions = DualConditionsUsed(
+            source="override",
+            location=None,
+            wind_speed=DualSpeed(
+                mph=round(override.wind_speed, 1),
+                kmh=UnitConverter.mph_to_kmh(override.wind_speed),
+            ),
+            wind_direction_deg=override.wind_direction,
+            temperature=DualTemperature(
+                fahrenheit=round(override.temperature, 1),
+                celsius=UnitConverter.fahrenheit_to_celsius(override.temperature),
+            ),
+            altitude=DualAltitude(
+                feet=round(override.altitude, 0),
+                meters=round(UnitConverter.feet_to_meters(override.altitude), 0),
+            ),
+            humidity_pct=override.humidity,
+            pressure=DualPressure(
+                inhg=round(override.air_pressure, 2),
+                hpa=UnitConverter.inhg_to_hpa(override.air_pressure),
+            ),
+            conditions_text="Custom conditions",
+            fetched_at=datetime.utcnow(),
+        )
+
+        return build_dual_trajectory_response(result, dual_conditions, validated_units)
+
+    elif request.location:
+        # Fetch real weather from coordinates
+        try:
+            weather = await fetch_weather_by_coords(
+                lat=request.location.lat,
+                lon=request.location.lng,
+            )
+        except ValueError as e:
+            raise HTTPException(status_code=500, detail=str(e))
+        except Exception as e:
+            raise HTTPException(
+                status_code=502,
+                detail=f"Failed to fetch weather data: {str(e)}",
+            )
+
+        # Build conditions from weather data
+        conditions = WeatherConditions(
+            wind_speed_mph=weather["wind_speed_mph"],
+            wind_direction_deg=weather["wind_direction_deg"],
+            temperature_f=weather["temperature_f"],
+            altitude_ft=weather["altitude_ft"],
+            humidity_pct=weather["humidity_pct"],
+            pressure_inhg=weather["pressure_inhg"],
+        )
+
+        # Calculate trajectory
+        result = calculate_impact_breakdown(shot, conditions)
+
+        # Build conditions_used with source = "real"
+        dual_conditions = DualConditionsUsed(
+            source="real",
+            location=weather["location"],
+            wind_speed=DualSpeed(
+                mph=round(weather["wind_speed_mph"], 1),
+                kmh=UnitConverter.mph_to_kmh(weather["wind_speed_mph"]),
+            ),
+            wind_direction_deg=weather["wind_direction_deg"],
+            temperature=DualTemperature(
+                fahrenheit=round(weather["temperature_f"], 1),
+                celsius=UnitConverter.fahrenheit_to_celsius(weather["temperature_f"]),
+            ),
+            altitude=DualAltitude(
+                feet=round(weather["altitude_ft"], 0),
+                meters=round(UnitConverter.feet_to_meters(weather["altitude_ft"]), 0),
+            ),
+            humidity_pct=weather["humidity_pct"],
+            pressure=DualPressure(
+                inhg=round(weather["pressure_inhg"], 2),
+                hpa=UnitConverter.inhg_to_hpa(weather["pressure_inhg"]),
+            ),
+            conditions_text=weather.get("conditions_text"),
+            fetched_at=weather.get("fetched_at"),
+        )
+
+        return build_dual_trajectory_response(result, dual_conditions, validated_units)
+
+    else:
+        # This shouldn't happen due to validation, but handle it anyway
+        raise HTTPException(
+            status_code=400,
+            detail="Either location or conditions_override required"
+        )

@@ -66,6 +66,66 @@ class CourseQuery(BaseModel):
     name: str = Field(..., min_length=1, description="Golf course name")
 
 
+class CoordinateLocation(BaseModel):
+    """GPS coordinates for weather lookup."""
+    lat: float = Field(..., ge=-90, le=90, description="Latitude")
+    lng: float = Field(..., ge=-180, le=180, description="Longitude")
+
+
+class CalculateRequest(BaseModel):
+    """
+    Professional trajectory calculation request.
+
+    Supports:
+    - GPS coordinate-based weather (location with lat/lng)
+    - Custom weather conditions (conditions_override)
+
+    Priority:
+    - If conditions_override provided, uses custom conditions
+    - If location provided (and no override), fetches real weather
+    """
+    # Shot parameters (flat, not nested)
+    ball_speed: float = Field(
+        ..., gt=0, le=220,
+        description="Ball speed in mph"
+    )
+    launch_angle: float = Field(
+        ..., ge=-10, le=60,
+        description="Launch angle in degrees"
+    )
+    spin_rate: float = Field(
+        ..., ge=0, le=15000,
+        description="Total spin rate in RPM"
+    )
+    spin_axis: float = Field(
+        default=0, ge=-90, le=90,
+        description="Spin axis tilt in degrees (negative = draw, positive = fade)"
+    )
+    direction: float = Field(
+        default=0, ge=-45, le=45,
+        description="Initial direction relative to target line"
+    )
+
+    # Weather source (one required)
+    location: Optional[CoordinateLocation] = Field(
+        default=None,
+        description="GPS coordinates for weather lookup"
+    )
+    conditions_override: Optional[ConditionsOverride] = Field(
+        default=None,
+        description="Custom weather conditions (takes precedence over location)"
+    )
+
+    @model_validator(mode='after')
+    def validate_weather_source(self):
+        """Ensure at least one weather source is provided."""
+        if not self.conditions_override and not self.location:
+            raise ValueError(
+                "Either location or conditions_override required"
+            )
+        return self
+
+
 class TrajectoryRequest(BaseModel):
     shot: ShotData
     conditions: WeatherConditions
