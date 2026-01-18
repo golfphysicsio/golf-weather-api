@@ -75,11 +75,9 @@ async def verify_recaptcha(
 
             # Log result for monitoring
             logger.info(
-                "reCAPTCHA verification",
-                success=result.get('success'),
-                score=result.get('score'),
-                action=result.get('action'),
-                expected_action=action
+                f"reCAPTCHA verification: success={result.get('success')}, "
+                f"score={result.get('score')}, action={result.get('action')}, "
+                f"expected_action={action}"
             )
 
             # Check if verification was successful
