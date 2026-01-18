@@ -56,14 +56,14 @@ async def lifespan(app: FastAPI):
         await init_db()
         logger.info("Database initialized")
     except Exception as e:
-        logger.warning("Database not available", error=str(e))
+        logger.warning(f"Database not available: {str(e)}")
 
     # Initialize Redis
     try:
         await init_redis()
         logger.info("Redis connection verified")
     except Exception as e:
-        logger.warning("Redis not available", error=str(e))
+        logger.warning(f"Redis not available: {str(e)}")
 
     yield
 
@@ -166,7 +166,7 @@ async def add_request_context(request: Request, call_next):
                         request.headers.get("user-agent", "")[:500]
                     )
         except Exception as e:
-            logger.warning("Failed to log request to database", error=str(e))
+            logger.warning(f"Failed to log request to database: {str(e)}")
 
     return response
 
