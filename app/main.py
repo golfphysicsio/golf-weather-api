@@ -20,7 +20,7 @@ import sentry_sdk
 from app.config import settings
 from app.database import init_db, close_db
 from app.redis_client import init_redis, close_redis
-from app.routers import trajectory, conditions, health, admin, admin_dashboard, api_key_requests, contact
+from app.routers import trajectory, conditions, health, admin, admin_dashboard, api_key_requests, contact, gaming
 from app.middleware.authentication import AuthMiddleware
 from app.middleware.rate_limiting import RateLimitMiddleware
 from app.middleware.security import SecurityHeadersMiddleware
@@ -179,6 +179,7 @@ app.include_router(admin.router, prefix="/api/v1/admin", tags=["Admin"])
 app.include_router(admin_dashboard.router, tags=["Admin Dashboard"])
 app.include_router(api_key_requests.router, tags=["API Key Requests"])
 app.include_router(contact.router, tags=["Contact"])
+app.include_router(gaming.router, prefix="/api/v1/gaming", tags=["Gaming"])
 
 # Legacy routes (for backwards compatibility)
 app.include_router(trajectory.router, prefix="/v1", tags=["Trajectory (Legacy)"])

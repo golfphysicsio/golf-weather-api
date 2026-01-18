@@ -136,6 +136,8 @@ class DualImpactBreakdown(BaseModel):
 
 class DualConditionsUsed(BaseModel):
     """Conditions with both imperial and metric units."""
+    source: Optional[str] = None  # "real", "override", or "preset"
+    preset_name: Optional[str] = None  # Name of preset if used
     location: Optional[str] = None
     wind_speed: DualSpeed
     wind_direction_deg: float
@@ -186,3 +188,69 @@ class HealthResponse(BaseModel):
     status: str
     version: str
     timestamp: datetime
+
+
+# ============================================================================
+# GAMING ENHANCEMENT RESPONSE MODELS
+# ============================================================================
+
+
+class PresetConditions(BaseModel):
+    """Weather conditions for a preset."""
+    wind_speed: float
+    wind_direction: float
+    temperature: float
+    humidity: float
+    altitude: float
+    air_pressure: float
+
+
+class WeatherPreset(BaseModel):
+    """A single weather preset."""
+    name: str
+    description: str
+    conditions: PresetConditions
+    difficulty: str
+    tags: List[str]
+
+
+class PresetsResponse(BaseModel):
+    """Response for GET /api/v1/presets endpoint."""
+    presets: dict  # Key: preset_id, Value: WeatherPreset
+    count: int
+
+
+class GamingConditionsUsed(BaseModel):
+    """Extended conditions for gaming responses."""
+    source: str  # "real", "override", or "preset"
+    preset_name: Optional[str] = None
+    handicap_tier: Optional[str] = None  # "scratch", "low", "mid", "high"
+    player_handicap: Optional[int] = None
+    club: Optional[str] = None
+    stock_carry: Optional[float] = None  # Expected carry for this handicap/club
+    wind_speed_mph: float
+    wind_direction_deg: float
+    temperature_f: float
+    altitude_ft: float
+    humidity_pct: float
+    pressure_inhg: float
+    location: Optional[str] = None
+    conditions_text: Optional[str] = None
+
+
+class GamingTrajectoryResponse(BaseModel):
+    """
+    Gaming-enhanced trajectory response.
+
+    Includes all standard trajectory data plus:
+    - Source of conditions (real, override, or preset)
+    - Handicap tier information if using handicap-based distances
+    - Stock carry distance for comparison
+    """
+    adjusted: DualAdjustedResults
+    baseline: DualAdjustedResults
+    impact_breakdown: DualImpactBreakdown
+    equivalent_calm_distance: DualDistance
+    trajectory_points: List[DualTrajectoryPoint]
+    conditions_used: GamingConditionsUsed
+    units_preference: str = "imperial"
