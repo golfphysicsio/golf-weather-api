@@ -13,7 +13,8 @@ import UnitToggle from './components/UnitToggle'
 import LanguageSelector from './components/LanguageSelector'
 import { UnitProvider } from './contexts/UnitContext'
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://golf-weather-api-production.up.railway.app'
+// Use current origin so it works on staging, production, and localhost
+const API_BASE = import.meta.env.VITE_API_BASE_URL || window.location.origin
 
 function App() {
   const { t } = useTranslation(['common'])
