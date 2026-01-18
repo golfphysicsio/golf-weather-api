@@ -1,4 +1,4 @@
-# Core - updated 2026-01-17 to invalidate Docker cache
+# Core - updated 2026-01-18 to add SendGrid email support
 fastapi>=0.109.0
 uvicorn[standard]>=0.27.0
 pydantic>=2.5.0
