@@ -86,39 +86,39 @@ body {
 .btn-primary {
   @apply bg-golf-green text-white px-6 py-3 rounded-md font-semibold
          transition-all duration-200 hover:bg-golf-green-dark
-         hover:shadow-lg hover:-translate-y-0.5 inline-block text-center;
+         hover:shadow-lg hover:-translate-y-0.5 inline-flex items-center justify-center gap-2;
 }
 
 .btn-secondary {
   @apply border-2 border-golf-green text-golf-green px-6 py-3 rounded-md
          font-semibold transition-all duration-200
-         hover:bg-golf-green hover:text-white inline-block text-center;
+         hover:bg-golf-green hover:text-white inline-flex items-center justify-center gap-2;
 }
 
 /* Professional API Buttons (Blue) */
 .btn-pro {
   @apply bg-pro-blue text-white px-6 py-3 rounded-md font-semibold
          transition-all duration-200 hover:bg-pro-blue-dark
-         hover:shadow-lg hover:-translate-y-0.5 inline-block text-center;
+         hover:shadow-lg hover:-translate-y-0.5 inline-flex items-center justify-center gap-2;
 }
 
 .btn-pro-outline {
   @apply border-2 border-pro-blue text-pro-blue px-6 py-3 rounded-md
          font-semibold transition-all duration-200
-         hover:bg-pro-blue hover:text-white inline-block text-center;
+         hover:bg-pro-blue hover:text-white inline-flex items-center justify-center gap-2;
 }
 
 /* Gaming API Buttons (Orange) */
 .btn-gaming {
   @apply bg-gaming-orange text-white px-6 py-3 rounded-md font-semibold
          transition-all duration-200 hover:bg-gaming-orange-dark
-         hover:shadow-lg hover:-translate-y-0.5 inline-block text-center;
+         hover:shadow-lg hover:-translate-y-0.5 inline-flex items-center justify-center gap-2;
 }
 
 .btn-gaming-outline {
   @apply border-2 border-gaming-orange text-gaming-orange px-6 py-3 rounded-md
          font-semibold transition-all duration-200
-         hover:bg-gaming-orange hover:text-white inline-block text-center;
+         hover:bg-gaming-orange hover:text-white inline-flex items-center justify-center gap-2;
 }
 
 /* Card styles */
