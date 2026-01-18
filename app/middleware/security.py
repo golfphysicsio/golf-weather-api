@@ -7,6 +7,21 @@ Adds security headers and implements security best practices.
 from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
 
+from app.config import settings
+
+
+def build_csp_connect_src() -> str:
+    """Build CSP connect-src from CORS origins."""
+    # Always include 'self' and Google OAuth
+    sources = ["'self'", "https://accounts.google.com"]
+
+    # Add all CORS origins
+    for origin in settings.cors_origins_list:
+        if origin and origin not in sources:
+            sources.append(origin)
+
+    return " ".join(sources)
+
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     """Add security headers to all responses."""
@@ -26,14 +41,15 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         # Referrer Policy
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
 
-        # Content Security Policy (relaxed for API and Google OAuth)
+        # Content Security Policy - uses CORS origins from environment
+        csp_connect_src = build_csp_connect_src()
         response.headers["Content-Security-Policy"] = (
             "default-src 'self'; "
             "script-src 'self' 'unsafe-inline' https://accounts.google.com https://cdn.tailwindcss.com; "
             "style-src 'self' 'unsafe-inline' https://accounts.google.com; "
             "img-src 'self' data: https:; "
             "font-src 'self'; "
-            "connect-src 'self' https://accounts.google.com https://api.golfphysics.io https://golf-weather-api-production.up.railway.app https://golf-weather-api-staging.up.railway.app; "
+            f"connect-src {csp_connect_src}; "
             "frame-src https://accounts.google.com; "
             "frame-ancestors 'none';"
         )

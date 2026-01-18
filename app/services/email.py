@@ -12,12 +12,18 @@ from typing import Optional
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail, Email, To, Content
 
+from app.config import settings
+
 logger = logging.getLogger(__name__)
 
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 FROM_EMAIL = os.getenv('FROM_EMAIL', 'noreply@golfphysics.io')
 REPLY_TO_EMAIL = os.getenv('REPLY_TO_EMAIL', 'golfphysicsio@gmail.com')
 ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', 'golfphysicsio@gmail.com')
+
+# Get URLs from environment via settings
+BACKEND_URL = settings.BACKEND_URL
+FRONTEND_URL = settings.FRONTEND_URL
 
 
 async def send_api_key_email(
@@ -77,13 +83,13 @@ async def send_api_key_email(
                 <h3 style="margin-top: 0; color: #2E7D32;">Quick Start</h3>
 
                 <p style="margin: 15px 0 10px 0;"><strong>1. Make your first request:</strong></p>
-                <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; overflow-x: auto; font-size: 13px; border: 1px solid #ddd;">curl "https://api.golfphysics.io/weather?lat=33.7&lon=-84.4" \\
+                <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; overflow-x: auto; font-size: 13px; border: 1px solid #ddd;">curl "{BACKEND_URL}/weather?lat=33.7&lon=-84.4" \\
   -H "X-API-Key: {api_key}"</pre>
 
                 <p style="margin: 15px 0 5px 0;"><strong>2. View Documentation:</strong></p>
                 <p style="margin: 5px 0;">
-                    <a href="https://golfphysics.io/docs" style="color: #2E7D32; text-decoration: none; font-weight: 500;">
-                        https://golfphysics.io/docs
+                    <a href="{FRONTEND_URL}/docs" style="color: #2E7D32; text-decoration: none; font-weight: 500;">
+                        {FRONTEND_URL}/docs
                     </a>
                 </p>
 
@@ -118,7 +124,7 @@ async def send_api_key_email(
             </table>
 
             <p style="text-align: center; margin: 25px 0;">
-                <a href="https://golfphysics.io/pricing" style="display: inline-block; background: #2E7D32; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: 500;">
+                <a href="{FRONTEND_URL}/pricing" style="display: inline-block; background: #2E7D32; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: 500;">
                     View All Pricing Plans
                 </a>
             </p>
@@ -129,7 +135,7 @@ async def send_api_key_email(
             <p>We're here to support you:</p>
             <ul style="line-height: 1.8;">
                 <li>Email: <a href="mailto:support@golfphysics.io" style="color: #2E7D32;">support@golfphysics.io</a></li>
-                <li>Documentation: <a href="https://golfphysics.io/docs" style="color: #2E7D32;">golfphysics.io/docs</a></li>
+                <li>Documentation: <a href="{FRONTEND_URL}/docs" style="color: #2E7D32;">{FRONTEND_URL}/docs</a></li>
             </ul>
 
             <p style="margin-top: 30px;">Happy building!</p>
@@ -149,9 +155,9 @@ async def send_api_key_email(
         <div style="text-align: center; padding: 20px; font-size: 12px; color: #666;">
             <p>&copy; 2026 Golf Physics API. All rights reserved.</p>
             <p>
-                <a href="https://golfphysics.io" style="color: #2E7D32; text-decoration: none;">Website</a> |
-                <a href="https://golfphysics.io/docs" style="color: #2E7D32; text-decoration: none;">Documentation</a> |
-                <a href="https://golfphysics.io/pricing" style="color: #2E7D32; text-decoration: none;">Pricing</a>
+                <a href="{FRONTEND_URL}" style="color: #2E7D32; text-decoration: none;">Website</a> |
+                <a href="{FRONTEND_URL}/docs" style="color: #2E7D32; text-decoration: none;">Documentation</a> |
+                <a href="{FRONTEND_URL}/pricing" style="color: #2E7D32; text-decoration: none;">Pricing</a>
             </p>
         </div>
     </body>
@@ -181,10 +187,10 @@ DEVELOPER TIER INCLUDES:
 QUICK START:
 
 1. Make your first request:
-curl "https://api.golfphysics.io/weather?lat=33.7&lon=-84.4" \\
+curl "{BACKEND_URL}/weather?lat=33.7&lon=-84.4" \\
   -H "X-API-Key: {api_key}"
 
-2. View Documentation: https://golfphysics.io/docs
+2. View Documentation: {FRONTEND_URL}/docs
 
 3. Explore code examples in Python, JavaScript, and Go
 
@@ -200,11 +206,11 @@ Business Tier - $599/month
 - Account manager
 - Custom integration
 
-View all pricing: https://golfphysics.io/pricing
+View all pricing: {FRONTEND_URL}/pricing
 
 NEED HELP?
 - Email: support@golfphysics.io
-- Docs: https://golfphysics.io/docs
+- Docs: {FRONTEND_URL}/docs
 
 Happy building!
 
@@ -271,8 +277,8 @@ async def send_contact_confirmation(
 
             <p>In the meantime, feel free to explore:</p>
             <ul>
-                <li><a href="https://golfphysics.io/docs" style="color: #2E7D32;">API Documentation</a></li>
-                <li><a href="https://golfphysics.io/pricing" style="color: #2E7D32;">Pricing Plans</a></li>
+                <li><a href="{FRONTEND_URL}/docs" style="color: #2E7D32;">API Documentation</a></li>
+                <li><a href="{FRONTEND_URL}/pricing" style="color: #2E7D32;">Pricing Plans</a></li>
             </ul>
 
             <p style="margin-top: 30px;">Best regards,<br><strong>The Golf Physics Team</strong></p>
@@ -351,7 +357,7 @@ async def send_admin_notification(
             </table>
 
             <p style="margin-top: 30px;">
-                <a href="https://api.golfphysics.io/admin/leads" style="background: #2E7D32; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
+                <a href="{BACKEND_URL}/admin/leads" style="background: #2E7D32; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
                     View in Admin Dashboard
                 </a>
             </p>

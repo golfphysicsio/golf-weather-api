@@ -289,8 +289,8 @@ export default function SystemHealth({ token, apiBase }) {
           Set up UptimeRobot or similar service to monitor these endpoints:
         </p>
         <ul className="list-disc list-inside text-blue-700 space-y-1">
-          <li><code className="bg-blue-100 px-1 rounded">https://api.golfphysics.io/api/v1/health</code> - API Health</li>
-          <li><code className="bg-blue-100 px-1 rounded">https://api.golfphysics.io/admin</code> - Admin Dashboard</li>
+          <li><code className="bg-blue-100 px-1 rounded">{apiBase}/api/v1/health</code> - API Health</li>
+          <li><code className="bg-blue-100 px-1 rounded">{apiBase}/admin</code> - Admin Dashboard</li>
         </ul>
         <p className="text-sm text-blue-600 mt-2">
           See the Operational Runbook for detailed setup instructions.

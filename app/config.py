@@ -36,8 +36,14 @@ class Settings(BaseSettings):
     RATE_LIMIT_PER_MINUTE: int = 1000
     RATE_LIMIT_BURST: int = 100
 
+    # URLs - configurable per environment
+    BACKEND_URL: str = "http://localhost:8000"  # This API's URL
+    FRONTEND_URL: str = "http://localhost:5173"  # Marketing website URL
+    ADMIN_URL: str = "http://localhost:5173"  # Admin dashboard URL (usually same origin as backend)
+
     # CORS - stored as string, parsed by validator
-    CORS_ORIGINS: str = "https://app.inrangegolf.com,https://admin.inrangegolf.com,http://localhost:3000,https://golf-weather-api-production.up.railway.app,https://golf-weather-api-staging.up.railway.app,https://golfphysics.io,https://www.golfphysics.io"
+    # Default includes common development URLs; override in Railway environment variables
+    CORS_ORIGINS: str = "http://localhost:3000,http://localhost:5173,http://localhost:8000"
 
     # Weather API
     WEATHER_API_KEY: str = ""
