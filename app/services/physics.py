@@ -471,7 +471,11 @@ def calculate_trajectory(
     }
 
 
-def calculate_impact_breakdown(shot: ShotData, conditions: WeatherConditions) -> Dict:
+def calculate_impact_breakdown(
+    shot: ShotData,
+    conditions: WeatherConditions,
+    api_type: str = "professional"
+) -> Dict:
     """
     Calculate how each weather factor affects distance.
 
@@ -481,6 +485,9 @@ def calculate_impact_breakdown(shot: ShotData, conditions: WeatherConditions) ->
     Args:
         shot: Shot parameters (speed, launch, spin, etc.)
         conditions: Weather conditions
+        api_type: "professional" or "gaming"
+            - professional: Uses pure physics simulation (shows realistic lift loss)
+            - gaming: Uses smart capping for extreme conditions (enhanced for gameplay)
 
     Returns:
         Dictionary containing:
@@ -488,6 +495,7 @@ def calculate_impact_breakdown(shot: ShotData, conditions: WeatherConditions) ->
         - adjusted: Trajectory results in actual conditions
         - impact_breakdown: Individual effects of each weather factor
         - equivalent_calm_distance_yards: What the shot would go in calm conditions
+        - api_type: Which calculation method was used
     """
     # Calculate baseline trajectory (standard conditions, no wind)
     baseline_result = calculate_trajectory(
@@ -514,8 +522,6 @@ def calculate_impact_breakdown(shot: ShotData, conditions: WeatherConditions) ->
     )
 
     # Calculate trajectory for shape/visualization (physics-based)
-    # Note: Wind effects in trajectory are scaled but still under-predicted
-    # Final distance uses empirical wind formula for accuracy
     physics_adjusted = calculate_trajectory(
         ball_speed_mph=shot.ball_speed_mph,
         launch_angle_deg=shot.launch_angle_deg,
@@ -527,27 +533,7 @@ def calculate_impact_breakdown(shot: ShotData, conditions: WeatherConditions) ->
         crosswind_mps=crosswind,
     )
 
-    # Calculate empirical wind effect (TrackMan benchmarks)
-    # This gives accurate distance changes that match industry data
-    wind_distance_effect, wind_lateral_drift = calculate_empirical_wind_effect(
-        baseline_result["carry_yards"],
-        conditions.wind_speed_mph,
-        conditions.wind_direction_deg,
-    )
-
-    # Apply empirical altitude effect
-    # Industry benchmark: ~1.2% distance gain per 1,000 ft altitude
-    ALTITUDE_GAIN_PER_1000FT = 0.012
-    altitude_multiplier = 1.0 + (conditions.altitude_ft / 1000) * ALTITUDE_GAIN_PER_1000FT
-
-    # Build adjusted result with empirical corrections
-    # Start with physics result for trajectory shape, apex, landing angle
-    adjusted_result = physics_adjusted.copy()
-
-    # Apply empirical effects to distance
-    # Base carry with temp/humidity + wind effect + altitude effect
-    temp_humid_carry = physics_adjusted["carry_yards"]
-    # Remove physics wind effect (already in temp_humid_carry) and add empirical
+    # Calculate no-wind carry for reference
     no_wind_carry = calculate_trajectory(
         ball_speed_mph=shot.ball_speed_mph,
         launch_angle_deg=shot.launch_angle_deg,
@@ -559,15 +545,64 @@ def calculate_impact_breakdown(shot: ShotData, conditions: WeatherConditions) ->
         crosswind_mps=0,
     )["carry_yards"]
 
-    # Final carry = (temp/humid adjusted, no wind) + empirical wind + altitude
-    adjusted_carry = no_wind_carry + wind_distance_effect
-    adjusted_carry = adjusted_carry * altitude_multiplier
+    # Apply empirical altitude effect
+    # Industry benchmark: ~1.2% distance gain per 1,000 ft altitude
+    ALTITUDE_GAIN_PER_1000FT = 0.012
+    altitude_multiplier = 1.0 + (conditions.altitude_ft / 1000) * ALTITUDE_GAIN_PER_1000FT
+
+    # Build adjusted result - start with physics result for trajectory shape
+    adjusted_result = physics_adjusted.copy()
+
+    # CRITICAL: Different wind handling based on api_type
+    if api_type == "professional":
+        # Professional API: Use pure physics simulation
+        # This shows realistic lift loss at extreme tailwinds
+        physics_wind_effect = physics_adjusted["carry_yards"] - no_wind_carry
+        adjusted_carry = no_wind_carry + physics_wind_effect
+        adjusted_carry = adjusted_carry * altitude_multiplier
+        wind_distance_effect = physics_wind_effect
+        wind_lateral_drift = physics_adjusted["lateral_drift_yards"]
+
+    else:  # api_type == "gaming"
+        # Gaming API: Smart capping for extreme conditions
+        wind_speed = conditions.wind_speed_mph
+
+        if wind_speed <= 40:
+            # Normal winds (0-40 mph): Use pure physics
+            physics_wind_effect = physics_adjusted["carry_yards"] - no_wind_carry
+            adjusted_carry = no_wind_carry + physics_wind_effect
+            wind_distance_effect = physics_wind_effect
+            wind_lateral_drift = physics_adjusted["lateral_drift_yards"]
+
+        elif wind_speed <= 100:
+            # Extreme winds (40-100 mph): Cap empirical benefit at +30%
+            empirical_effect, empirical_lateral = calculate_empirical_wind_effect(
+                baseline_result["carry_yards"],
+                conditions.wind_speed_mph,
+                conditions.wind_direction_deg,
+            )
+            max_boost = baseline_result["carry_yards"] * 0.30  # +30% cap
+            max_loss = -baseline_result["carry_yards"] * 0.50  # -50% cap for headwinds
+            capped_effect = max(min(empirical_effect, max_boost), max_loss)
+            adjusted_carry = no_wind_carry + capped_effect
+            wind_distance_effect = capped_effect
+            wind_lateral_drift = empirical_lateral
+
+        else:  # wind_speed > 100
+            # Hurricane winds (100+ mph): Use "surfing physics" (pure physics)
+            # At extreme tailwinds, ball "surfs" - wind exceeds ball speed
+            physics_wind_effect = physics_adjusted["carry_yards"] - no_wind_carry
+            adjusted_carry = no_wind_carry + physics_wind_effect
+            wind_distance_effect = physics_wind_effect
+            wind_lateral_drift = physics_adjusted["lateral_drift_yards"]
+
+        adjusted_carry = adjusted_carry * altitude_multiplier
 
     adjusted_result["carry_yards"] = round(adjusted_carry, 1)
     adjusted_result["total_yards"] = round(adjusted_carry * (physics_adjusted["total_yards"] / physics_adjusted["carry_yards"]) if physics_adjusted["carry_yards"] > 0 else adjusted_carry * 1.15, 1)
     adjusted_result["lateral_drift_yards"] = round(wind_lateral_drift, 1)
 
-    # Wind effect for breakdown uses empirical formula
+    # Wind effect for breakdown
     wind_effect = wind_distance_effect
     wind_lateral = wind_lateral_drift
 
@@ -588,7 +623,6 @@ def calculate_impact_breakdown(shot: ShotData, conditions: WeatherConditions) ->
     # Isolate altitude effect using empirical formula
     # Industry benchmark: ~1.2% distance gain per 1,000 ft altitude
     # This matches TrackMan, Titleist, and USGA published data
-    ALTITUDE_GAIN_PER_1000FT = 0.012  # 1.2%
     alt_effect = baseline_result["carry_yards"] * (conditions.altitude_ft / 1000) * ALTITUDE_GAIN_PER_1000FT
 
     # Isolate humidity effect only (typically minimal)
@@ -620,4 +654,5 @@ def calculate_impact_breakdown(shot: ShotData, conditions: WeatherConditions) ->
             "total_adjustment_yards": round(total_adjustment, 1),
         },
         "equivalent_calm_distance_yards": baseline_result["carry_yards"],
+        "api_type": api_type,
     }

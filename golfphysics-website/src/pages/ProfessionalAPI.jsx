@@ -54,8 +54,8 @@ export default function ProfessionalAPI() {
     },
     {
       icon: <Gauge className="w-6 h-6" />,
-      title: 'Realistic Ranges',
-      description: 'Wind: 0-35mph. Temperature: 20-110°F. Designed for playable conditions.',
+      title: 'Tournament-Level Validation',
+      description: 'Wind: 0-40mph. Temperature: 32-105°F. Altitude: 0-8,000ft. Realistic playable conditions only.',
     },
     {
       icon: <Clock className="w-6 h-6" />,
@@ -301,6 +301,77 @@ const data = await response.json();
             <Link to="/science" className="btn-pro-outline inline-flex items-center gap-2">
               Read The Science <ArrowRight className="w-4 h-4" />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Pure Physics Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                Pure Physics Simulation
+              </h2>
+              <p className="text-gray-600 mb-6">
+                The Professional API uses a complete 6-DOF physics simulation with no empirical shortcuts.
+                Both drag AND lift forces are calculated using relative airspeed—the ball's speed through
+                the air, not over the ground.
+              </p>
+              <p className="text-gray-600 mb-6">
+                This means our results correctly show how tailwinds actually affect ball flight:
+                reduced relative airspeed means less drag (good), but also less lift (limits the benefit).
+              </p>
+              <div className="bg-white rounded-lg p-6 border border-gray-200">
+                <h4 className="font-bold text-gray-900 mb-3">Validation Caps</h4>
+                <p className="text-gray-600 text-sm mb-4">
+                  The Professional API enforces realistic tournament-level conditions:
+                </p>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li className="flex items-center gap-2">
+                    <Wind className="w-4 h-4 text-pro-blue" />
+                    Wind: 0-40 mph (realistic maximum for playable golf)
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Thermometer className="w-4 h-4 text-pro-blue" />
+                    Temperature: 32-105°F (playable conditions)
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Mountain className="w-4 h-4 text-pro-blue" />
+                    Altitude: 0-8,000 ft (covers all major golf courses)
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div className="bg-gray-900 rounded-xl p-8 text-white">
+              <h3 className="text-xl font-bold mb-6">Why This Matters</h3>
+              <div className="space-y-6">
+                <div>
+                  <h4 className="font-semibold text-blue-300 mb-2">The Lift Paradox</h4>
+                  <p className="text-gray-300 text-sm">
+                    Many apps calculate wind as a simple push/pull on the ball. In reality, tailwinds
+                    reduce the ball's relative airspeed, which reduces both drag AND lift. The ball
+                    drops sooner than simplified models predict.
+                  </p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-blue-300 mb-2">Professional Accuracy</h4>
+                  <p className="text-gray-300 text-sm">
+                    Our engine calculates: F_lift = ½ρv²_rel × C_L × A, where v_rel is the ball's
+                    speed through the air. This is the same approach used by TrackMan and tour-level
+                    launch monitors.
+                  </p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-blue-300 mb-2">No Empirical Shortcuts</h4>
+                  <p className="text-gray-300 text-sm">
+                    Unlike gaming applications that use simplified formulas, the Professional API
+                    runs a full physics simulation every time. The accuracy is in the physics, not
+                    in curve-fitting to expected results.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

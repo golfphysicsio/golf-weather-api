@@ -202,7 +202,7 @@ async def calculate_trajectory(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-    result = calculate_impact_breakdown(request.shot, request.conditions)
+    result = calculate_impact_breakdown(request.shot, request.conditions, api_type="professional")
     return build_dual_trajectory_response(result, units_preference=validated_units)
 
 
@@ -255,7 +255,7 @@ async def calculate_trajectory_by_location(
         pressure_inhg=weather["pressure_inhg"],
     )
 
-    result = calculate_impact_breakdown(request.shot, conditions)
+    result = calculate_impact_breakdown(request.shot, conditions, api_type="professional")
     dual_conditions = build_dual_conditions_used(weather)
 
     return build_dual_trajectory_response(result, dual_conditions, validated_units)
@@ -322,7 +322,7 @@ async def calculate_trajectory_by_course(
         pressure_inhg=weather["pressure_inhg"],
     )
 
-    result = calculate_impact_breakdown(request.shot, conditions)
+    result = calculate_impact_breakdown(request.shot, conditions, api_type="professional")
 
     # Update weather dict with course altitude before building dual conditions
     weather_with_altitude = weather.copy()
@@ -408,8 +408,8 @@ async def calculate_trajectory_professional(
             pressure_inhg=override.air_pressure,
         )
 
-        # Calculate trajectory
-        result = calculate_impact_breakdown(shot, conditions)
+        # Calculate trajectory with professional physics
+        result = calculate_impact_breakdown(shot, conditions, api_type="professional")
 
         # Build conditions_used with source = "override"
         from datetime import datetime
@@ -465,8 +465,8 @@ async def calculate_trajectory_professional(
             pressure_inhg=weather["pressure_inhg"],
         )
 
-        # Calculate trajectory
-        result = calculate_impact_breakdown(shot, conditions)
+        # Calculate trajectory with professional physics
+        result = calculate_impact_breakdown(shot, conditions, api_type="professional")
 
         # Build conditions_used with source = "real"
         dual_conditions = DualConditionsUsed(

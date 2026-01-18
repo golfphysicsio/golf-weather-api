@@ -98,17 +98,17 @@ async def get_weather_presets() -> PresetsResponse:
     """
     Get all available weather presets for gaming scenarios.
 
-    Returns 10 predefined extreme weather scenarios for entertainment venues:
+    Returns 9 predefined extreme weather scenarios for entertainment venues:
     - calm_day: Perfect conditions (baseline)
-    - hurricane_hero: Category 3 hurricane winds
-    - arctic_assault: Freezing polar conditions
-    - desert_inferno: Scorching heat with high altitude
-    - tornado_alley: Severe storm with extreme winds
-    - monsoon_madness: Heavy tropical conditions
-    - mountain_challenge: High altitude thin air
-    - polar_vortex: Extreme Arctic cold
-    - dust_bowl: Hot, dry plains
-    - typhoon_terror: Category 4 Pacific storm
+    - hurricane_hero: Category 3 hurricane winds (65mph tailwind)
+    - arctic_assault: Freezing polar conditions (-15°F, 30mph headwind)
+    - desert_inferno: Scorching heat with high altitude (115°F, 3500ft)
+    - monsoon_madness: Heavy tropical conditions (45mph variable winds)
+    - mountain_challenge: High altitude thin air (8500ft elevation)
+    - polar_vortex: Extreme Arctic cold (-25°F)
+    - dust_bowl: Hot, dry plains (95°F)
+    - sweet_spot_tailwind: Optimal 35mph tailwind - physics sweet spot
+    - wind_surfer: 150mph hurricane tailwind - ball "surfs" the wind!
 
     Use these preset keys with the gaming trajectory endpoint.
     """
@@ -273,8 +273,8 @@ async def calculate_gaming_trajectory(
             detail="Either conditions_override, preset, or location required"
         )
 
-    # Calculate trajectory
-    result = calculate_impact_breakdown(shot, conditions)
+    # Calculate trajectory with gaming physics (smart capping for extreme conditions)
+    result = calculate_impact_breakdown(shot, conditions, api_type="gaming")
 
     # Build conditions used response
     conditions_used = GamingConditionsUsed(

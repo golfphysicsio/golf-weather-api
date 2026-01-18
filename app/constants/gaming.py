@@ -72,19 +72,19 @@ WEATHER_PRESETS: Dict[str, Dict[str, Any]] = {
         "tags": ["heat", "altitude", "dry"]
     },
 
-    "tornado_alley": {
-        "name": "Tornado Alley",
-        "description": "Severe storm with chaotic, extreme winds",
+    "sweet_spot_tailwind": {
+        "name": "Sweet Spot Tailwind",
+        "description": "35mph tailwind - optimal balance of drag reduction and lift preservation. Real physics, maximum efficiency.",
         "conditions": {
-            "wind_speed": 85,
-            "wind_direction": 270,
-            "temperature": 68,
-            "humidity": 85,
-            "altitude": 1200,
-            "air_pressure": 29.5
+            "wind_speed": 35,
+            "wind_direction": 180,
+            "temperature": 75,
+            "humidity": 45,
+            "altitude": 500,
+            "air_pressure": 30.0
         },
-        "difficulty": "extreme",
-        "tags": ["wind", "storm", "extreme"]
+        "difficulty": "medium",
+        "tags": ["realistic", "optimal", "distance-boost", "physics-accurate"]
     },
 
     "monsoon_madness": {
@@ -147,19 +147,19 @@ WEATHER_PRESETS: Dict[str, Dict[str, Any]] = {
         "tags": ["heat", "dry", "wind"]
     },
 
-    "typhoon_terror": {
-        "name": "Typhoon Terror",
-        "description": "Category 4 Pacific storm with devastating winds",
+    "wind_surfer": {
+        "name": "Wind Surfer",
+        "description": "Surf a 150mph hurricane tailwind! Ball experiences headwind lift while wind carries it forward - unusual but real physics.",
         "conditions": {
-            "wind_speed": 95,
-            "wind_direction": 315,
-            "temperature": 82,
-            "humidity": 97,
-            "altitude": 0,
-            "air_pressure": 27.9
+            "wind_speed": 150,
+            "wind_direction": 180,
+            "temperature": 85,
+            "humidity": 40,
+            "altitude": 1000,
+            "air_pressure": 29.5
         },
         "difficulty": "extreme",
-        "tags": ["extreme", "wind", "tropical", "rain"]
+        "tags": ["extreme", "distance-record", "viral", "physics-unusual", "surfing"]
     }
 }
 

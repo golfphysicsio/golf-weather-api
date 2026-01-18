@@ -13,10 +13,10 @@ export default function GamingAPI() {
       name: 'Hurricane Hero',
       emoji: '🌀',
       tagline: 'Ride the tailwind to glory',
-      description: 'Maximum tailwind pushes drives to insane distances. Players compete for longest drives with physics-accurate wind boost.',
-      conditions: '75mph tailwind, 75°F, sea level',
-      typicalResult: '400-500+ yard drives',
-      playerExperience: '"Just hit 487 yards at Topgolf. This is insane!"',
+      description: 'Category 3 hurricane tailwind pushes drives to impressive distances. Physics-accurate wind effects with smart capping for realistic results.',
+      conditions: '65mph tailwind, 78°F, sea level',
+      typicalResult: '350-400+ yard drives',
+      playerExperience: '"Just hit 387 yards at Topgolf. This is insane!"',
       viralPotential: 'Screenshot-worthy distances that demand sharing',
     },
     {
@@ -63,44 +63,36 @@ export default function GamingAPI() {
 
   const extremeModes = [
     {
-      name: 'Maximum Tailwind',
-      emoji: '💨',
-      tagline: 'The ultimate distance chase',
-      conditions: '150mph tailwind, optimal temp, sea level',
-      typicalResult: '600+ yard drives possible',
-      description: 'Push physics to the absolute limit. Record-breaking distances for the distance-obsessed.',
+      name: 'Sweet Spot Tailwind',
+      emoji: '🎯',
+      tagline: 'Physics-optimal distance boost',
+      conditions: '35mph tailwind, 75°F, 500ft',
+      typicalResult: '15-20% distance increase',
+      description: 'The physics sweet spot! At 35mph, drag reduction is maximized while lift loss is minimal. Real science, maximum efficiency.',
     },
     {
-      name: 'Hurricane Apocalypse',
-      emoji: '🌪️',
-      tagline: 'Category 5 chaos',
-      conditions: '150mph variable wind, extreme conditions',
-      typicalResult: 'Completely unpredictable',
-      description: 'Maximum chaos mode. Will your ball go forward, backward, or sideways?',
+      name: 'Polar Vortex',
+      emoji: '🥶',
+      tagline: 'Extreme Arctic survival',
+      conditions: '-25°F, 40mph headwind',
+      typicalResult: '50-70% distance reduction',
+      description: 'Dangerous cold meets brutal headwind. Can you even get the ball airborne?',
     },
     {
-      name: 'Everest Challenge',
-      emoji: '🏔️',
-      tagline: 'Golf at 29,000 feet',
-      conditions: '29,000ft elevation, extreme cold, thin air',
-      typicalResult: '25-35% distance increase (if you can hit it)',
-      description: 'The ultimate altitude test. Extreme cold vs. extreme thin air.',
+      name: 'Dust Bowl',
+      emoji: '🏜️',
+      tagline: 'Hot plains challenge',
+      conditions: '95°F, 12% humidity, 25mph quartering wind',
+      typicalResult: '10-15% distance increase with drift',
+      description: 'Hot, dry air helps distance but the quartering wind adds a strategic challenge.',
     },
     {
-      name: 'Crosswind Chaos',
-      emoji: '↔️',
-      tagline: 'Master the sideways challenge',
-      conditions: '80mph pure crosswind',
-      typicalResult: '100+ yard lateral movement',
-      description: 'How far can the ball curve? Test your ability to aim way left to go right.',
-    },
-    {
-      name: 'Death Valley Heat',
-      emoji: '🔥',
-      tagline: 'Record-breaking temperatures',
-      conditions: '130°F, bone-dry humidity, slight tailwind',
-      typicalResult: '20-30% distance increase',
-      description: 'The hottest golf on Earth. Maximum ball speed from extreme heat.',
+      name: 'Wind Surfer',
+      emoji: '🏄',
+      tagline: 'Surf a 150mph hurricane!',
+      conditions: '150mph tailwind, 85°F, 1000ft',
+      typicalResult: '450+ yard drives',
+      description: 'The ball "surfs" the wind! At 150mph, wind exceeds ball speed creating reverse aerodynamics. Real physics, wild results.',
     },
   ]
 
@@ -143,7 +135,7 @@ export default function GamingAPI() {
               Unforgettable Moments
             </h1>
             <p className="text-xl text-orange-100 mb-8">
-              500-yard drives. Hurricane challenges. Viral TikTok content.
+              450-yard drives. Hurricane challenges. Viral TikTok content.
               <br />
               Real physics. Extreme fun.
             </p>
@@ -206,7 +198,7 @@ export default function GamingAPI() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              10 Extreme Weather Game Modes
+              9 Extreme Weather Game Modes
             </h2>
             <p className="text-xl text-gray-600">
               Each mode uses real atmospheric physics—just pushed to extremes.
@@ -234,7 +226,7 @@ export default function GamingAPI() {
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
-                Extreme Modes (5)
+                Extreme Modes (4)
               </button>
             </div>
           </div>
@@ -319,7 +311,7 @@ export default function GamingAPI() {
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">TikTok-Ready Results</h3>
                     <p className="text-gray-600 text-sm">
-                      "500-yard drive!" videos generate thousands of views and venue tags.
+                      "450-yard drive!" videos generate thousands of views and venue tags.
                     </p>
                   </div>
                 </div>
@@ -430,13 +422,13 @@ const response = await fetch(
         player_handicap: 15,  // Just need handicap
         club: "driver"        // And club selection
       },
-      preset: "hurricane_hero"  // 75mph tailwind
+      preset: "hurricane_hero"  // 65mph tailwind
     })
   }
 );
 
 const data = await response.json();
-// Returns: ~450 yard drive for mid-handicapper!`}
+// Returns: ~300 yard drive for mid-handicapper!`}
             </pre>
           </div>
 
@@ -531,7 +523,7 @@ const data = await response.json();
               <ul className="space-y-3 text-sm text-gray-600 mb-8">
                 <li className="flex items-center gap-2">
                   <CheckCircle className="w-4 h-4 text-gaming-orange" />
-                  All 10 game modes
+                  All 9 game modes
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle className="w-4 h-4 text-gaming-orange" />

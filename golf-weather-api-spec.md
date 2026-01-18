@@ -1013,6 +1013,53 @@ curl "http://localhost:8000/v1/conditions?city=Denver&state=CO"
 
 ---
 
+## Physics Engine Updates (2026-01)
+
+### The Lift Paradox
+
+Both drag AND lift forces use **relative airspeed** (v_rel = ball speed - wind speed):
+
+```
+F_drag = ½ρv²_rel × C_D × A
+F_lift = ½ρv²_rel × C_L × A
+```
+
+This means tailwinds reduce BOTH drag AND lift. At high tailwind speeds:
+- Drag reduction helps distance (ball moves faster through still air)
+- Lift reduction hurts distance (ball drops sooner)
+
+At ~35mph tailwind, these effects balance optimally. Beyond that, lift loss dominates.
+
+### Professional vs Gaming API Split
+
+The physics engine now accepts an `api_type` parameter:
+
+**Professional API (`api_type="professional"`)**
+- Uses pure physics simulation
+- Shows realistic lift loss at high tailwinds
+- Validation caps: Wind 0-40mph, Temp 32-105°F, Altitude 0-8,000ft
+- Best for: Launch monitor integration, club fitting, coaching
+
+**Gaming API (`api_type="gaming"`)**
+- 0-40mph winds: Pure physics (same as Professional)
+- 40-100mph winds: Smart capping at +30% max boost
+- 100+mph winds: "Surfing physics" where wind exceeds ball speed
+- Best for: Entertainment venues, extreme weather modes, viral moments
+
+### Gaming Presets (9 modes)
+
+1. `hurricane_hero` - 65mph tailwind
+2. `arctic_assault` - -15°F, 30mph headwind
+3. `desert_inferno` - 115°F, 3500ft altitude
+4. `sweet_spot_tailwind` - 35mph optimal physics
+5. `monsoon_madness` - 45mph variable wind
+6. `mountain_challenge` - 8500ft elevation
+7. `polar_vortex` - -25°F extreme cold
+8. `dust_bowl` - 95°F dry plains
+9. `wind_surfer` - 150mph surfing physics
+
+---
+
 ## Next Steps After MVP
 
 1. **API Key Authentication** — Add partner API keys and usage tracking

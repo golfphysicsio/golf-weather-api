@@ -72,9 +72,40 @@ class CoordinateLocation(BaseModel):
     lng: float = Field(..., ge=-180, le=180, description="Longitude")
 
 
+class ProfessionalConditionsOverride(BaseModel):
+    """
+    Custom weather conditions for Professional API.
+    Realistic tournament-level validation ranges for accurate physics.
+    """
+    wind_speed: float = Field(
+        ..., ge=0, le=40,
+        description="Wind speed in mph (0-40). Realistic tournament maximum."
+    )
+    wind_direction: float = Field(
+        ..., ge=0, le=360,
+        description="Wind direction in degrees (0=North/headwind, 90=East, 180=South/tailwind, 270=West)"
+    )
+    temperature: float = Field(
+        ..., ge=32, le=105,
+        description="Temperature in Fahrenheit (32-105). Playable conditions."
+    )
+    humidity: float = Field(
+        ..., ge=0, le=100,
+        description="Relative humidity percentage (0-100)"
+    )
+    altitude: float = Field(
+        ..., ge=0, le=8000,
+        description="Altitude in feet (0-8,000). Realistic golf course elevations."
+    )
+    air_pressure: float = Field(
+        ..., ge=28.0, le=31.0,
+        description="Barometric pressure in inches of mercury (28-31). Normal atmospheric range."
+    )
+
+
 class ConditionsOverride(BaseModel):
     """
-    Custom weather conditions for gaming scenarios.
+    Custom weather conditions for Gaming API.
     Extended ranges beyond normal weather to support entertainment gaming.
     """
     wind_speed: float = Field(
@@ -142,9 +173,9 @@ class CalculateRequest(BaseModel):
         default=None,
         description="GPS coordinates for weather lookup"
     )
-    conditions_override: Optional[ConditionsOverride] = Field(
+    conditions_override: Optional[ProfessionalConditionsOverride] = Field(
         default=None,
-        description="Custom weather conditions (takes precedence over location)"
+        description="Custom weather conditions with professional validation (takes precedence over location)"
     )
 
     @model_validator(mode='after')
