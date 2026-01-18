@@ -1058,6 +1058,29 @@ The physics engine now accepts an `api_type` parameter:
 8. `dust_bowl` - 95°F dry plains
 9. `wind_surfer` - 150mph surfing physics
 
+### Model Limitations
+
+**Simplifications:**
+- Launch-speed approximations (full model uses time-stepped integration)
+- Relatively constant coefficients (CD/CL are speed/spin-dependent in reality)
+- Scalar relative airspeed (full implementation uses vector calculations)
+
+**Precision:**
+- Expected ranges allow ±3-5 yards for coefficient variations
+- Specific numbers are model outputs, not physics-derived guarantees
+- Appropriate for club selection and training applications
+
+**What We Can Claim:**
+- "Uses standard ball-flight physics equations"
+- "Structure consistent with industry modeling approaches"
+- "Relative airspeed applied to both drag and lift forces"
+- "Benchmarked against published reference ranges"
+
+**What We Don't Claim (Yet):**
+- "Validated against TrackMan within ±3 yards" (pending v2.0 field calibration)
+- "Field-tested tour-level accuracy"
+- "Optimal tailwind is precisely 35mph in all cases"
+
 ---
 
 ## Next Steps After MVP
