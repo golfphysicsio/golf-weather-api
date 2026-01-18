@@ -25,7 +25,10 @@ PUBLIC_PATHS = [
     "/v1/health",    # Legacy health endpoint
     "/docs/client",  # Client documentation
     "/api/request-api-key",  # API key request form (public)
-    "/api/contact",      # Contact form (public)
+    "/api/contact",          # Contact form (public)
+    "/api/v1/gaming/presets",         # Gaming presets (read-only reference)
+    "/api/v1/gaming/clubs",           # Valid clubs (read-only reference)
+    "/api/v1/gaming/stock-distances", # Stock distances (read-only reference)
 ]
 
 # Database connection pool for API key lookups
