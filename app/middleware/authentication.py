@@ -22,6 +22,8 @@ PUBLIC_PATHS = [
     "/api/v1/admin",
     "/admin-api",    # Admin dashboard API (uses Google OAuth)
     "/admin",        # Admin dashboard static files
+    "/assets",       # Website static assets (JS, CSS)
+    "/vite.svg",     # Website favicon
     "/v1/health",    # Legacy health endpoint
     "/docs/client",  # Client documentation
     "/api/request-api-key",  # API key request form (public)
@@ -29,8 +31,6 @@ PUBLIC_PATHS = [
     "/api/v1/gaming/presets",         # Gaming presets (read-only reference)
     "/api/v1/gaming/clubs",           # Valid clubs (read-only reference)
     "/api/v1/gaming/stock-distances", # Stock distances (read-only reference)
-    "/api/v1/calculate",              # TEMP: Correctness testing
-    "/api/v1/gaming/trajectory",      # TEMP: Correctness testing
 ]
 
 # Database connection pool for API key lookups
@@ -93,6 +93,11 @@ class AuthMiddleware(BaseHTTPMiddleware):
         # Skip auth for public paths
         path = request.url.path
         if any(path == p or path.startswith(p + "/") for p in PUBLIC_PATHS):
+            return await call_next(request)
+
+        # Skip auth for website pages (non-API paths)
+        # Only require auth for /api/* and /v1/* endpoints
+        if not path.startswith(("/api/", "/v1/")):
             return await call_next(request)
 
         # Get API key from header
