@@ -24,7 +24,7 @@ PUBLIC_PATHS = [
     "/admin",        # Admin dashboard static files
     "/v1/health",    # Legacy health endpoint
     "/docs/client",  # Client documentation
-    "/api/request-key",  # API key request form (public)
+    "/api/request-api-key",  # API key request form (public)
     "/api/contact",      # Contact form (public)
 ]
 
