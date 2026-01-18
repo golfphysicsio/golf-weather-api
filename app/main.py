@@ -186,17 +186,49 @@ app.include_router(trajectory.router, prefix="/v1", tags=["Trajectory (Legacy)"]
 app.include_router(conditions.router, prefix="/v1", tags=["Conditions (Legacy)"])
 
 
-@app.get("/", include_in_schema=False)
-async def root():
-    """Root endpoint with API information."""
-    return {
-        "message": "Golf Weather Physics API",
-        "version": settings.VERSION,
-        "environment": settings.ENVIRONMENT,
-        "docs": "/docs" if show_docs else "disabled",
-        "health": "/api/v1/health",
-        "admin_dashboard": "/admin",
-    }
+# ==================== MAIN WEBSITE ====================
+# Serve the React marketing website at root
+
+WEBSITE_PATH = Path(__file__).parent.parent / "website-dist"
+
+if WEBSITE_PATH.exists():
+    # Serve static assets (JS, CSS, images)
+    app.mount(
+        "/assets",
+        StaticFiles(directory=WEBSITE_PATH / "assets"),
+        name="website-assets"
+    )
+
+    @app.get("/", include_in_schema=False)
+    async def serve_website_root():
+        """Serve the marketing website at root."""
+        index_file = WEBSITE_PATH / "index.html"
+        if index_file.exists():
+            return FileResponse(index_file, media_type="text/html")
+        return {"error": "Website not found"}
+
+    # Serve vite.svg and other static files at root
+    @app.get("/vite.svg", include_in_schema=False)
+    async def serve_vite_svg():
+        """Serve vite.svg."""
+        svg_file = WEBSITE_PATH / "vite.svg"
+        if svg_file.exists():
+            return FileResponse(svg_file, media_type="image/svg+xml")
+        return {"error": "File not found"}
+
+else:
+    # Fallback if website not deployed - show API info
+    @app.get("/", include_in_schema=False)
+    async def root():
+        """Root endpoint with API information."""
+        return {
+            "message": "Golf Weather Physics API",
+            "version": settings.VERSION,
+            "environment": settings.ENVIRONMENT,
+            "docs": "/docs" if show_docs else "disabled",
+            "health": "/api/v1/health",
+            "admin_dashboard": "/admin",
+        }
 
 
 # Legacy health endpoint for backwards compatibility
@@ -253,3 +285,29 @@ if CLIENT_DOCS_PATH.exists():
         if docs_file.exists():
             return FileResponse(docs_file, media_type="text/html")
         return {"error": "Documentation not found"}
+
+
+# ==================== WEBSITE CATCH-ALL ====================
+# Handle client-side routing for React (must be last!)
+
+if WEBSITE_PATH.exists():
+    @app.get("/{full_path:path}", include_in_schema=False)
+    async def serve_website_pages(full_path: str):
+        """
+        Catch-all route for React client-side routing.
+        Serves index.html for any non-API, non-admin routes.
+        """
+        # Don't catch API routes, admin routes, or static files
+        if full_path.startswith(("api/", "v1/", "admin", "docs", "redoc", "openapi")):
+            return {"error": "Not found"}
+
+        # Check if it's a static file request
+        static_file = WEBSITE_PATH / full_path
+        if static_file.exists() and static_file.is_file():
+            return FileResponse(static_file)
+
+        # Otherwise serve index.html for client-side routing
+        index_file = WEBSITE_PATH / "index.html"
+        if index_file.exists():
+            return FileResponse(index_file, media_type="text/html")
+        return {"error": "Website not found"}
