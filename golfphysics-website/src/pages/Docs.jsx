@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Copy, Check, Zap, Shield, Code, Book, BarChart3, Gamepad2, Target } from 'lucide-react'
+import { Copy, Check, Zap, Shield, Code, Book, BarChart3, Gamepad2, Target, Building2 } from 'lucide-react'
 
 export default function Docs() {
   const [activeSection, setActiveSection] = useState('quickstart')
@@ -16,6 +16,7 @@ export default function Docs() {
     { id: 'quickstart', label: 'Quick Start', icon: Zap },
     { id: 'authentication', label: 'Authentication', icon: Shield },
     { id: 'trajectory', label: 'POST /trajectory', icon: Code, category: 'professional' },
+    { id: 'enterprise-metadata', label: 'Enterprise Metadata', icon: Building2, category: 'professional' },
     { id: 'gaming-presets', label: 'Gaming Presets', icon: Gamepad2, category: 'gaming' },
     { id: 'game-modes', label: 'Game Modes', icon: Gamepad2, category: 'gaming' },
     { id: 'sdks', label: 'SDKs', icon: Book },
@@ -356,6 +357,92 @@ X-RateLimit-Reset: 1640995200`}
   }
 }`}
                 />
+              </div>
+            )}
+
+            {/* Enterprise Metadata */}
+            {activeSection === 'enterprise-metadata' && (
+              <div className="prose max-w-none">
+                <div className="flex items-center gap-2 mb-4">
+                  <h2 className="text-2xl font-bold text-gray-900">Enterprise Metadata</h2>
+                  <span className="text-xs bg-pro-blue/10 text-pro-blue px-2 py-1 rounded-full">Professional</span>
+                </div>
+
+                <p className="text-gray-600 mb-6">
+                  For launch monitor integrations, you can include optional metadata to track
+                  shots across facilities, bays, and players.
+                </p>
+
+                <div className="bg-blue-50 border-l-4 border-blue-500 p-6 mb-6">
+                  <p className="font-semibold mb-2">All metadata fields are optional</p>
+                  <p className="text-sm text-gray-600">
+                    Metadata is echoed back in the response and can be used for your internal
+                    tracking and analytics. It does not affect physics calculations.
+                  </p>
+                </div>
+
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Request with Metadata</h3>
+                <CodeBlock
+                  id="enterprise-request"
+                  code={`{
+  "ball_speed": 145.2,
+  "launch_angle": 12.3,
+  "spin_rate": 5842,
+  "location": {"lat": 33.749, "lng": -84.388},
+
+  "metadata": {
+    "facility_id": "your_facility_id",
+    "bay_number": 12,
+    "player_id": "player_12345",
+    "session_id": "session_789",
+    "club_type": "7-iron",
+    "club_speed": 105.3,
+    "smash_factor": 1.38,
+    "player_handicap": 15
+  }
+}`}
+                />
+
+                <h3 className="text-lg font-semibold text-gray-900 mt-8 mb-3">Enhanced Response</h3>
+                <p className="text-gray-600 mb-4">
+                  The response includes your metadata, plus insights and recommendations:
+                </p>
+                <CodeBlock
+                  id="enterprise-response"
+                  code={`{
+  "request_id": "uuid-1234-5678",
+  "timestamp": "2026-01-18T14:30:05Z",
+
+  "metadata": {
+    "facility_id": "your_facility_id",
+    "bay_number": 12,
+    "player_id": "player_12345",
+    "club_type": "7-iron"
+  },
+
+  "trajectory": {
+    "carry_distance_yards": 156,
+    "total_distance_yards": 164,
+    "apex_height_feet": 82
+  },
+
+  "insights": [
+    "8mph headwind reducing 3 yards",
+    "High humidity (72%) reducing 2 yards"
+  ],
+
+  "recommendations": {
+    "club_suggestion": "Consider 6-iron for 162-yard target",
+    "optimal_launch_angle": 13.2
+  }
+}`}
+                />
+
+                <div className="mt-8">
+                  <Link to="/enterprise" className="text-golf-green hover:underline font-semibold">
+                    View full Enterprise Integration guide →
+                  </Link>
+                </div>
               </div>
             )}
 

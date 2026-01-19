@@ -1,0 +1,635 @@
+PROMPT FOR CLAUDE CODE - PRODUCTION DEPLOYMENT & FINAL REFINEMENTS
+==================================================================
+
+⚠️ CRITICAL: Multiple items are pending production deployment. This prompt consolidates everything.
+
+Copy and paste this to Claude Code:
+
+---
+
+I need you to complete all pending production tasks and deploy everything to production.
+
+## Context: What's Been Done
+
+You've been working on several major updates:
+
+1. **Physics Fix** (Completed, committed locally)
+   - Commit: e0607a9 "Fix physics calculation: add Lift Paradox handling and API type split"
+   - Status: Committed to local git, NOT pushed to Railway production
+   - Changes: 9 files, +614/-145 lines
+
+2. **Website Rebuild** (Status Unknown)
+   - May be complete, in progress, or pending
+   - Dual-market positioning (Professional + Gaming)
+   - 8 pages total
+
+3. **Documentation Updates** (Need Verification)
+   - API spec updated
+   - Website content
+   - Physics validation table
+
+## Required Reading
+
+**Document Location:** C:\Users\Vtorr\OneDrive\GolfWeatherAPI\website build
+
+**Files to review:**
+1. **professional_api_physics_validation_v2.md** (NEW - just created)
+   - Refined validation table incorporating external reviewer feedback
+   - All technical language tightened
+   - Model limitations clearly stated
+   - Needs to be integrated into documentation
+
+## Your Mission
+
+Complete ALL pending tasks and deploy EVERYTHING to production without waiting for approval.
+
+---
+
+## PART 1: VERIFY CURRENT STATUS
+
+### Task 1.1: Check Git Status
+
+Run these commands and report what's pending:
+
+```bash
+cd /path/to/golf-weather-api
+
+# Check local commits not pushed
+git log origin/main..HEAD --oneline
+
+# Check uncommitted changes
+git status
+
+# Check current branch
+git branch
+```
+
+**Report:**
+- How many commits are ahead of origin/main?
+- Any uncommitted changes?
+- Current branch name?
+
+---
+
+### Task 1.2: Check Website Status
+
+```bash
+cd /path/to/golfphysics-website  # or wherever website lives
+
+# Check git status
+git status
+git log origin/main..HEAD --oneline
+
+# Check if built
+ls -la dist/ 2>/dev/null || echo "Not built yet"
+```
+
+**Report:**
+- Website rebuild complete?
+- Committed and ready to push?
+- Production build exists?
+
+---
+
+## PART 2: UPDATE VALIDATION TABLE IN DOCS
+
+### Task 2.1: Integrate Refined Validation Table
+
+**File:** `professional_api_physics_validation_v2.md`
+
+This is the **reviewer-approved** version that fixes all technical language issues.
+
+**Update these locations:**
+
+1. **API Repository** - Add to docs:
+   ```
+   golf-weather-api/
+   └── docs/
+       └── PHYSICS_VALIDATION.md  (replace or create with v2 content)
+   ```
+
+2. **Website** - Update Science page:
+   ```
+   Use the refined language from v2 for:
+   - "Model Simplifications" section
+   - "Tailwind effects" explanation (relative airflow, not just "reduces lift")
+   - "Distance Definitions" (carry vs total)
+   - "Model Domain" justification for caps
+   ```
+
+3. **API Spec** - Update:
+   ```
+   golf-weather-api-spec.md
+   - Add "Model Limitations" section
+   - Update "Physics Engine Updates" with refined language
+   - Add "What We Can Claim" section
+   ```
+
+**Changes to make:**
+
+OLD language → NEW language replacements:
+
+```markdown
+❌ "Tailwinds reduce both drag and lift"
+✅ "Tailwinds reduce relative airflow, which reduces dynamic pressure and 
+    therefore reduces both drag and lift terms (subject to CD/CL variation)"
+
+❌ "Expected Carry: 295-310 yards"
+✅ "Expected carry output (model, launch-approx validation): ~295-310 yd"
+
+❌ "Validated against TrackMan within ±5 yards"
+✅ "Benchmarked against published reference ranges"
+
+❌ "Optimal tailwind is 35mph"
+✅ "This test case often falls near the model's peak-carry region for these 
+    launch conditions; the exact optimum shifts with launch angle, spin, 
+    and coefficient model"
+```
+
+**Commit message:**
+```
+Refine physics validation table based on external review
+
+- Add model simplifications section
+- Define carry vs total distance
+- Soften precision claims (model outputs, not guarantees)
+- Add model domain justification for 40mph cap
+- Use technically precise language for tailwind effects
+- Widen ranges to allow coefficient variation (±3-5 yards)
+```
+
+---
+
+## PART 3: PRODUCTION DEPLOYMENT CHECKLIST
+
+### Task 3.1: API Production Deployment
+
+**Current Status:** Physics fix committed locally (e0607a9)
+
+**Required Actions:**
+
+1. **Verify tests still pass:**
+   ```bash
+   cd golf-weather-api
+   
+   # Run correctness tests
+   python tests/correctness_test_suite.py
+   
+   # Verify Professional API rejects 50mph wind
+   curl -X POST http://localhost:8000/api/v1/calculate \
+     -H "Content-Type: application/json" \
+     -d '{"conditions_override": {"wind_speed": 50}}'
+   # Should return 422 validation error
+   
+   # Verify Gaming API accepts 150mph
+   curl -X POST http://localhost:8000/api/v1/gaming/trajectory \
+     -H "Content-Type: application/json" \
+     -d '{"preset": "wind_surfer"}'
+   # Should return ~450 yards
+   ```
+
+2. **Push to Railway:**
+   ```bash
+   # Push physics fix to production
+   git push origin main
+   
+   # Railway auto-deploys
+   # Monitor: https://railway.app (check logs)
+   ```
+
+3. **Verify production deployment:**
+   ```bash
+   # Test production API
+   PROD_URL="https://your-production-url.railway.app"
+   
+   # Test Professional API cap
+   curl -X POST $PROD_URL/api/v1/calculate \
+     -H "Content-Type: application/json" \
+     -d '{
+       "ball_speed": 167,
+       "launch_angle": 11.2,
+       "spin_rate": 2600,
+       "conditions_override": {"wind_speed": 50}
+     }'
+   # Should return 422
+   
+   # Test Gaming API Wind Surfer
+   curl -X POST $PROD_URL/api/v1/gaming/trajectory \
+     -H "Content-Type: application/json" \
+     -d '{"shot": {"player_handicap": 2, "club": "driver"}, "preset": "wind_surfer"}'
+   # Should return ~450 yards
+   ```
+
+**Deliverable:**
+- Confirmation that Railway deployment succeeded
+- Production API test results
+- Any errors encountered
+
+---
+
+### Task 3.2: Website Production Deployment
+
+**Check Status:**
+```bash
+cd golfphysics-website
+git status
+```
+
+**If website rebuild is complete:**
+
+1. **Verify build:**
+   ```bash
+   npm run build
+   
+   # Check dist/ output
+   ls -la dist/
+   ```
+
+2. **Deploy to production:**
+   
+   **If using Vercel:**
+   ```bash
+   vercel --prod
+   ```
+   
+   **If using Netlify:**
+   ```bash
+   netlify deploy --prod
+   ```
+   
+   **If using Railway static:**
+   ```bash
+   git push origin main
+   ```
+
+3. **Verify production website:**
+   - Homepage shows dual-market positioning ✓
+   - Professional API page exists ✓
+   - Gaming API page exists with 9 modes ✓
+   - Science page has "Lift Paradox" section ✓
+   - Pricing page has dual tiers ✓
+
+**If website rebuild is NOT complete:**
+
+Follow the website rebuild plan from previous documents:
+- Phase 1: Homepage + both API pages
+- Phase 2: Pricing + Science
+- Phase 3: Docs + polish
+- Then deploy
+
+**Deliverable:**
+- Production website URL
+- Screenshots of key pages
+- Confirmation all 8 pages are live
+
+---
+
+### Task 3.3: Documentation Production
+
+**Update all docs to production:**
+
+1. **API Documentation:**
+   ```bash
+   # Ensure docs reflect current state
+   - Professional API caps (40mph)
+   - Gaming API modes (9 total)
+   - Model limitations section
+   - Physics validation table (v2)
+   ```
+
+2. **README files:**
+   ```bash
+   # Update README.md in both repos
+   - Current status
+   - What's deployed
+   - How to test
+   - Known limitations
+   ```
+
+3. **Changelog:**
+   ```bash
+   # Create/update CHANGELOG.md
+   
+   ## [2.0.0] - 2026-01-18
+   
+   ### Changed
+   - Split Professional vs Gaming API physics handling
+   - Professional API: Pure physics, realistic caps (wind 0-40mph)
+   - Gaming API: Smart capping for extreme conditions
+   
+   ### Added
+   - Wind Surfer mode (150mph surfing physics)
+   - Sweet Spot Tailwind mode (35mph optimal)
+   - Model limitations documentation
+   - Physics validation table (reviewer-approved)
+   
+   ### Removed
+   - Tornado Alley preset (85mph - unrealistic)
+   - Typhoon Terror preset (95mph - unrealistic)
+   
+   ### Fixed
+   - Physics calculation bug (empirical override at extreme winds)
+   - Lift loss now correctly shown in Professional API
+   - Science page explains both drag AND lift forces
+   ```
+
+**Commit and push all docs:**
+```bash
+git add .
+git commit -m "docs: update documentation for production v2.0 deployment"
+git push origin main
+```
+
+---
+
+## PART 4: LOGGING REQUIREMENTS
+
+**CRITICAL: You must create detailed logs of EVERYTHING you do.**
+
+### Task 4.1: Create Deployment Log
+
+**File:** `DEPLOYMENT_LOG_2026-01-18.md`
+
+**Template:**
+```markdown
+# Production Deployment Log
+**Date:** January 18, 2026
+**Version:** v2.0.0
+**Deployed By:** Claude Code
+
+---
+
+## Pre-Deployment Status
+
+**API (golf-weather-api):**
+- Commits ahead of origin/main: [X]
+- Local changes: [list]
+- Current branch: [name]
+
+**Website (golfphysics-website):**
+- Status: [complete/in-progress/pending]
+- Commits ahead: [X]
+- Build status: [yes/no]
+
+---
+
+## Actions Taken
+
+### 1. Validation Table Update
+- [ ] Integrated professional_api_physics_validation_v2.md
+- [ ] Updated Science page language
+- [ ] Updated API spec
+- [ ] Commit: [hash]
+
+### 2. API Production Deployment
+- [ ] Tests verified passing
+- [ ] Pushed to Railway: [timestamp]
+- [ ] Deployment succeeded: [yes/no]
+- [ ] Production tests passed: [yes/no]
+- [ ] Errors: [none/list]
+
+### 3. Website Production Deployment
+- [ ] Build completed: [timestamp]
+- [ ] Deployed to: [Vercel/Netlify/Railway]
+- [ ] Production URL: [url]
+- [ ] All pages verified: [yes/no]
+- [ ] Errors: [none/list]
+
+### 4. Documentation Updates
+- [ ] PHYSICS_VALIDATION.md updated
+- [ ] README.md updated
+- [ ] CHANGELOG.md created/updated
+- [ ] All docs pushed: [yes/no]
+
+---
+
+## Post-Deployment Verification
+
+**API Endpoints Tested:**
+- [ ] POST /api/v1/calculate (Professional)
+  - Test: 50mph wind rejection → [PASS/FAIL]
+  - Response: [show response]
+
+- [ ] POST /api/v1/gaming/trajectory
+  - Test: wind_surfer preset → [PASS/FAIL]
+  - Expected: ~450 yards
+  - Actual: [X] yards
+
+**Website Pages Verified:**
+- [ ] Homepage (dual-market hero)
+- [ ] Professional API page
+- [ ] Gaming API page (9 modes)
+- [ ] Pricing page (dual tiers)
+- [ ] Science page (Lift Paradox)
+- [ ] About page
+- [ ] Documentation
+- [ ] Contact page
+
+---
+
+## Production URLs
+
+**API:** https://[production-url].railway.app
+**Website:** https://[production-url].[platform].app
+**Docs:** https://[production-url]/docs
+
+---
+
+## Issues Encountered
+
+[List any issues and how they were resolved]
+
+---
+
+## Next Steps
+
+- [ ] Monitor Railway logs for errors
+- [ ] Monitor website analytics
+- [ ] Set up error alerting
+- [ ] Schedule TrackMan calibration (v2.0)
+
+---
+
+## Sign-Off
+
+Deployment completed: [timestamp]
+Status: [SUCCESS/PARTIAL/FAILED]
+Notes: [any final notes]
+```
+
+**Save this log to:** `C:\Users\Vtorr\OneDrive\GolfWeatherAPI\website build\DEPLOYMENT_LOG_2026-01-18.md`
+
+---
+
+### Task 4.2: Create Change Summary
+
+**File:** `PRODUCTION_CHANGES_SUMMARY.md`
+
+Document what changed between old and new production:
+
+```markdown
+# Production Changes Summary - v2.0.0
+
+## API Changes
+
+**Professional API:**
+- Now uses pure physics (no empirical override)
+- Validation caps: Wind 0-40mph, Temp 32-105°F, Altitude 0-8000ft
+- Shows realistic lift loss at extreme conditions
+- Rejects unrealistic inputs with 422 error
+
+**Gaming API:**
+- Smart capping: 0-40mph pure physics, 40-100mph +30% cap, 100+mph surfing
+- Presets reduced from 10 to 9:
+  - Removed: tornado_alley, typhoon_terror
+  - Added: sweet_spot_tailwind
+  - Renamed: maximum_tailwind → wind_surfer
+- Wind Surfer mode: 150mph → ~450 yards (surfing physics)
+
+## Website Changes
+
+**New Pages:**
+- Professional API page (dedicated)
+- Gaming API page (dedicated, 9 modes)
+- Science page (with Lift Paradox)
+- About page
+
+**Updated Pages:**
+- Homepage (dual-market positioning)
+- Pricing (dual tiers: Professional + Gaming)
+- Documentation (extended with Gaming API)
+- Contact (interest selector)
+
+## Documentation Changes
+
+**New:**
+- PHYSICS_VALIDATION.md (reviewer-approved v2)
+- Model Limitations section
+- "What We Can Claim" guidelines
+
+**Updated:**
+- API spec (Physics Engine Updates section)
+- Science page (refined technical language)
+- README files (current deployment status)
+
+## Breaking Changes
+
+⚠️ **Professional API:**
+- Wind speeds >40mph now rejected (was: accepted with empirical override)
+- Returns 422 validation error instead of calculating
+- Clients using extreme winds must migrate to Gaming API
+
+## Migration Guide
+
+**If you were using winds >40mph:**
+```
+Old: POST /api/v1/calculate with 65mph wind
+New: POST /api/v1/gaming/trajectory with preset or custom conditions
+```
+
+**If you need pure physics with extreme conditions:**
+- Not supported in Professional API (product decision)
+- Use Gaming API which supports extended ranges
+- Gaming API uses pure physics for 100+ mph (surfing regime)
+```
+
+---
+
+## PART 5: FINAL VERIFICATION
+
+After completing all tasks above:
+
+### Checklist
+
+**API Production:**
+- [ ] Physics fix pushed to Railway
+- [ ] Deployment succeeded (check Railway dashboard)
+- [ ] Professional API rejects 50mph wind
+- [ ] Gaming API returns ~450 yards for wind_surfer
+- [ ] No errors in Railway logs
+
+**Website Production:**
+- [ ] All 8 pages deployed and live
+- [ ] Dual-market positioning clear
+- [ ] Science page has refined language
+- [ ] 9 game modes shown (not 10)
+- [ ] No broken links
+
+**Documentation:**
+- [ ] Validation table v2 integrated
+- [ ] API spec updated
+- [ ] CHANGELOG created
+- [ ] README files current
+
+**Logging:**
+- [ ] DEPLOYMENT_LOG created with all actions
+- [ ] PRODUCTION_CHANGES_SUMMARY created
+- [ ] All logs saved to correct folder
+
+---
+
+## DELIVERABLES
+
+When you're done, provide:
+
+1. **Deployment Log** (complete)
+2. **Production URLs:**
+   - API: [url]
+   - Website: [url]
+3. **Test Results:**
+   - Professional API: 50mph rejection ✓
+   - Gaming API: Wind Surfer ~450 yards ✓
+4. **Screenshots:**
+   - Updated Science page
+   - Gaming API page (9 modes)
+5. **Git Summary:**
+   - Commits pushed: [X]
+   - Files changed: [X]
+6. **Status:**
+   - API: DEPLOYED / FAILED
+   - Website: DEPLOYED / FAILED
+   - Docs: UPDATED / PENDING
+
+---
+
+## IMPORTANT REMINDERS
+
+**You have FULL AUTHORITY to:**
+- ✅ Push all commits to origin/main
+- ✅ Deploy to Railway/Vercel/Netlify
+- ✅ Update all documentation
+- ✅ Make any necessary fixes
+- ✅ Test in production
+
+**Only STOP if:**
+- ❌ Tests fail in production (report what failed)
+- ❌ Deployment fails (show error logs)
+- ❌ Breaking change detected (explain issue)
+
+**Otherwise:**
+- Work through all tasks continuously
+- Don't wait for approval
+- Log everything
+- Deploy everything
+
+---
+
+## EXECUTION ORDER
+
+1. ✅ Check current status (git, builds)
+2. ✅ Update validation table in all locations
+3. ✅ Commit documentation updates
+4. ✅ Push API to Railway production
+5. ✅ Verify API deployment
+6. ✅ Deploy website to production
+7. ✅ Verify website deployment
+8. ✅ Create deployment log
+9. ✅ Create changes summary
+10. ✅ Final verification
+11. ✅ Report deliverables
+
+---
+
+**Ready to execute. Begin with Task 1.1 (Check Git Status) and work through everything.**
+
+Let's ship this to production! 🚀

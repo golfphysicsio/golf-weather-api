@@ -1,0 +1,108 @@
+======================================================================
+GOLF WEATHER API - PRODUCTION BENCHMARK TESTS
+======================================================================
+API: https://golf-weather-api-staging.up.railway.app
+Date: 2026-01-18 15:27:48
+
+=== Health Check ===
+Status: healthy
+Version: 1.0.6
+Environment: staging
+
+=== Validation Cap Tests ===
+
+Test: 40mph wind (should accept)...
+  PASS: 40mph accepted, carry=106.9 yards
+
+Test: 50mph wind (should reject)...
+  PASS: 50mph rejected with 422
+
+Test: 110F temperature (should reject)...
+  PASS: 110F rejected with 422
+
+Test: 9000ft altitude (should reject)...
+  PASS: 9000ft rejected with 422
+
+=== Gaming Preset Tests ===
+
+Test: calm_day...
+  PASS: calm_day = 255.4 yards
+
+Test: hurricane_hero...
+  PASS: hurricane_hero = 332.2 yards
+
+Test: arctic_assault...
+  ERROR: HTTPSConnectionPool(host='golf-weather-api-staging.up.railway.app', port=443): Max retries exceeded with url: /api/v1/gaming/trajectory (Caused by ConnectTimeoutError(<HTTPSConnection(host='golf-weather-api-staging.up.railway.app', port=443) at 0x18f82029090>, 'Connection to golf-weather-api-staging.up.railway.app timed out. (connect timeout=15)'))
+
+Test: desert_inferno...
+  PASS: desert_inferno = 271.9 yards
+
+Test: sweet_spot_tailwind...
+  PASS: sweet_spot_tailwind = 270.1 yards
+
+Test: monsoon_madness...
+  PASS: monsoon_madness = 303.2 yards
+
+Test: mountain_challenge...
+  PASS: mountain_challenge = 303.2 yards
+
+Test: polar_vortex...
+  PASS: polar_vortex = 60.3 yards
+
+Test: dust_bowl...
+  PASS: dust_bowl = 285.9 yards
+
+Test: wind_surfer...
+  PASS: wind_surfer = 481.6 yards
+
+=== Industry Benchmark Tests ===
+
+Test: PGA Tour average baseline (calm)...
+  Result: 270.4 yards (expected ~271, diff 0.6)
+  PASS: Within +/-5 yards of benchmark
+
+Test: Denver altitude effect (5280ft)...
+  Result: 287.5 yards (6.1% increase)
+  PASS: Expected 4-8% increase
+
+Test: Sweet spot 35mph tailwind...
+  Result: 291.8 yards (expected 280-320)
+  PASS
+
+Test: Wind Surfer 150mph tailwind...
+  Result: 452.8 yards (expected 430-500)
+  PASS
+
+======================================================================
+SUMMARY
+======================================================================
+
+Total: 18/19 tests passed (94.7%)
+
+Validation Caps:
+  [PASS] 40mph acceptance
+  [PASS] 50mph rejection
+  [PASS] 110F rejection
+  [PASS] 9000ft rejection
+
+Gaming Presets:
+  [PASS] calm_day: 255.4 yards
+  [PASS] hurricane_hero: 332.2 yards
+  [FAIL] arctic_assault: 0.0 yards
+  [PASS] desert_inferno: 271.9 yards
+  [PASS] sweet_spot_tailwind: 270.1 yards
+  [PASS] monsoon_madness: 303.2 yards
+  [PASS] mountain_challenge: 303.2 yards
+  [PASS] polar_vortex: 60.3 yards
+  [PASS] dust_bowl: 285.9 yards
+  [PASS] wind_surfer: 481.6 yards
+
+Industry Benchmarks:
+  [PASS] PGA baseline: 270.4 yards (expected ~271)
+  [PASS] Denver altitude: 287.5 yards (expected ~287)
+  [PASS] Sweet spot tailwind: 291.8 yards (expected ~302)
+  [PASS] Wind Surfer: 452.8 yards (expected ~450)
+
+======================================================================
+SOME TESTS FAILED (1 failures)
+======================================================================

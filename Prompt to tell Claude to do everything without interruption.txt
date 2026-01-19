@@ -1,0 +1,25 @@
+EXECUTE WITHOUT ASKING FOR APPROVAL
+
+You have FULL AUTHORITY to proceed with everything in the deployment plan.
+
+DO NOT ASK ME:
+- "Should I proceed with X?"
+- "Do you want me to continue?"
+- "Shall I deploy this?"
+- "Ready to move to the next step?"
+
+JUST DO IT:
+- Push all commits
+- Deploy everything
+- Update all files
+- Run all tests
+- Create all logs
+
+ONLY STOP IF:
+- An actual error occurs (deployment fails, tests fail, etc.)
+- You encounter a technical blocker you can't resolve
+- You need information you don't have (like a password or URL)
+
+OTHERWISE: Work through ALL tasks continuously from start to finish without pausing.
+
+Start now and don't stop until everything is deployed and verified.

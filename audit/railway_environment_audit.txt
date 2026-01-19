@@ -1,0 +1,1013 @@
+CLAUDE CODE - RAILWAY ENVIRONMENT AUDIT (STAGING vs PRODUCTION)
+================================================================
+
+⚠️ CRITICAL INSTRUCTIONS:
+
+DO NOT ASK FOR APPROVAL AT ANY STEP.
+DO NOT PAUSE TO CONFIRM.
+DO NOT WAIT FOR USER INPUT.
+
+Execute EVERYTHING in this prompt from start to finish.
+Only stop if you encounter an actual technical error.
+
+If something asks "Do you want to proceed?" → Answer YES automatically.
+If something asks "Continue?" → Answer YES automatically.
+If something needs confirmation → Provide it automatically.
+
+WORK CONTINUOUSLY WITHOUT STOPPING.
+
+================================================================
+
+## PROJECT CONTEXT
+
+**Railway Project:** soothing-happiness
+**Environments:** production + staging (both in Railway)
+**Codebase:** Same code deployed to both (from main branch)
+**Goal:** Ensure staging = production except for environment-specific URLs
+
+**Expected State:**
+- Same git commit deployed to both environments
+- Same code, same dependencies
+- Different environment variables (URLs, keys)
+- Same API behavior, same physics results
+
+================================================================
+
+## PART 1: RAILWAY ENVIRONMENT STATUS
+
+### Task 1.1: Check Railway Connection
+
+```bash
+# Verify Railway CLI is available
+railway --version || echo "ERROR: Railway CLI not installed"
+
+# Check if linked to project
+railway status || echo "Not linked - will link now"
+
+# Link to project if needed
+railway link || echo "Link manually: soothing-happiness"
+
+# List environments
+echo "=== Railway Environments ===" > environment_audit.txt
+railway environment list >> environment_audit.txt 2>&1
+```
+
+### Task 1.2: Get Environment URLs
+
+```bash
+echo "" >> environment_audit.txt
+echo "=== Environment URLs ===" >> environment_audit.txt
+
+# Staging URL
+railway environment staging
+STAGING_URL=$(railway status | grep -oP 'https://[^\s]+' | head -1)
+echo "Staging: $STAGING_URL" >> environment_audit.txt
+
+# Production URL
+railway environment production
+PROD_URL=$(railway status | grep -oP 'https://[^\s]+' | head -1)
+echo "Production: $PROD_URL" >> environment_audit.txt
+
+echo "" >> environment_audit.txt
+echo "Expected staging: golf-weather-api-staging.up.railway.app" >> environment_audit.txt
+echo "Expected production: golf-weather-api-production.up.railway.app" >> environment_audit.txt
+```
+
+### Task 1.3: Check Deployment Status
+
+```bash
+echo "" >> environment_audit.txt
+echo "=== Deployment Status ===" >> environment_audit.txt
+
+# Get staging deployment info
+railway environment staging
+echo "Staging:" >> environment_audit.txt
+railway status >> environment_audit.txt 2>&1
+
+echo "" >> environment_audit.txt
+
+# Get production deployment info
+railway environment production
+echo "Production:" >> environment_audit.txt
+railway status >> environment_audit.txt 2>&1
+```
+
+---
+
+## PART 2: CODE VERSION VERIFICATION
+
+### Task 2.1: Check Current Git State
+
+```bash
+echo "" >> environment_audit.txt
+echo "=== Git Status ===" >> environment_audit.txt
+
+# Current branch and commit
+git branch --show-current >> environment_audit.txt
+git log -1 --oneline >> environment_audit.txt
+
+# Check for uncommitted changes
+echo "" >> environment_audit.txt
+echo "Uncommitted changes:" >> environment_audit.txt
+git status --short >> environment_audit.txt || echo "None" >> environment_audit.txt
+
+# Check if staging and production are on same commit
+echo "" >> environment_audit.txt
+echo "Latest commit on main:" >> environment_audit.txt
+git log origin/main -1 --oneline >> environment_audit.txt 2>&1
+```
+
+### Task 2.2: Verify Built Website Files
+
+```bash
+echo "" >> environment_audit.txt
+echo "=== Built Website Files ===" >> environment_audit.txt
+
+# Check website-dist exists
+if [ -d "website-dist" ]; then
+    echo "✅ website-dist/ exists" >> environment_audit.txt
+    ls -la website-dist/ | head -10 >> environment_audit.txt
+else
+    echo "❌ website-dist/ NOT FOUND" >> environment_audit.txt
+fi
+
+echo "" >> environment_audit.txt
+
+# Check admin-dashboard-dist exists
+if [ -d "admin-dashboard-dist" ]; then
+    echo "✅ admin-dashboard-dist/ exists" >> environment_audit.txt
+    ls -la admin-dashboard-dist/ | head -10 >> environment_audit.txt
+else
+    echo "❌ admin-dashboard-dist/ NOT FOUND" >> environment_audit.txt
+fi
+
+# These should be committed to git
+echo "" >> environment_audit.txt
+echo "Checking if built files are in git:" >> environment_audit.txt
+git ls-files website-dist/ | wc -l >> environment_audit.txt
+git ls-files admin-dashboard-dist/ | wc -l >> environment_audit.txt
+```
+
+---
+
+## PART 3: ENVIRONMENT VARIABLES COMPARISON
+
+### Task 3.1: Extract Environment Variables
+
+```bash
+echo "" >> environment_audit.txt
+echo "=== Environment Variables Comparison ===" >> environment_audit.txt
+
+# Get staging variables
+railway environment staging
+railway variables > vars_staging.txt 2>&1
+echo "Staging variables extracted" >> environment_audit.txt
+
+# Get production variables
+railway environment production
+railway variables > vars_production.txt 2>&1
+echo "Production variables extracted" >> environment_audit.txt
+```
+
+### Task 3.2: Compare Variables (Excluding URLs)
+
+```bash
+echo "" >> environment_audit.txt
+echo "=== Variable Differences ===" >> environment_audit.txt
+
+# Extract variable names (left of =)
+grep -oP '^[A-Z_]+(?==)' vars_staging.txt | sort > vars_staging_names.txt 2>/dev/null || \
+  grep -o "^[A-Z_]*" vars_staging.txt | sort > vars_staging_names.txt
+
+grep -oP '^[A-Z_]+(?==)' vars_production.txt | sort > vars_production_names.txt 2>/dev/null || \
+  grep -o "^[A-Z_]*" vars_production.txt | sort > vars_production_names.txt
+
+# Variables only in staging
+comm -23 vars_staging_names.txt vars_production_names.txt > vars_only_staging.txt
+if [ -s vars_only_staging.txt ]; then
+    echo "❌ Variables ONLY in staging:" >> environment_audit.txt
+    cat vars_only_staging.txt >> environment_audit.txt
+else
+    echo "✅ No staging-only variables" >> environment_audit.txt
+fi
+
+echo "" >> environment_audit.txt
+
+# Variables only in production
+comm -13 vars_staging_names.txt vars_production_names.txt > vars_only_production.txt
+if [ -s vars_only_production.txt ]; then
+    echo "❌ Variables ONLY in production:" >> environment_audit.txt
+    cat vars_only_production.txt >> environment_audit.txt
+else
+    echo "✅ No production-only variables" >> environment_audit.txt
+fi
+
+echo "" >> environment_audit.txt
+
+# Check expected variables exist in both
+echo "=== Critical Variables Check ===" >> environment_audit.txt
+REQUIRED_VARS="DATABASE_URL REDIS_URL SENDGRID_API_KEY BACKEND_URL FRONTEND_URL RECAPTCHA_SECRET_KEY WEATHER_API_KEY ENVIRONMENT"
+
+for var in $REQUIRED_VARS; do
+    STAGING_HAS=$(grep -c "^$var=" vars_staging.txt 2>/dev/null || echo "0")
+    PROD_HAS=$(grep -c "^$var=" vars_production.txt 2>/dev/null || echo "0")
+    
+    if [ "$STAGING_HAS" -eq 1 ] && [ "$PROD_HAS" -eq 1 ]; then
+        echo "✅ $var exists in both" >> environment_audit.txt
+    elif [ "$STAGING_HAS" -eq 0 ] && [ "$PROD_HAS" -eq 0 ]; then
+        echo "⚠️  $var missing from both" >> environment_audit.txt
+    elif [ "$STAGING_HAS" -eq 0 ]; then
+        echo "❌ $var missing from STAGING" >> environment_audit.txt
+    else
+        echo "❌ $var missing from PRODUCTION" >> environment_audit.txt
+    fi
+done
+```
+
+### Task 3.3: Check URL Variables
+
+```bash
+echo "" >> environment_audit.txt
+echo "=== URL Variables Verification ===" >> environment_audit.txt
+
+# Extract URLs from each environment
+echo "Staging URLs:" >> environment_audit.txt
+grep -E "BACKEND_URL|FRONTEND_URL" vars_staging.txt >> environment_audit.txt 2>&1
+
+echo "" >> environment_audit.txt
+echo "Production URLs:" >> environment_audit.txt
+grep -E "BACKEND_URL|FRONTEND_URL" vars_production.txt >> environment_audit.txt 2>&1
+
+echo "" >> environment_audit.txt
+echo "Expected:" >> environment_audit.txt
+echo "Staging BACKEND_URL: https://golf-weather-api-staging.up.railway.app" >> environment_audit.txt
+echo "Staging FRONTEND_URL: https://golf-weather-api-staging.up.railway.app" >> environment_audit.txt
+echo "Production BACKEND_URL: https://api.golfphysics.io" >> environment_audit.txt
+echo "Production FRONTEND_URL: https://www.golfphysics.io" >> environment_audit.txt
+```
+
+### Task 3.4: Check ENVIRONMENT Variable
+
+```bash
+echo "" >> environment_audit.txt
+echo "=== ENVIRONMENT Variable ===" >> environment_audit.txt
+
+STAGING_ENV=$(grep "^ENVIRONMENT=" vars_staging.txt | cut -d'=' -f2 2>/dev/null || echo "NOT SET")
+PROD_ENV=$(grep "^ENVIRONMENT=" vars_production.txt | cut -d'=' -f2 2>/dev/null || echo "NOT SET")
+
+echo "Staging ENVIRONMENT: $STAGING_ENV" >> environment_audit.txt
+echo "Production ENVIRONMENT: $PROD_ENV" >> environment_audit.txt
+
+if [ "$STAGING_ENV" = "staging" ] && [ "$PROD_ENV" = "production" ]; then
+    echo "✅ ENVIRONMENT variables correctly set" >> environment_audit.txt
+else
+    echo "❌ ENVIRONMENT variables incorrect" >> environment_audit.txt
+    echo "   Expected staging=staging, production=production" >> environment_audit.txt
+fi
+```
+
+---
+
+## PART 4: DATABASE SCHEMA COMPARISON
+
+### Task 4.1: Check Database URLs
+
+```bash
+echo "" >> environment_audit.txt
+echo "=== Database Configuration ===" >> environment_audit.txt
+
+# Check if DATABASE_URL exists in both
+STAGING_DB=$(grep "^DATABASE_URL=" vars_staging.txt 2>/dev/null | wc -l)
+PROD_DB=$(grep "^DATABASE_URL=" vars_production.txt 2>/dev/null | wc -l)
+
+if [ "$STAGING_DB" -eq 1 ] && [ "$PROD_DB" -eq 1 ]; then
+    echo "✅ Both environments have DATABASE_URL" >> environment_audit.txt
+    echo "" >> environment_audit.txt
+    echo "⚠️  Note: Staging and production use SEPARATE databases" >> environment_audit.txt
+    echo "This is expected - they should have same SCHEMA, different DATA" >> environment_audit.txt
+else
+    echo "❌ Database configuration issue" >> environment_audit.txt
+    echo "   Staging has DATABASE_URL: $STAGING_DB" >> environment_audit.txt
+    echo "   Production has DATABASE_URL: $PROD_DB" >> environment_audit.txt
+fi
+```
+
+### Task 4.2: Compare Database Schemas
+
+```bash
+echo "" >> environment_audit.txt
+echo "=== Database Schema Comparison ===" >> environment_audit.txt
+
+# Create Python script to compare schemas
+cat > compare_schemas.py << 'PYEOF'
+import os
+import sys
+from sqlalchemy import create_engine, inspect
+
+try:
+    # Get database URLs from environment
+    staging_db = None
+    prod_db = None
+    
+    # Read from vars files
+    with open('vars_staging.txt', 'r') as f:
+        for line in f:
+            if line.startswith('DATABASE_URL='):
+                staging_db = line.split('=', 1)[1].strip()
+    
+    with open('vars_production.txt', 'r') as f:
+        for line in f:
+            if line.startswith('DATABASE_URL='):
+                prod_db = line.split('=', 1)[1].strip()
+    
+    if not staging_db or not prod_db:
+        print("Could not extract database URLs from vars files")
+        sys.exit(1)
+    
+    # Connect to both databases
+    staging_engine = create_engine(staging_db)
+    prod_engine = create_engine(prod_db)
+    
+    staging_inspector = inspect(staging_engine)
+    prod_inspector = inspect(prod_engine)
+    
+    # Get table names
+    staging_tables = set(staging_inspector.get_table_names())
+    prod_tables = set(prod_inspector.get_table_names())
+    
+    print(f"Staging tables ({len(staging_tables)}): {sorted(staging_tables)}")
+    print(f"Production tables ({len(prod_tables)}): {sorted(prod_tables)}")
+    print()
+    
+    # Compare
+    if staging_tables == prod_tables:
+        print("✅ Table names match")
+    else:
+        print("❌ Table differences found:")
+        only_staging = staging_tables - prod_tables
+        only_prod = prod_tables - staging_tables
+        if only_staging:
+            print(f"  Only in staging: {sorted(only_staging)}")
+        if only_prod:
+            print(f"  Only in production: {sorted(only_prod)}")
+    
+    print()
+    
+    # Compare columns for common tables
+    common_tables = staging_tables & prod_tables
+    schema_diffs = []
+    
+    for table in sorted(common_tables):
+        staging_cols = {col['name']: col['type'].__class__.__name__ 
+                       for col in staging_inspector.get_columns(table)}
+        prod_cols = {col['name']: col['type'].__class__.__name__ 
+                    for col in prod_inspector.get_columns(table)}
+        
+        if staging_cols != prod_cols:
+            schema_diffs.append(table)
+            print(f"❌ Schema mismatch in table '{table}':")
+            
+            # Columns only in staging
+            only_staging = set(staging_cols.keys()) - set(prod_cols.keys())
+            if only_staging:
+                print(f"   Columns only in staging: {sorted(only_staging)}")
+            
+            # Columns only in production
+            only_prod = set(prod_cols.keys()) - set(staging_cols.keys())
+            if only_prod:
+                print(f"   Columns only in production: {sorted(only_prod)}")
+            
+            # Type mismatches
+            for col in set(staging_cols.keys()) & set(prod_cols.keys()):
+                if staging_cols[col] != prod_cols[col]:
+                    print(f"   Type mismatch '{col}': staging={staging_cols[col]}, prod={prod_cols[col]}")
+    
+    if not schema_diffs:
+        print("✅ All table schemas match")
+    else:
+        print(f"\n❌ Schema differences in {len(schema_diffs)} table(s)")
+
+except Exception as e:
+    print(f"Error comparing schemas: {e}")
+    print("This is OK - manual schema check may be needed")
+
+PYEOF
+
+# Run schema comparison
+python3 compare_schemas.py >> environment_audit.txt 2>&1 || \
+    echo "Could not compare schemas automatically - manual check required" >> environment_audit.txt
+
+# Clean up
+rm -f compare_schemas.py
+```
+
+---
+
+## PART 5: API FUNCTIONALITY COMPARISON
+
+### Task 5.1: Test Identical Endpoints
+
+```bash
+echo "" >> environment_audit.txt
+echo "=== API Endpoint Comparison ===" >> environment_audit.txt
+
+# Use the URLs we extracted
+echo "Testing identical requests on both environments..." >> environment_audit.txt
+echo "" >> environment_audit.txt
+
+# Test 1: Health check
+echo "Test 1: Health check" >> environment_audit.txt
+STAGING_HEALTH=$(curl -s $STAGING_URL/api/v1/health | jq -r '.status' 2>/dev/null || echo "FAILED")
+PROD_HEALTH=$(curl -s $PROD_URL/api/v1/health | jq -r '.status' 2>/dev/null || echo "FAILED")
+
+echo "  Staging: $STAGING_HEALTH" >> environment_audit.txt
+echo "  Production: $PROD_HEALTH" >> environment_audit.txt
+
+if [ "$STAGING_HEALTH" = "$PROD_HEALTH" ]; then
+    echo "  ✅ Both healthy" >> environment_audit.txt
+else
+    echo "  ❌ Health status differs" >> environment_audit.txt
+fi
+
+echo "" >> environment_audit.txt
+
+# Test 2: Professional API (35mph tailwind)
+echo "Test 2: Professional API - 35mph tailwind" >> environment_audit.txt
+
+STAGING_RESULT=$(curl -s -X POST $STAGING_URL/api/v1/calculate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "ball_speed": 167,
+    "launch_angle": 11.2,
+    "spin_rate": 2600,
+    "conditions_override": {
+      "wind_speed": 35,
+      "wind_direction": 180,
+      "temperature": 75,
+      "altitude": 0
+    }
+  }' | jq -r '.carry_distance' 2>/dev/null)
+
+PROD_RESULT=$(curl -s -X POST $PROD_URL/api/v1/calculate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "ball_speed": 167,
+    "launch_angle": 11.2,
+    "spin_rate": 2600,
+    "conditions_override": {
+      "wind_speed": 35,
+      "wind_direction": 180,
+      "temperature": 75,
+      "altitude": 0
+    }
+  }' | jq -r '.carry_distance' 2>/dev/null)
+
+echo "  Staging: $STAGING_RESULT yards" >> environment_audit.txt
+echo "  Production: $PROD_RESULT yards" >> environment_audit.txt
+
+if [ -n "$STAGING_RESULT" ] && [ -n "$PROD_RESULT" ]; then
+    DIFF=$(echo "$STAGING_RESULT - $PROD_RESULT" | bc 2>/dev/null | sed 's/-//')
+    if [ -n "$DIFF" ] && (( $(echo "$DIFF < 0.1" | bc -l 2>/dev/null) )); then
+        echo "  ✅ Results match (diff: $DIFF yards)" >> environment_audit.txt
+    else
+        echo "  ❌ Results differ by $DIFF yards" >> environment_audit.txt
+    fi
+else
+    echo "  ❌ One or both requests failed" >> environment_audit.txt
+fi
+
+echo "" >> environment_audit.txt
+
+# Test 3: Gaming API (Wind Surfer)
+echo "Test 3: Gaming API - Wind Surfer preset" >> environment_audit.txt
+
+STAGING_RESULT=$(curl -s -X POST $STAGING_URL/api/v1/gaming/trajectory \
+  -H "Content-Type: application/json" \
+  -d '{
+    "shot": {"player_handicap": 5, "club": "driver"},
+    "preset": "wind_surfer"
+  }' | jq -r '.carry_distance' 2>/dev/null)
+
+PROD_RESULT=$(curl -s -X POST $PROD_URL/api/v1/gaming/trajectory \
+  -H "Content-Type: application/json" \
+  -d '{
+    "shot": {"player_handicap": 5, "club": "driver"},
+    "preset": "wind_surfer"
+  }' | jq -r '.carry_distance' 2>/dev/null)
+
+echo "  Staging: $STAGING_RESULT yards" >> environment_audit.txt
+echo "  Production: $PROD_RESULT yards" >> environment_audit.txt
+
+if [ -n "$STAGING_RESULT" ] && [ -n "$PROD_RESULT" ]; then
+    DIFF=$(echo "$STAGING_RESULT - $PROD_RESULT" | bc 2>/dev/null | sed 's/-//')
+    if [ -n "$DIFF" ] && (( $(echo "$DIFF < 0.1" | bc -l 2>/dev/null) )); then
+        echo "  ✅ Results match (diff: $DIFF yards)" >> environment_audit.txt
+    else
+        echo "  ❌ Results differ by $DIFF yards" >> environment_audit.txt
+    fi
+else
+    echo "  ❌ One or both requests failed" >> environment_audit.txt
+fi
+
+echo "" >> environment_audit.txt
+
+# Test 4: Validation cap (50mph should be rejected)
+echo "Test 4: Validation cap - 50mph wind rejection" >> environment_audit.txt
+
+STAGING_CODE=$(curl -s -w "%{http_code}" -o /dev/null -X POST $STAGING_URL/api/v1/calculate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "ball_speed": 167,
+    "launch_angle": 11.2,
+    "spin_rate": 2600,
+    "conditions_override": {"wind_speed": 50}
+  }')
+
+PROD_CODE=$(curl -s -w "%{http_code}" -o /dev/null -X POST $PROD_URL/api/v1/calculate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "ball_speed": 167,
+    "launch_angle": 11.2,
+    "spin_rate": 2600,
+    "conditions_override": {"wind_speed": 50}
+  }')
+
+echo "  Staging HTTP code: $STAGING_CODE" >> environment_audit.txt
+echo "  Production HTTP code: $PROD_CODE" >> environment_audit.txt
+
+if [ "$STAGING_CODE" = "$PROD_CODE" ]; then
+    if [ "$STAGING_CODE" = "422" ]; then
+        echo "  ✅ Both correctly reject 50mph wind (422)" >> environment_audit.txt
+    else
+        echo "  ⚠️  Both return same code but expected 422, got $STAGING_CODE" >> environment_audit.txt
+    fi
+else
+    echo "  ❌ Validation differs between environments" >> environment_audit.txt
+fi
+
+echo "" >> environment_audit.txt
+
+# Test 5: Gaming presets list
+echo "Test 5: Gaming presets list" >> environment_audit.txt
+
+STAGING_PRESETS=$(curl -s $STAGING_URL/api/v1/gaming/presets | jq -r '.presets | length' 2>/dev/null)
+PROD_PRESETS=$(curl -s $PROD_URL/api/v1/gaming/presets | jq -r '.presets | length' 2>/dev/null)
+
+echo "  Staging preset count: $STAGING_PRESETS" >> environment_audit.txt
+echo "  Production preset count: $PROD_PRESETS" >> environment_audit.txt
+
+if [ "$STAGING_PRESETS" = "$PROD_PRESETS" ]; then
+    echo "  ✅ Same number of presets" >> environment_audit.txt
+else
+    echo "  ❌ Preset count differs" >> environment_audit.txt
+fi
+```
+
+### Task 5.2: Test Form Endpoints
+
+```bash
+echo "" >> environment_audit.txt
+echo "=== Form Endpoint Comparison ===" >> environment_audit.txt
+
+# Test API key request endpoint
+echo "Test: API key request endpoint" >> environment_audit.txt
+
+STAGING_CODE=$(curl -s -w "%{http_code}" -o /dev/null -X POST $STAGING_URL/api/request-api-key \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "audit-test@example.com",
+    "name": "Audit Test",
+    "use_case": "personal",
+    "expected_volume": "under_1k",
+    "recaptcha_token": "test_token_staging"
+  }')
+
+PROD_CODE=$(curl -s -w "%{http_code}" -o /dev/null -X POST $PROD_URL/api/request-api-key \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "audit-test@example.com",
+    "name": "Audit Test",
+    "use_case": "personal",
+    "expected_volume": "under_1k",
+    "recaptcha_token": "test_token_prod"
+  }')
+
+echo "  Staging HTTP code: $STAGING_CODE" >> environment_audit.txt
+echo "  Production HTTP code: $PROD_CODE" >> environment_audit.txt
+
+if [ "$STAGING_CODE" = "$PROD_CODE" ]; then
+    echo "  ✅ Both handle API key requests identically" >> environment_audit.txt
+else
+    echo "  ❌ API key handling differs" >> environment_audit.txt
+fi
+
+echo "" >> environment_audit.txt
+
+# Test contact form endpoint
+echo "Test: Contact form endpoint" >> environment_audit.txt
+
+STAGING_CODE=$(curl -s -w "%{http_code}" -o /dev/null -X POST $STAGING_URL/api/contact \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Audit Test",
+    "email": "audit-test@example.com",
+    "subject": "Test",
+    "message": "Audit test message",
+    "recaptcha_token": "test_token"
+  }')
+
+PROD_CODE=$(curl -s -w "%{http_code}" -o /dev/null -X POST $PROD_URL/api/contact \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Audit Test",
+    "email": "audit-test@example.com",
+    "subject": "Test",
+    "message": "Audit test message",
+    "recaptcha_token": "test_token"
+  }')
+
+echo "  Staging HTTP code: $STAGING_CODE" >> environment_audit.txt
+echo "  Production HTTP code: $PROD_CODE" >> environment_audit.txt
+
+if [ "$STAGING_CODE" = "$PROD_CODE" ]; then
+    echo "  ✅ Both handle contact form identically" >> environment_audit.txt
+else
+    echo "  ❌ Contact form handling differs" >> environment_audit.txt
+fi
+```
+
+---
+
+## PART 6: DEPENDENCIES VERIFICATION
+
+### Task 6.1: Check requirements.txt
+
+```bash
+echo "" >> environment_audit.txt
+echo "=== Python Dependencies ===" >> environment_audit.txt
+
+if [ -f requirements.txt ]; then
+    echo "requirements.txt exists (used by both environments)" >> environment_audit.txt
+    echo "" >> environment_audit.txt
+    echo "Dependencies:" >> environment_audit.txt
+    cat requirements.txt >> environment_audit.txt
+    echo "" >> environment_audit.txt
+    echo "✅ Both environments use same requirements.txt from git" >> environment_audit.txt
+else
+    echo "❌ requirements.txt not found" >> environment_audit.txt
+fi
+```
+
+---
+
+## PART 7: SERVICES CHECK
+
+### Task 7.1: Verify Railway Services
+
+```bash
+echo "" >> environment_audit.txt
+echo "=== Railway Services ===" >> environment_audit.txt
+
+# Check staging services
+railway environment staging
+echo "Staging services:" >> environment_audit.txt
+railway service list >> environment_audit.txt 2>&1 || echo "Could not list services" >> environment_audit.txt
+
+echo "" >> environment_audit.txt
+
+# Check production services
+railway environment production
+echo "Production services:" >> environment_audit.txt
+railway service list >> environment_audit.txt 2>&1 || echo "Could not list services" >> environment_audit.txt
+
+echo "" >> environment_audit.txt
+echo "Expected services: golf-weather-api, PostgreSQL, Redis" >> environment_audit.txt
+```
+
+---
+
+## PART 8: GENERATE SUMMARY REPORT
+
+### Task 8.1: Analyze Results
+
+```bash
+echo "" >> environment_audit.txt
+echo "========================================" >> environment_audit.txt
+echo "ENVIRONMENT AUDIT SUMMARY" >> environment_audit.txt
+echo "========================================" >> environment_audit.txt
+echo "" >> environment_audit.txt
+
+# Count issues
+ISSUES=0
+
+# Check for variable differences
+if [ -s vars_only_staging.txt ] || [ -s vars_only_production.txt ]; then
+    echo "⚠️  Environment variable differences found" >> environment_audit.txt
+    ((ISSUES++))
+fi
+
+# Summary
+echo "" >> environment_audit.txt
+echo "Status: $(date)" >> environment_audit.txt
+echo "" >> environment_audit.txt
+
+if [ $ISSUES -eq 0 ]; then
+    echo "✅ NO CRITICAL DIFFERENCES FOUND" >> environment_audit.txt
+    echo "" >> environment_audit.txt
+    echo "Staging and production are in sync:" >> environment_audit.txt
+    echo "- Same codebase deployed" >> environment_audit.txt
+    echo "- Same dependencies" >> environment_audit.txt
+    echo "- Same API behavior" >> environment_audit.txt
+    echo "- Different only in environment-specific URLs/keys" >> environment_audit.txt
+else
+    echo "⚠️  $ISSUES DIFFERENCE(S) FOUND" >> environment_audit.txt
+    echo "Review details above" >> environment_audit.txt
+fi
+```
+
+### Task 8.2: Create Sync Plan (if needed)
+
+```bash
+cat > SYNC_PLAN.md << 'EOF'
+# Staging ↔ Production Sync Plan
+
+**Railway Project:** soothing-happiness  
+**Generated:** $(date)
+
+## Understanding Your Setup
+
+**Important:** Staging and production use the SAME codebase from git.
+
+```
+git main branch
+    │
+    ├──> Railway staging environment
+    └──> Railway production environment
+```
+
+Both deploy automatically on push to main.
+
+## What SHOULD Be Different
+
+✅ **Environment Variables:**
+- BACKEND_URL (staging vs production URL)
+- FRONTEND_URL (staging vs production URL)
+- ENVIRONMENT (staging vs production)
+- DATABASE_URL (separate databases)
+- REDIS_URL (may be separate or shared)
+
+✅ **Database Data:**
+- Staging: Test data, can be wiped
+- Production: Real customer data, protected
+
+## What Should Be IDENTICAL
+
+✅ **Code:**
+- Same git commit
+- Same requirements.txt
+- Same website-dist/ files
+- Same admin-dashboard-dist/ files
+
+✅ **API Behavior:**
+- Same physics results
+- Same validation rules
+- Same endpoints
+- Same error handling
+
+## If Environments Are Out of Sync
+
+### Scenario 1: Variables Missing
+
+**Problem:** Production missing SENDGRID_API_KEY  
+**Fix:**
+```bash
+railway environment production
+railway variables set SENDGRID_API_KEY=your_key_here
+```
+
+### Scenario 2: Different Code Versions
+
+**Problem:** Staging has newer commits than production  
+**Fix:** Railway auto-deploys both on push to main - just wait for deployment
+
+**Or force redeploy:**
+```bash
+railway environment production
+railway up --force
+```
+
+### Scenario 3: API Results Differ
+
+**Problem:** Same request gives different results  
+**Cause:** Different code OR different environment variables  
+**Fix:** 
+1. Check both deployed same commit
+2. Verify DATABASE_URL points to correct database
+3. Check ENVIRONMENT variable is set correctly
+
+## Your Workflow (Going Forward)
+
+### Development:
+```bash
+# Work locally
+# Test changes
+
+# Commit to main
+git add .
+git commit -m "Add feature"
+git push origin main
+
+# Both environments auto-deploy!
+```
+
+### Testing:
+```bash
+# Test on staging first
+curl https://golf-weather-api-staging.up.railway.app/api/v1/health
+
+# If staging works, production should also work
+# (same code, just different URLs)
+```
+
+### Monitoring:
+```bash
+# Watch staging logs
+railway logs --environment staging
+
+# Watch production logs
+railway logs --environment production
+```
+
+## Quick Sync Check
+
+Create this script: `check_envs.sh`
+
+```bash
+#!/bin/bash
+
+STAGING="https://golf-weather-api-staging.up.railway.app"
+PROD="https://api.golfphysics.io"
+
+STAGING_RESULT=$(curl -s -X POST $STAGING/api/v1/calculate \
+  -H "Content-Type: application/json" \
+  -d '{"ball_speed":167,"launch_angle":11.2,"spin_rate":2600,"conditions_override":{"wind_speed":20}}' \
+  | jq -r '.carry_distance')
+
+PROD_RESULT=$(curl -s -X POST $PROD/api/v1/calculate \
+  -H "Content-Type: application/json" \
+  -d '{"ball_speed":167,"launch_angle":11.2,"spin_rate":2600,"conditions_override":{"wind_speed":20}}' \
+  | jq -r '.carry_distance')
+
+echo "Staging: $STAGING_RESULT yards"
+echo "Production: $PROD_RESULT yards"
+
+DIFF=$(echo "$STAGING_RESULT - $PROD_RESULT" | bc | sed 's/-//')
+if (( $(echo "$DIFF < 0.1" | bc -l) )); then
+    echo "✅ Environments in sync"
+else
+    echo "❌ Environments differ by $DIFF yards"
+fi
+```
+
+Run before deploying changes to verify environments are aligned.
+
+EOF
+
+echo "SYNC_PLAN.md created"
+```
+
+### Task 8.3: Create Executive Summary
+
+```bash
+cat > ENVIRONMENT_AUDIT_REPORT.md << 'EOF'
+# Environment Audit Report
+
+**Project:** Golf Weather API (soothing-happiness)  
+**Date:** $(date)  
+**Environments:** Staging + Production (Railway)
+
+---
+
+## Summary
+
+**Staging URL:** https://golf-weather-api-staging.up.railway.app  
+**Production URL:** https://api.golfphysics.io (custom domain)
+
+**Status:** [REVIEW environment_audit.txt FOR DETAILS]
+
+---
+
+## Architecture
+
+```
+Single Git Repository (main branch)
+    │
+    ├──> Railway Staging Environment
+    │    ├── FastAPI app
+    │    ├── PostgreSQL (staging data)
+    │    └── Redis
+    │
+    └──> Railway Production Environment
+         ├── FastAPI app
+         ├── PostgreSQL (production data)
+         └── Redis
+```
+
+**Both environments auto-deploy on push to main.**
+
+---
+
+## Key Findings
+
+### Code Deployment
+- Git commit: [from audit]
+- Website files: [from audit]
+- Requirements.txt: [from audit]
+
+### Environment Variables
+- Variables only in staging: [count]
+- Variables only in production: [count]
+- Critical variables: [status]
+
+### API Functionality
+- Health check: [status]
+- Professional API: [status]
+- Gaming API: [status]
+- Validation caps: [status]
+- Form endpoints: [status]
+
+### Database
+- Staging DB: [status]
+- Production DB: [status]
+- Schema match: [status]
+
+---
+
+## Differences Found
+
+[List from audit - should only be environment-specific URLs/keys]
+
+---
+
+## Recommendations
+
+[Based on findings]
+
+---
+
+## Files Created
+
+1. environment_audit.txt - Complete detailed audit
+2. vars_staging.txt - Staging environment variables
+3. vars_production.txt - Production environment variables
+4. SYNC_PLAN.md - How to sync if needed
+5. ENVIRONMENT_AUDIT_REPORT.md - This summary
+
+---
+
+## Next Steps
+
+1. Review environment_audit.txt for details
+2. If differences found, follow SYNC_PLAN.md
+3. Use check_envs.sh for ongoing monitoring
+
+---
+
+**Audit completed:** $(date)
+
+EOF
+```
+
+---
+
+## DELIVERABLES
+
+Report completion:
+
+```bash
+echo ""
+echo "=========================================="
+echo "ENVIRONMENT AUDIT COMPLETE"
+echo "=========================================="
+echo ""
+echo "Files created:"
+echo "1. environment_audit.txt (detailed log)"
+echo "2. ENVIRONMENT_AUDIT_REPORT.md (summary)"
+echo "3. SYNC_PLAN.md (sync instructions)"
+echo "4. vars_staging.txt (staging variables)"
+echo "5. vars_production.txt (production variables)"
+echo ""
+echo "Review ENVIRONMENT_AUDIT_REPORT.md for summary"
+echo "Review environment_audit.txt for complete details"
+echo ""
+
+# Copy to outputs if directory exists
+if [ -d "../website\ build" ]; then
+    cp environment_audit.txt ENVIRONMENT_AUDIT_REPORT.md SYNC_PLAN.md vars_*.txt "../website build/" 2>/dev/null
+    echo "Files copied to website build directory"
+fi
+```
+
+---
+
+END OF AUDIT SCRIPT

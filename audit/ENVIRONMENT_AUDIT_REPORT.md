@@ -178,16 +178,85 @@ These are intentionally kept as production URLs since they show users what to ca
 
 ---
 
-## Next Steps
+---
 
-- [x] Phase 1: Find all hardcoded URLs and Vercel references
-- [x] Phase 2: Fix Backend API issues
-- [x] Phase 3: Fix Admin Dashboard issues
-- [x] Phase 4: Fix Marketing Website issues
-- [ ] Phase 5: Create documentation
-- [ ] Phase 6: Test in staging
-- [ ] Phase 7: Final report and approval
+## Phase 6: Staging Tests (COMPLETED)
+
+### Test Results (2026-01-18)
+
+| Test | Status | Result |
+|------|--------|--------|
+| Health Endpoint | ✅ PASS | `{"environment":"staging"}` |
+| CORS Headers | ✅ PASS | `Access-Control-Allow-Origin: https://golf-weather-api-staging.up.railway.app` |
+| API Key Request | ✅ PASS | `{"success":true}` |
+| Contact Form | ✅ PASS | `{"success":true}` |
+| CSP Headers | ✅ PASS | Includes staging URL in connect-src |
+| Admin Dashboard | ✅ PASS | HTML loads correctly |
+
+### Environment Variables Verified:
+- `ENVIRONMENT=staging` ✓
+- `BACKEND_URL=https://golf-weather-api-staging.up.railway.app` ✓
+- `FRONTEND_URL=https://golf-weather-api-staging.up.railway.app` ✓
+- `CORS_ORIGINS=https://golf-weather-api-staging.up.railway.app` ✓
+
+### Manual Verification Required:
+- [ ] Login to admin dashboard with Google OAuth
+- [ ] Check that email links point to staging URLs
+- [ ] Verify Leads page displays data
 
 ---
 
-**DO NOT DEPLOY TO PRODUCTION UNTIL ALL PHASES COMPLETE AND APPROVED**
+## Summary
+
+| Phase | Status |
+|-------|--------|
+| Phase 1: Find hardcoded URLs | ✅ Complete |
+| Phase 2: Fix Backend API | ✅ Complete |
+| Phase 3: Fix Admin Dashboard | ✅ Complete |
+| Phase 4: Fix Marketing Website | ✅ Complete |
+| Phase 5: Create Documentation | ✅ Complete |
+| Phase 6: Test in Staging | ✅ Complete |
+| Phase 7: Final Report | ✅ Complete |
+
+---
+
+## Files Modified
+
+### Backend (app/)
+- `app/config.py` - Added URL env vars, simplified CORS defaults
+- `app/services/email.py` - 15+ hardcoded URLs replaced with env vars
+- `app/middleware/security.py` - CSP now uses CORS_ORIGINS dynamically
+- `.env.example` - Added URL configuration section
+
+### Admin Dashboard (golf-admin/)
+- `src/components/SystemHealth.jsx` - Uses apiBase prop
+- `.env.example` - Updated guidance
+
+### Marketing Website (golfphysics-website/)
+- `src/config.js` - NEW centralized config
+- `src/components/ApiKeyRequestModal.jsx` - Uses getApiUrl()
+- `.env.example` - Updated with env-specific examples
+
+### Documentation (audit/)
+- `ENVIRONMENT_SETUP.md` - Complete env var guide
+- `DEPLOYMENT_CHECKLIST.md` - Step-by-step deployment guide
+- `ENVIRONMENT_AUDIT_REPORT.md` - This report
+
+---
+
+## Production Deployment Requirements
+
+Before deploying to production, set these Railway variables:
+
+```
+ENVIRONMENT=production
+BACKEND_URL=https://api.golfphysics.io
+FRONTEND_URL=https://golfphysics.io
+CORS_ORIGINS=https://golfphysics.io,https://www.golfphysics.io,https://api.golfphysics.io
+```
+
+Also update Google OAuth authorized origins to include production URLs.
+
+---
+
+## AUDIT COMPLETE - AWAITING APPROVAL FOR PRODUCTION DEPLOYMENT

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, ChevronDown, Target, Gamepad2 } from 'lucide-react'
+import { Menu, X, ChevronDown, Target, Gamepad2, Building2 } from 'lucide-react'
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
@@ -8,7 +8,7 @@ export default function Navigation() {
   const location = useLocation()
 
   const isActive = (path) => location.pathname === path
-  const isProductActive = () => ['/professional', '/gaming'].includes(location.pathname)
+  const isProductActive = () => ['/professional', '/gaming', '/enterprise'].includes(location.pathname)
 
   return (
     <nav className="bg-white shadow-sm sticky top-0 z-50">
@@ -65,6 +65,20 @@ export default function Navigation() {
                     <div>
                       <p className="font-semibold text-gray-900">Gaming API</p>
                       <p className="text-xs text-gray-500">Extreme weather for entertainment</p>
+                    </div>
+                  </Link>
+                  <div className="border-t border-gray-100 my-1"></div>
+                  <Link
+                    to="/enterprise"
+                    className="flex items-start gap-3 px-4 py-3 hover:bg-gray-50 transition-colors"
+                    onClick={() => setProductsOpen(false)}
+                  >
+                    <div className="w-10 h-10 bg-golf-green/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Building2 className="w-5 h-5 text-golf-green" />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900">Enterprise</p>
+                      <p className="text-xs text-gray-500">Launch monitor integration</p>
                     </div>
                   </Link>
                 </div>
@@ -169,6 +183,21 @@ export default function Navigation() {
               <div>
                 <p className="font-medium">Gaming API</p>
                 <p className="text-xs text-gray-500">Extreme entertainment</p>
+              </div>
+            </Link>
+            <Link
+              to="/enterprise"
+              onClick={() => setIsOpen(false)}
+              className={`flex items-center gap-3 px-2 py-3 rounded-lg ${
+                isActive('/enterprise')
+                  ? 'bg-golf-green/10 text-golf-green'
+                  : 'text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              <Building2 className="w-5 h-5" />
+              <div>
+                <p className="font-medium">Enterprise</p>
+                <p className="text-xs text-gray-500">Launch monitor integration</p>
               </div>
             </Link>
 

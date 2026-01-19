@@ -2,6 +2,50 @@ from pydantic import BaseModel, Field, model_validator
 from typing import Optional, Literal
 
 
+class ShotMetadata(BaseModel):
+    """Optional metadata for enterprise integrations (launch monitors, etc.)"""
+    facility_id: Optional[str] = Field(
+        default=None,
+        description="Your facility/location identifier"
+    )
+    bay_number: Optional[int] = Field(
+        default=None, ge=1, le=100,
+        description="Bay or station number"
+    )
+    player_id: Optional[str] = Field(
+        default=None,
+        description="Player identifier from your system"
+    )
+    session_id: Optional[str] = Field(
+        default=None,
+        description="Session identifier to group multiple shots"
+    )
+    timestamp: Optional[str] = Field(
+        default=None,
+        description="ISO 8601 timestamp of the shot"
+    )
+    club_type: Optional[str] = Field(
+        default=None,
+        description="Club used: driver, 3-wood, 7-iron, etc."
+    )
+    club_speed: Optional[float] = Field(
+        default=None, gt=0, le=150,
+        description="Club head speed in mph"
+    )
+    smash_factor: Optional[float] = Field(
+        default=None, gt=0, le=2.0,
+        description="Ball speed / club speed ratio"
+    )
+    launch_direction: Optional[float] = Field(
+        default=None, ge=-45, le=45,
+        description="Horizontal launch angle in degrees"
+    )
+    player_handicap: Optional[int] = Field(
+        default=None, ge=0, le=54,
+        description="Player handicap (0-54)"
+    )
+
+
 class ShotData(BaseModel):
     ball_speed_mph: float = Field(
         ..., gt=0, le=220, description="Ball speed in mph"
@@ -176,6 +220,12 @@ class CalculateRequest(BaseModel):
     conditions_override: Optional[ProfessionalConditionsOverride] = Field(
         default=None,
         description="Custom weather conditions with professional validation (takes precedence over location)"
+    )
+
+    # Enterprise metadata (optional)
+    metadata: Optional[ShotMetadata] = Field(
+        default=None,
+        description="Optional enterprise metadata for tracking (facility, player, session, etc.)"
     )
 
     @model_validator(mode='after')

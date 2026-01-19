@@ -254,3 +254,85 @@ class GamingTrajectoryResponse(BaseModel):
     trajectory_points: List[DualTrajectoryPoint]
     conditions_used: GamingConditionsUsed
     units_preference: str = "imperial"
+
+
+# ============================================================================
+# ENTERPRISE INTEGRATION RESPONSE MODELS
+# ============================================================================
+
+
+class EnterpriseEffects(BaseModel):
+    """Breakdown of environmental effects in yards."""
+    wind_yards: float
+    temperature_yards: float
+    humidity_yards: float
+    altitude_yards: float
+
+
+class EnterpriseAnalysis(BaseModel):
+    """Analysis breakdown for enterprise response."""
+    baseline_carry_yards: float
+    adjusted_carry_yards: float
+    total_adjustment_yards: float
+    effects: EnterpriseEffects
+
+
+class EnterpriseRecommendations(BaseModel):
+    """Recommendations based on conditions."""
+    club_suggestion: Optional[str] = None
+    optimal_launch_angle: Optional[float] = None
+
+
+class EnterpriseConditions(BaseModel):
+    """Conditions used in enterprise response."""
+    source: str  # "real-time" or "override"
+    temperature_f: float
+    wind_speed_mph: float
+    wind_direction_deg: float
+    humidity_percent: float
+    pressure_inhg: float
+    altitude_ft: float
+    location: Optional[dict] = None  # {"lat": x, "lng": y}
+
+
+class EnterpriseTrajectory(BaseModel):
+    """Trajectory results for enterprise response."""
+    carry_distance_yards: float
+    total_distance_yards: float
+    apex_height_feet: float
+    flight_time_seconds: float
+    landing_angle_degrees: float
+
+
+class EnterpriseTrajectoryResponse(BaseModel):
+    """
+    Enterprise-grade trajectory response with enhanced metadata support.
+
+    Designed for launch monitor integrations (inRange, TrackMan, etc.)
+    with optional metadata echoing, insights, and recommendations.
+    """
+    request_id: str
+    timestamp: str
+
+    # Echo back metadata if provided
+    metadata: Optional[dict] = None
+
+    # Conditions used for calculation
+    conditions: EnterpriseConditions
+
+    # Core trajectory results
+    trajectory: EnterpriseTrajectory
+
+    # Analysis breakdown
+    analysis: EnterpriseAnalysis
+
+    # Human-readable insights
+    insights: List[str]
+
+    # Recommendations
+    recommendations: EnterpriseRecommendations
+
+    # Include full dual-unit data for clients that want it
+    adjusted: Optional[DualAdjustedResults] = None
+    baseline: Optional[DualAdjustedResults] = None
+    impact_breakdown: Optional[DualImpactBreakdown] = None
