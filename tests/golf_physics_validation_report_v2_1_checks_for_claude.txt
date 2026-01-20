@@ -1,0 +1,182 @@
+# Golf Physics Test Suite Re-Validation Report (V2.1 Checks)
+
+**Inputs analyzed:**
+- `PHYSICS_VALIDATION_GUIDE_V2.md` (baseline density, sea-level adjusted pressure semantics, wind benchmarks, drift formula, coefficient models)
+- `physics_validation_test_data_v2.csv` (100 scenarios, scenario_type tags, tolerances, expected lateral drift)
+
+## 0) Executive summary
+- **Baseline density math:** PASS (computed baseline density = **1.194 kg/m³**, guide states 1.194).
+- **Altitude effect (+1.2%/1000 ft):** PASS (altitude-only scenarios max |error| = **0.8 yards**; all within listed tolerances).
+- **Crosswind drift formula:** PASS (max |drift error| = **0 yards**).
+- **Wind benchmarks (strict ±1 percentage point):** **FAIL** for driver benchmark rows: [41, 42, 50].
+- **Pressure-only tests (V2.1 target ±0.5%):** **FAIL to validate** (expected carry equals baseline on shots [27, 28, 29, 30]).
+- **Humidity-only tests:** WEAK (fails to enforce sign on shots [23, 24, 25, 26]).
+
+> **Important:** Your message says V2 → V2.1 fixed wind 20–25 mph and pressure-only expected values. In the uploaded CSV, those specific rows still reflect the older expectations (see sections 2–3).
+
+## 1) Dataset integrity and coverage
+### 1.1 Scenario distribution
+| scenario_type    |   count |
+|:-----------------|--------:|
+| baseline         |      13 |
+| combined         |      10 |
+| wind_head        |       9 |
+| real_world       |       9 |
+| density_temp     |       8 |
+| altitude_only    |       7 |
+| wind_tail        |       7 |
+| wind_cross       |       6 |
+| wind_quarter     |       6 |
+| density_humid    |       5 |
+| extreme          |       5 |
+| density_pressure |       4 |
+| asymmetry        |       4 |
+| club_wind        |       4 |
+| handicap_comp    |       3 |
+
+### 1.2 Basic structural checks
+- No structural issues found (unique shot_id, no missing rows in required columns, scenario invariants hold).
+
+## 2) Wind benchmark re-validation (TrackMan table)
+These checks validate the **expected_carry_yards** in the test data against the benchmark % table in the guide for **pure headwind/tailwind** cases (driver).
+
+### 2.1 Driver headwind (shots 38–42)
+|   shot_id |   wind_speed_mph |   baseline_carry_yards |   expected_carry_yards |   computed_adjustment_pct |   wind_benchmark_pct |   wind_benchmark_error_pct_points |   wind_benchmark_error_yards_float |   tolerance_yards | pass_wind_benchmark_within_tolerance   | pass_wind_benchmark_strict_pp1   | notes                                   |
+|----------:|-----------------:|-----------------------:|-----------------------:|--------------------------:|---------------------:|----------------------------------:|-----------------------------------:|------------------:|:---------------------------------------|:---------------------------------|:----------------------------------------|
+|        38 |                5 |                    273 |                    260 |                   -4.7619 |                   -5 |                          0.238095 |                               0.65 |                 3 | True                                   | True                             | Headwind 5 mph: expect -5%              |
+|        39 |               10 |                    273 |                    245 |                  -10.2564 |                  -10 |                         -0.25641  |                              -0.7  |                 4 | True                                   | True                             | Headwind 10 mph: expect -10% (TrackMan) |
+|        40 |               15 |                    273 |                    228 |                  -16.4835 |                  -16 |                         -0.483516 |                              -1.32 |                 5 | True                                   | True                             | Headwind 15 mph: expect -16%            |
+|        41 |               20 |                    273 |                    209 |                  -23.4432 |                  -22 |                         -1.44322  |                              -3.94 |                 6 | True                                   | False                            | Headwind 20 mph: expect -22% (TrackMan) |
+|        42 |               25 |                    273 |                    187 |                  -31.5018 |                  -28 |                         -3.50183  |                              -9.56 |                 7 | False                                  | False                            | Headwind 25 mph: expect -28%            |
+
+### 2.2 Driver tailwind (shots 47–50)
+|   shot_id |   wind_speed_mph |   baseline_carry_yards |   expected_carry_yards |   computed_adjustment_pct |   wind_benchmark_pct |   wind_benchmark_error_pct_points |   wind_benchmark_error_yards_float |   tolerance_yards | pass_wind_benchmark_within_tolerance   | pass_wind_benchmark_strict_pp1   | notes                                   |
+|----------:|-----------------:|-----------------------:|-----------------------:|--------------------------:|---------------------:|----------------------------------:|-----------------------------------:|------------------:|:---------------------------------------|:---------------------------------|:----------------------------------------|
+|        47 |                5 |                    273 |                    284 |                   4.0293  |                  3.5 |                          0.529304 |                              1.445 |                 3 | True                                   | True                             | Tailwind 5 mph: expect +3.5%            |
+|        48 |               10 |                    273 |                    293 |                   7.32601 |                  7   |                          0.326007 |                              0.89  |                 4 | True                                   | True                             | Tailwind 10 mph: expect +7% (TrackMan)  |
+|        49 |               15 |                    273 |                    298 |                   9.15751 |                 10   |                         -0.842491 |                             -2.3   |                 5 | True                                   | True                             | Tailwind 15 mph: expect +10%            |
+|        50 |               20 |                    273 |                    301 |                  10.2564  |                 12   |                         -1.74359  |                             -4.76  |                 6 | True                                   | False                            | Tailwind 20 mph: expect +12% (TrackMan) |
+
+**Wind benchmark conclusion:**
+- Within tolerance, most rows “pass.”
+- Under a stricter requirement (±1 percentage point), the following still miss the guide benchmarks: 41, 42, 50.
+
+## 3) Pressure-only re-validation (V2.1 ±0.5% target)
+|   shot_id | club   |   baseline_carry_yards |   air_pressure_inhg |   expected_carry_yards |   computed_adjustment_yards |   computed_adjustment_pct |   pressure_target_pct_v21 |   tolerance_yards | validates_pressure_effect_v21   | notes                            |
+|----------:|:-------|-----------------------:|--------------------:|-----------------------:|----------------------------:|--------------------------:|--------------------------:|------------------:|:--------------------------------|:---------------------------------|
+|        27 | driver |                    273 |                29.4 |                    273 |                           0 |                         0 |                       0.5 |                 2 | False                           | Pressure only: 29.40 inHg (low)  |
+|        28 | driver |                    273 |                30.4 |                    273 |                           0 |                         0 |                      -0.5 |                 2 | False                           | Pressure only: 30.40 inHg (high) |
+|        29 | 5-iron |                    217 |                29.4 |                    217 |                           0 |                         0 |                       0.5 |                 2 | False                           | 5-iron pressure: 29.40 inHg      |
+|        30 | 5-iron |                    217 |                30.4 |                    217 |                           0 |                         0 |                      -0.5 |                 2 | False                           | 5-iron pressure: 30.40 inHg      |
+
+**Finding:** All four pressure-only rows have 0-yard adjustment. With current integer yard rounding + tolerance=2, a “no pressure effect” implementation can still pass.
+
+## 4) Confirm still passing (baseline density, altitude, drift, wind direction)
+### 4.1 Baseline density
+- Density at reference conditions computed via guide equation: **1.194 kg/m³** (guide: 1.194 kg/m³).
+
+### 4.2 Altitude-only scaling (+1.2% per 1000 ft)
+|   shot_id | club   |   baseline_carry_yards |   altitude_ft |   expected_carry_yards |   altitude_multiplier_guide |   altitude_only_expected_carry_float |   altitude_error_yards_float |   tolerance_yards |
+|----------:|:-------|-----------------------:|--------------:|-----------------------:|----------------------------:|-------------------------------------:|-----------------------------:|------------------:|
+|        31 | driver |                    273 |          1000 |                    276 |                       1.012 |                              276.276 |                       -0.276 |                 3 |
+|        32 | driver |                    273 |          3000 |                    282 |                       1.036 |                              282.828 |                       -0.828 |                 3 |
+|        33 | driver |                    273 |          5000 |                    289 |                       1.06  |                              289.38  |                       -0.38  |                 4 |
+|        34 | driver |                    273 |          7000 |                    296 |                       1.084 |                              295.932 |                        0.068 |                 4 |
+|        35 | 5-iron |                    217 |          3000 |                    225 |                       1.036 |                              224.812 |                        0.188 |                 3 |
+|        36 | 5-iron |                    217 |          5000 |                    230 |                       1.06  |                              230.02  |                       -0.02  |                 3 |
+|        37 | 7-iron |                    190 |          5000 |                    201 |                       1.06  |                              201.4   |                       -0.4   |                 3 |
+
+### 4.3 Crosswind drift formula
+|   shot_id | scenario_type   | club   |   wind_speed_mph |   wind_direction_deg |   baseline_carry_yards |   expected_lateral_drift_yards |   computed_lateral_drift_yards_round |   drift_error_yards | notes                                         |
+|----------:|:----------------|:-------|-----------------:|---------------------:|-----------------------:|-------------------------------:|-------------------------------------:|--------------------:|:----------------------------------------------|
+|        54 | wind_cross      | driver |               10 |                   90 |                    273 |                             35 |                                   35 |                   0 | Crosswind 10 mph L-R: minimal carry effect    |
+|        55 | wind_cross      | driver |               10 |                  270 |                    273 |                            -35 |                                  -35 |                   0 | Crosswind 10 mph R-L: minimal carry effect    |
+|        56 | wind_cross      | driver |               20 |                   90 |                    273 |                             71 |                                   71 |                   0 | Crosswind 20 mph L-R                          |
+|        57 | wind_cross      | 5-iron |               10 |                   90 |                    217 |                             28 |                                   28 |                   0 | 5-iron crosswind 10 mph                       |
+|        58 | wind_cross      | 5-iron |               15 |                  270 |                    217 |                            -42 |                                  -42 |                   0 | 5-iron crosswind 15 mph R-L                   |
+|        59 | wind_cross      | 7-iron |               10 |                   90 |                    190 |                             25 |                                   25 |                   0 | 7-iron crosswind 10 mph                       |
+|        60 | wind_quarter    | driver |               10 |                   45 |                    273 |                             25 |                                   25 |                   0 | Quartering headwind 10mph from left (45deg)   |
+|        61 | wind_quarter    | driver |               10 |                  315 |                    273 |                            -25 |                                  -25 |                   0 | Quartering headwind 10mph from right (315deg) |
+|        62 | wind_quarter    | driver |               10 |                  135 |                    273 |                             25 |                                   25 |                   0 | Quartering tailwind 10mph from left (135deg)  |
+|        63 | wind_quarter    | driver |               10 |                  225 |                    273 |                            -25 |                                  -25 |                   0 | Quartering tailwind 10mph from right (225deg) |
+|        64 | wind_quarter    | driver |               15 |                   45 |                    273 |                             38 |                                   38 |                   0 | Quartering headwind 15mph                     |
+|        65 | wind_quarter    | 5-iron |               10 |                  315 |                    217 |                            -20 |                                  -20 |                   0 | 5-iron quartering headwind                    |
+
+- Max |drift error| across all drift rows: **0 yards**.
+
+### 4.4 Wind direction convention
+- Conventions used in guide are internally consistent with test data:
+  - 0° = headwind (positive headwind_component_mph)
+  - 180° = tailwind (negative headwind_component_mph)
+  - 90° = left-to-right crosswind (positive drift)
+  - 270° = right-to-left crosswind (negative drift)
+
+## 5) Density isolation scenarios
+### 5.1 Temperature-only (direction + scaling)
+|   shot_id | club   |   baseline_carry_yards |   temperature_f |   expected_carry_yards |   computed_adjustment_yards | notes                                        |
+|----------:|:-------|-----------------------:|----------------:|-----------------------:|----------------------------:|:---------------------------------------------|
+|        14 | driver |                    273 |              40 |                    267 |                          -6 | Temperature only: 40F (cold) - expect ~-2.5% |
+|        15 | driver |                    273 |              55 |                    270 |                          -3 | Temperature only: 55F (cool) - expect ~-1%   |
+|        16 | driver |                    273 |              85 |                    275 |                           2 | Temperature only: 85F (warm) - expect ~+1%   |
+|        17 | driver |                    273 |             100 |                    278 |                           5 | Temperature only: 100F (hot) - expect ~+2%   |
+|        18 | 5-iron |                    217 |              40 |                    213 |                          -4 | 5-iron temp test: 40F                        |
+|        19 | 5-iron |                    217 |             100 |                    220 |                           3 | 5-iron temp test: 100F                       |
+|        20 | 7-iron |                    190 |              40 |                    187 |                          -3 | 7-iron temp test: 40F                        |
+|        21 | 7-iron |                    190 |             100 |                    193 |                           3 | 7-iron temp test: 100F                       |
+
+Observation: Expected temperature deltas scale with baseline carry (consistent with a “yards per 10°F per 150 yards” rule-of-thumb), not a single fixed % applied to all clubs. If that is intentional, document it explicitly to avoid confusion with the % summary table.
+
+### 5.2 Humidity-only (rounding/discriminating power)
+|   shot_id | club   |   baseline_carry_yards |   humidity_pct |   expected_carry_yards |   computed_adjustment_yards | validates_humidity_effect   | notes                              |
+|----------:|:-------|-----------------------:|---------------:|-----------------------:|----------------------------:|:----------------------------|:-----------------------------------|
+|        22 | driver |                    273 |             20 |                    272 |                          -1 | True                        | Humidity only: 20% RH (dry)        |
+|        23 | driver |                    273 |             80 |                    273 |                           0 | False                       | Humidity only: 80% RH (humid)      |
+|        24 | driver |                    273 |             95 |                    273 |                           0 | False                       | Humidity only: 95% RH (very humid) |
+|        25 | 5-iron |                    217 |             20 |                    217 |                           0 | False                       | 5-iron humidity: 20% RH            |
+|        26 | 5-iron |                    217 |             95 |                    217 |                           0 | False                       | 5-iron humidity: 95% RH            |
+
+Observation: Several humid cases round to 0 yards. This weakens validation because an implementation that ignores humidity can still pass.
+
+## 6) Combined multi-factor scenarios
+For combined scenarios, I computed a simple compounding reference (altitude multiplier × wind benchmark based on headwind component × temp rule-of-thumb × humidity percent × pressure ±0.5%). This is **not** a substitute for the full trajectory sim, but is a useful sanity check.
+
+- Combined scenarios checked: **10**
+- Median |error| vs this reference: **1.7 yards**
+- Max |error| vs this reference: **7.1 yards**
+- Rows outside their own tolerance: **1**
+
+|   shot_id | club   |   baseline_carry_yards |   expected_carry_yards |   predicted_combined_carry_float |   predicted_combined_error_yards_float |   tolerance_yards | notes                                       |
+|----------:|:-------|-----------------------:|-----------------------:|---------------------------------:|---------------------------------------:|------------------:|:--------------------------------------------|
+|        66 | driver |                    275 |                    226 |                           228.69 |                                  -2.69 |                 6 | Cold (55F) + 15mph headwind                 |
+|        67 | driver |                    270 |                    291 |                           291.84 |                                  -0.84 |                 5 | Hot (95F) + altitude 5000ft                 |
+|        68 | driver |                    280 |                    239 |                           238.08 |                                   0.92 |                 7 | 20mph quartering headwind                   |
+|        69 | driver |                    248 |                    272 |                           275.53 |                                  -3.53 |                 5 | Warm (85F) + 15mph tailwind                 |
+|        70 | driver |                    260 |                    193 |                           200.1  |                                  -7.1  |                 7 | Cold (50F) + high pressure + 20mph headwind |
+|        71 | 5-iron |                    222 |                    242 |                           241.22 |                                   0.78 |                 5 | Warm + tailwind + altitude 3000ft           |
+|        72 | driver |                    215 |                    236 |                           236.41 |                                  -0.41 |                 5 | Hot (100F) + altitude 6500ft                |
+|        73 | driver |                    232 |                    177 |                           180.96 |                                  -3.96 |                 6 | Pure 20mph headwind                         |
+|        74 | driver |                    221 |                    245 |                           247.31 |                                  -2.31 |                 6 | Warm + tailwind + altitude 2000ft           |
+|        75 | 7-iron |                    181 |                    197 |                           195.9  |                                   1.1  |                 4 | Warm + tailwind + altitude 2200ft           |
+
+## 7) Drag/lift equations and coefficient models
+This section is a **doc audit** (guide is unchanged):
+- Drag: `F_drag = ½ ρ A C_d v_rel²` (standard form).
+- Lift: `F_lift = ½ ρ A C_l v_rel²` with direction set by spin axis (Magnus).
+- C_d and C_l are simplified linear functions of spin parameter with caps (0.50, 0.40).
+Recommendation: Keep these as-is for an app if calibrated, but consider adding a small “aero sanity” table in test data (typical Cd/Cl ranges) so future edits don’t drift.
+
+## 8) Suggested CSV edits if you intended to ship V2.1 expected values
+Based on the guide’s wind benchmark table and your stated ±0.5% pressure target:
+|   shot_id | scenario   |   baseline_carry_yards |   current_expected_carry |   target_pct |   suggested_expected_carry |   delta_yards | notes                                   |
+|----------:|:-----------|-----------------------:|-------------------------:|-------------:|---------------------------:|--------------:|:----------------------------------------|
+|        41 | wind       |                    273 |                      209 |        -22   |                        213 |             4 | Headwind 20 mph: expect -22% (TrackMan) |
+|        42 | wind       |                    273 |                      187 |        -28   |                        197 |            10 | Headwind 25 mph: expect -28%            |
+|        50 | wind       |                    273 |                      301 |         12   |                        306 |             5 | Tailwind 20 mph: expect +12% (TrackMan) |
+|        27 | pressure   |                    273 |                      273 |          0.5 |                        274 |             1 | Pressure only: 29.40 inHg (low)         |
+|        28 | pressure   |                    273 |                      273 |         -0.5 |                        272 |            -1 | Pressure only: 30.40 inHg (high)        |
+|        29 | pressure   |                    217 |                      217 |          0.5 |                        218 |             1 | 5-iron pressure: 29.40 inHg             |
+|        30 | pressure   |                    217 |                      217 |         -0.5 |                        216 |            -1 | 5-iron pressure: 30.40 inHg             |
+
+## 9) Outputs generated
+- Annotated CSV: `physics_validation_test_data_v2_revalidated_annotated.csv` (adds computed density, wind decomposition, drift recomputation, benchmark deltas, and a combined-scenario reference check).
+- This markdown report + a plain-text copy for Claude ingestion.

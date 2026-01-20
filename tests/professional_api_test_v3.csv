@@ -1,0 +1,51 @@
+shot_id,scenario_type,handicap_category,handicap,club,ball_speed_mph,launch_angle_deg,spin_rate_rpm,spin_axis_deg,baseline_carry_yards,temperature_f,humidity_pct,wind_speed_mph,wind_direction_deg,altitude_ft,air_pressure_inhg,expected_carry_yards,expected_lateral_drift_yards,tolerance_yards,notes
+1,baseline,low,2,driver,171,10.5,2450,0,275,70,50,0,0,0,29.92,276,0,2,LOW handicap driver baseline (tour-like)
+2,baseline,mid,14,driver,155,12.8,3100,0,252,70,50,0,0,0,29.92,252,0,2,MID handicap driver baseline
+3,baseline,high,24,driver,140,15.0,3700,0,228,70,50,0,0,0,29.92,228,0,2,HIGH handicap driver baseline
+4,baseline,low,5,7-iron,132,16.5,6800,0,220,70,50,0,0,0,29.92,220,0,2,LOW handicap 7-iron baseline
+5,baseline,high,26,7-iron,108,21.0,8200,0,175,70,50,0,0,0,29.92,175,0,2,HIGH handicap 7-iron baseline
+6,desert,low,3,driver,170,10.8,2500,-1,275,98,18,8,45,1200,29.85,268,20,5,Phoenix summer AM - hot/dry + quartering wind
+7,desert,mid,12,driver,157,12.5,3000,2,255,105,12,5,180,1400,29.78,274,0,5,Scottsdale peak heat - very hot + light tailwind
+8,desert,high,22,5-iron,122,18.0,6400,0,200,102,15,10,0,1100,29.82,185,0,4,Phoenix afternoon - hot + headwind
+9,desert,low,4,5-iron,142,14.5,5200,-1,234,95,20,12,315,1300,29.8,221,-26,5,Desert morning - warm/dry + quartering headwind from right
+10,desert,mid,15,7-iron,118,18.5,7500,0,193,88,25,6,270,1000,29.88,197,-15,3,Arizona spring - warm + crosswind R-L
+11,desert,high,28,driver,135,16.0,3900,3,220,92,22,15,0,1500,29.75,190,0,6,Desert windy day - warm + moderate headwind
+12,desert,low,2,9-iron,115,21.5,8400,0,193,100,18,8,90,1200,29.82,199,20,3,Scottsdale hot day - short iron + crosswind L-R
+13,desert,mid,16,PW,98,26.5,9600,0,159,96,20,10,180,1350,29.78,175,0,3,Desert calm approach - hot + tailwind
+14,coastal,low,4,driver,168,11.2,2600,-2,272,62,78,18,315,0,30.02,235,-45,7,Pebble Beach PM - cool/humid + strong quartering headwind
+15,coastal,mid,13,driver,156,12.6,3050,0,254,58,82,20,0,0,30.05,196,0,7,Torrey Pines marine layer - cool/humid + strong headwind
+16,coastal,high,20,5-iron,126,17.2,6100,2,207,65,75,15,270,50,29.98,206,-40,5,Pacific coast afternoon - moderate + crosswind R-L
+17,coastal,low,5,3-wood,158,12.0,3400,-1,256,60,80,12,45,0,30.0,233,28,5,Ocean side morning - cool/humid + quartering headwind
+18,coastal,mid,14,7-iron,120,18.0,7400,0,197,68,72,8,180,0,29.95,208,0,3,Coastal evening - mild + light tailwind
+19,coastal,high,25,driver,138,15.5,3800,4,225,55,85,22,0,0,30.08,168,0,8,Windy coast - cold/humid + very strong headwind
+20,coastal,low,3,5-iron,144,14.2,5100,0,238,64,76,10,135,0,30.0,248,22,4,Late afternoon coast - quartering tailwind from left
+21,mountain,low,2,driver,172,10.2,2400,0,276,72,35,5,0,5280,29.92,279,0,5,Denver elevation - altitude boost + light headwind
+22,mountain,mid,11,driver,160,12.0,2850,-2,259,68,40,10,180,6500,29.9,299,0,6,Mountain resort - high altitude + moderate tailwind
+23,mountain,high,23,5-iron,124,17.5,6300,0,203,75,38,8,90,7000,29.88,221,21,5,Extreme altitude - 7000ft + crosswind L-R
+24,mountain,low,4,7-iron,130,17.0,6900,0,217,65,42,12,45,5500,29.85,211,24,5,Colorado summer - altitude + quartering headwind
+25,mountain,mid,15,driver,154,13.0,3200,2,251,58,30,15,315,4800,29.78,235,-35,6,Mountain morning - cool/dry + quartering headwind
+26,mountain,high,30,7-iron,105,22.0,8500,0,170,78,45,6,180,6000,29.82,190,0,4,High altitude beginner - altitude helps + tailwind
+27,mountain,low,3,PW,104,25.5,9700,0,173,70,40,10,270,5280,29.92,184,-22,4,Denver approach - altitude + crosswind R-L
+28,southeast,low,5,driver,167,11.5,2650,0,272,92,88,6,180,0,29.75,288,0,4,Florida summer - hot/humid + light tailwind (storm coming)
+29,southeast,mid,12,driver,158,12.5,2950,-1,257,88,92,12,45,0,29.7,240,28,5,Augusta spring - warm/very humid + quartering wind
+30,southeast,high,21,5-iron,125,17.5,6200,2,205,95,85,8,0,50,29.72,192,0,4,Florida afternoon - hot/humid + headwind
+31,southeast,low,4,7-iron,133,16.2,6700,0,222,85,80,10,270,0,29.8,224,-29,4,Georgia summer - warm/humid + crosswind R-L
+32,southeast,mid,16,9-iron,102,24.0,9100,0,166,90,82,5,90,0,29.78,168,11,3,Southeast calm morning - humid + light crosswind
+33,southeast,high,26,driver,136,16.2,3950,3,223,78,75,15,0,0,29.85,188,0,6,Southern windy day - moderate headwind
+34,midwest,low,3,driver,169,11.0,2550,-1,274,75,55,12,0,800,29.9,243,0,5,Midwest summer - moderate + headwind
+35,midwest,mid,13,driver,157,12.4,3000,0,255,52,45,18,180,650,30.05,282,0,6,Midwest fall - cool + strong tailwind
+36,midwest,high,22,5-iron,123,17.8,6350,0,202,68,58,10,315,750,29.95,189,-19,4,Midwest spring - mild + quartering headwind
+37,midwest,low,5,5-iron,141,14.8,5300,0,233,45,40,8,90,600,30.1,231,24,4,Cold midwest day - cool/dry + crosswind
+38,midwest,mid,14,7-iron,119,18.2,7500,0,195,80,62,6,225,700,29.88,204,-11,3,Summer afternoon - warm + quartering tailwind
+39,links,low,2,driver,171,10.5,2450,0,275,55,70,25,0,0,29.85,196,0,9,Scottish links - cool/windy + extreme headwind
+40,links,mid,12,5-iron,134,15.5,5700,0,220,52,75,20,270,0,29.8,218,-57,6,Irish coast - cool/humid + strong crosswind
+41,links,high,24,driver,139,15.2,3750,2,226,58,68,18,45,0,29.75,195,37,7,Windy links - quartering headwind challenge
+42,links,low,4,7-iron,131,16.8,6850,0,219,48,72,15,180,0,29.9,237,0,5,Links tailwind - cool/humid + helping wind
+43,links,mid,15,3-wood,150,13.5,3800,-1,246,50,78,22,315,0,29.78,202,-50,7,Open Championship style - cold + strong quartering wind
+44,extreme,low,1,driver,178,9.5,2250,-2,285,110,10,0,0,0,29.6,292,0,5,Peak heat + low pressure - max hot/dry
+45,extreme,mid,10,driver,162,11.8,2800,0,263,38,25,0,0,0,30.3,256,0,5,Cold winter day - high pressure
+46,extreme,high,20,driver,145,14.5,3500,0,237,70,50,30,0,0,29.92,156,0,10,Hurricane force headwind - extreme wind test
+47,extreme,low,3,driver,170,10.8,2500,0,275,85,50,25,180,5280,29.92,338,0,8,Denver + strong tailwind - altitude + wind combo
+48,extreme,mid,14,5-iron,133,15.8,5750,0,219,65,90,15,90,0,29.7,219,43,5,Humid + crosswind + low pressure combo
+49,extreme,high,28,7-iron,107,21.5,8300,0,174,100,85,8,45,2000,29.75,171,13,4,Hot/humid + altitude + quartering wind
+50,extreme,low,2,PW,105,25.0,9500,0,174,75,50,20,315,3500,29.88,155,-32,5,Short iron in challenging conditions
