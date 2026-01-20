@@ -300,9 +300,9 @@ if CLIENT_DOCS_PATH.exists():
 
 
 # ==================== SWAGGER UI ROUTES ====================
-# Explicit routes to ensure they're not caught by the catch-all
+# Swagger UI available at /api/docs (not /docs which is the React docs page)
 
-@app.get("/docs", include_in_schema=False)
+@app.get("/api/docs", include_in_schema=False)
 async def swagger_ui_html():
     """Serve Swagger UI for API documentation."""
     return get_swagger_ui_html(
@@ -311,7 +311,7 @@ async def swagger_ui_html():
         swagger_ui_parameters={"defaultModelsExpandDepth": -1}
     )
 
-@app.get("/redoc", include_in_schema=False)
+@app.get("/api/redoc", include_in_schema=False)
 async def redoc_html():
     """Serve ReDoc for API documentation."""
     return get_redoc_html(
