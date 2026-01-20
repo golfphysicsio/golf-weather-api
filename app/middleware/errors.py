@@ -66,6 +66,27 @@ def setup_exception_handlers(app: FastAPI):
     @app.exception_handler(Exception)
     async def general_exception_handler(request: Request, exc: Exception):
         """Handle unexpected exceptions."""
+        # Check if this is an ExceptionGroup containing an HTTPException
+        # (Python 3.11+ wraps exceptions in TaskGroups as ExceptionGroups)
+        if isinstance(exc, BaseExceptionGroup):
+            for sub_exc in exc.exceptions:
+                if isinstance(sub_exc, StarletteHTTPException):
+                    # Handle the HTTPException properly
+                    if isinstance(sub_exc.detail, dict) and "error" in sub_exc.detail:
+                        return JSONResponse(
+                            status_code=sub_exc.status_code,
+                            content=sub_exc.detail,
+                        )
+                    return JSONResponse(
+                        status_code=sub_exc.status_code,
+                        content={
+                            "error": {
+                                "code": f"HTTP_{sub_exc.status_code}",
+                                "message": str(sub_exc.detail),
+                            }
+                        },
+                    )
+
         # Log to Sentry if configured
         if settings.SENTRY_DSN:
             sentry_sdk.capture_exception(exc)
