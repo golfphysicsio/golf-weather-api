@@ -5,7 +5,8 @@ Validates X-API-Key header against stored hashes.
 Checks both environment variables and database.
 """
 
-from fastapi import Request, HTTPException
+from fastapi import Request
+from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 import hashlib
 import asyncpg
@@ -105,9 +106,9 @@ class AuthMiddleware(BaseHTTPMiddleware):
         api_key = request.headers.get("X-API-Key")
 
         if not api_key:
-            raise HTTPException(
+            return JSONResponse(
                 status_code=401,
-                detail={
+                content={
                     "error": {
                         "code": "MISSING_API_KEY",
                         "message": "API key is required. Include X-API-Key header.",
@@ -131,9 +132,9 @@ class AuthMiddleware(BaseHTTPMiddleware):
             client_id, api_key_id = await check_database_key(key_hash)
 
         if not client_id:
-            raise HTTPException(
+            return JSONResponse(
                 status_code=401,
-                detail={
+                content={
                     "error": {
                         "code": "INVALID_API_KEY",
                         "message": "The API key provided is invalid or expired.",
