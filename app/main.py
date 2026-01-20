@@ -73,8 +73,18 @@ async def lifespan(app: FastAPI):
     await close_db()
 
 
-# Determine if we should show docs
-show_docs = settings.ENVIRONMENT != "production"
+# Always show docs - linked in website navigation
+show_docs = True
+
+# OpenAPI servers configuration - use production URL for customer-facing docs
+openapi_servers = [
+    {"url": "https://api.golfphysics.io", "description": "Production API"},
+]
+if settings.ENVIRONMENT != "production":
+    # Add staging server for non-production environments
+    openapi_servers.append(
+        {"url": "https://staging.golfphysics.io", "description": "Staging API (internal)"}
+    )
 
 app = FastAPI(
     title="Golf Weather Physics API",
@@ -87,6 +97,7 @@ app = FastAPI(
     docs_url="/docs" if show_docs else None,
     redoc_url="/redoc" if show_docs else None,
     lifespan=lifespan,
+    servers=openapi_servers,
 )
 
 # CORS middleware

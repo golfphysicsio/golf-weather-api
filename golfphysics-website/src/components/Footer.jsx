@@ -137,7 +137,7 @@ export default function Footer() {
             <div className="flex items-center gap-4 text-sm">
               <span className="text-gray-400">Base URL:</span>
               <code className="text-golf-green bg-gray-800 px-2 py-1 rounded text-xs">
-                golf-weather-api-staging.up.railway.app
+                api.golfphysics.io
               </code>
             </div>
           </div>

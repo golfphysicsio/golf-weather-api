@@ -130,7 +130,7 @@ export default function Docs() {
                       <p className="text-sm font-medium text-pro-blue mb-2">Professional API - Accurate Physics</p>
                       <CodeBlock
                         id="quickstart-professional"
-                        code={`curl -X POST "https://golf-weather-api-staging.up.railway.app/v1/trajectory" \\
+                        code={`curl -X POST "https://api.golfphysics.io/v1/trajectory" \\
   -H "X-API-Key: your_api_key_here" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -152,7 +152,7 @@ export default function Docs() {
                       <p className="text-sm font-medium text-gaming-orange mb-2">Gaming API - Extreme Weather Presets</p>
                       <CodeBlock
                         id="quickstart-gaming"
-                        code={`curl -X POST "https://golf-weather-api-staging.up.railway.app/v1/trajectory" \\
+                        code={`curl -X POST "https://api.golfphysics.io/v1/trajectory" \\
   -H "X-API-Key: your_api_key_here" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -305,7 +305,7 @@ X-RateLimit-Reset: 1640995200`}
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Endpoint</h3>
                 <CodeBlock
                   id="trajectory-endpoint"
-                  code={`POST https://golf-weather-api-staging.up.railway.app/v1/trajectory`}
+                  code={`POST https://api.golfphysics.io/v1/trajectory`}
                 />
 
                 <h3 className="text-lg font-semibold text-gray-900 mt-8 mb-3">Request Body</h3>
@@ -600,7 +600,7 @@ X-RateLimit-Reset: 1640995200`}
 // - Final carry: 285 yards
 // - Total distance: 312+ yards
 
-const response = await fetch('https://golf-weather-api-staging.up.railway.app/v1/trajectory', {
+const response = await fetch('https://api.golfphysics.io/v1/trajectory', {
   method: 'POST',
   headers: {
     'X-API-Key': 'your_api_key',
@@ -624,7 +624,7 @@ const response = await fetch('https://golf-weather-api-staging.up.railway.app/v1
 // Tests lateral control and shot shaping
 // Great for closest-to-pin competitions
 
-const response = await fetch('https://golf-weather-api-staging.up.railway.app/v1/trajectory', {
+const response = await fetch('https://api.golfphysics.io/v1/trajectory', {
   method: 'POST',
   headers: {
     'X-API-Key': 'your_api_key',

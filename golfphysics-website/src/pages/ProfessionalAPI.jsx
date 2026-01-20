@@ -227,7 +227,7 @@ export default function ProfessionalAPI() {
             <pre className="text-gray-300 text-sm font-mono">
 {`// Calculate trajectory with real weather
 const response = await fetch(
-  'https://golf-weather-api-staging.up.railway.app/api/v1/calculate',
+  'https://api.golfphysics.io/api/v1/calculate',
   {
     method: 'POST',
     headers: {

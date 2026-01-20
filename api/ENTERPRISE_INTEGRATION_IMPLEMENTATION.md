@@ -936,6 +936,11 @@ git push origin main
 
 ## PHASE 8: Test in STAGING
 
+> **⚠️ INTERNAL TESTING ONLY**
+> This section uses staging URLs for internal development and QA testing.
+> These URLs are NOT shown to customers. Customer-facing documentation
+> uses only production URLs (api.golfphysics.io).
+
 After Railway deploys to staging:
 
 ### 1. Test Staging API

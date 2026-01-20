@@ -410,7 +410,7 @@ export default function GamingAPI() {
             <pre className="text-gray-300 text-sm font-mono">
 {`// Hurricane Hero mode - no launch monitor needed!
 const response = await fetch(
-  'https://golf-weather-api-staging.up.railway.app/api/v1/gaming/trajectory',
+  'https://api.golfphysics.io/api/v1/gaming/trajectory',
   {
     method: 'POST',
     headers: {
