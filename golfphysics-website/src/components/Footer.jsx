@@ -21,8 +21,6 @@ export default function Footer() {
       { label: 'Terms of Service', path: '/terms' },
     ],
     connect: [
-      { label: 'Twitter', href: 'https://twitter.com/golfphysicsio', external: true },
-      { label: 'GitHub', href: 'https://github.com/golfphysicsio', external: true },
       { label: 'Email', href: 'mailto:hello@golfphysics.io', external: true },
     ],
   }
