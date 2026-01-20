@@ -308,8 +308,9 @@ if WEBSITE_PATH.exists():
         Catch-all route for React client-side routing.
         Serves index.html for any non-API, non-admin routes.
         """
-        # Don't catch API routes, admin routes, or static files
-        if full_path.startswith(("api/", "v1/", "admin", "docs", "redoc", "openapi")):
+        # Don't catch API routes or admin routes - let FastAPI handle them
+        # Note: docs/redoc/openapi are handled by FastAPI's built-in routes
+        if full_path.startswith(("api/", "v1/", "admin/")):
             return {"error": "Not found"}
 
         # Check if it's a static file request
