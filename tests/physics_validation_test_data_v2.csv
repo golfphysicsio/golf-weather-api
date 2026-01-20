@@ -25,10 +25,10 @@ shot_id,scenario_type,handicap_category,handicap,club,ball_speed_mph,launch_angl
 24,density_humid,low,4,driver,168,11.2,2600,0,273,70,95,0,0,0,29.92,273,0,2,Humidity only: 95% RH (very humid)
 25,density_humid,mid,14,5-iron,132,16.0,5800,0,217,70,20,0,0,0,29.92,217,0,2,5-iron humidity: 20% RH
 26,density_humid,mid,14,5-iron,132,16.0,5800,0,217,70,95,0,0,0,29.92,217,0,2,5-iron humidity: 95% RH
-27,density_pressure,low,4,driver,168,11.2,2600,0,273,70,50,0,0,0,29.4,273,0,2,Pressure only: 29.40 inHg (low)
-28,density_pressure,low,4,driver,168,11.2,2600,0,273,70,50,0,0,0,30.4,273,0,2,Pressure only: 30.40 inHg (high)
-29,density_pressure,mid,14,5-iron,132,16.0,5800,0,217,70,50,0,0,0,29.4,217,0,2,5-iron pressure: 29.40 inHg
-30,density_pressure,mid,14,5-iron,132,16.0,5800,0,217,70,50,0,0,0,30.4,217,0,2,5-iron pressure: 30.40 inHg
+27,density_pressure,low,4,driver,168,11.2,2600,0,273,70,50,0,0,0,29.4,274,0,2,Pressure only: 29.40 inHg (low)
+28,density_pressure,low,4,driver,168,11.2,2600,0,273,70,50,0,0,0,30.4,271,0,2,Pressure only: 30.40 inHg (high)
+29,density_pressure,mid,14,5-iron,132,16.0,5800,0,217,70,50,0,0,0,29.4,218,0,2,5-iron pressure: 29.40 inHg
+30,density_pressure,mid,14,5-iron,132,16.0,5800,0,217,70,50,0,0,0,30.4,216,0,2,5-iron pressure: 30.40 inHg
 31,altitude_only,low,4,driver,168,11.2,2600,0,273,70,50,0,0,1000,29.92,276,0,3,"Altitude only: 1,000 ft (+1.2%)"
 32,altitude_only,low,4,driver,168,11.2,2600,0,273,70,50,0,0,3000,29.92,282,0,3,"Altitude only: 3,000 ft (+3.6%)"
 33,altitude_only,low,4,driver,168,11.2,2600,0,273,70,50,0,0,5000,29.92,289,0,4,"Altitude only: 5,000 ft Denver (+6%)"
@@ -36,66 +36,66 @@ shot_id,scenario_type,handicap_category,handicap,club,ball_speed_mph,launch_angl
 35,altitude_only,mid,14,5-iron,132,16.0,5800,0,217,70,50,0,0,3000,29.92,225,0,3,"5-iron altitude: 3,000 ft"
 36,altitude_only,mid,14,5-iron,132,16.0,5800,0,217,70,50,0,0,5000,29.92,230,0,3,"5-iron altitude: 5,000 ft"
 37,altitude_only,high,22,7-iron,115,20.0,8000,0,190,70,50,0,0,5000,29.92,201,0,3,"7-iron altitude: 5,000 ft"
-38,wind_head,low,4,driver,168,11.2,2600,0,273,70,50,5,0,0,29.92,260,0,3,Headwind 5 mph: expect -5%
+38,wind_head,low,4,driver,168,11.2,2600,0,273,70,50,5,0,0,29.92,259,0,3,Headwind 5 mph: expect -5%
 39,wind_head,low,4,driver,168,11.2,2600,0,273,70,50,10,0,0,29.92,245,0,4,Headwind 10 mph: expect -10% (TrackMan)
-40,wind_head,low,4,driver,168,11.2,2600,0,273,70,50,15,0,0,29.92,228,0,5,Headwind 15 mph: expect -16%
-41,wind_head,low,4,driver,168,11.2,2600,0,273,70,50,20,0,0,29.92,209,0,6,Headwind 20 mph: expect -22% (TrackMan)
-42,wind_head,low,4,driver,168,11.2,2600,0,273,70,50,25,0,0,29.92,187,0,7,Headwind 25 mph: expect -28%
-43,wind_head,mid,14,5-iron,132,16.0,5800,0,217,70,50,10,0,0,29.92,194,0,3,5-iron headwind 10 mph
-44,wind_head,mid,14,5-iron,132,16.0,5800,0,217,70,50,20,0,0,29.92,162,0,5,5-iron headwind 20 mph
-45,wind_head,high,22,7-iron,115,20.0,8000,0,190,70,50,10,0,0,29.92,168,0,3,7-iron headwind 10 mph
-46,wind_head,high,22,7-iron,115,20.0,8000,0,190,70,50,15,0,0,29.92,153,0,4,7-iron headwind 15 mph
-47,wind_tail,low,4,driver,168,11.2,2600,0,273,70,50,5,180,0,29.92,284,0,3,Tailwind 5 mph: expect +3.5%
-48,wind_tail,low,4,driver,168,11.2,2600,0,273,70,50,10,180,0,29.92,293,0,4,Tailwind 10 mph: expect +7% (TrackMan)
+40,wind_head,low,4,driver,168,11.2,2600,0,273,70,50,15,0,0,29.92,229,0,5,Headwind 15 mph: expect -16%
+41,wind_head,low,4,driver,168,11.2,2600,0,273,70,50,20,0,0,29.92,213,0,6,Headwind 20 mph: expect -22% (TrackMan)
+42,wind_head,low,4,driver,168,11.2,2600,0,273,70,50,25,0,0,29.92,196,0,7,Headwind 25 mph: expect -28%
+43,wind_head,mid,14,5-iron,132,16.0,5800,0,217,70,50,10,0,0,29.92,195,0,3,5-iron headwind 10 mph
+44,wind_head,mid,14,5-iron,132,16.0,5800,0,217,70,50,20,0,0,29.92,169,0,5,5-iron headwind 20 mph
+45,wind_head,high,22,7-iron,115,20.0,8000,0,190,70,50,10,0,0,29.92,171,0,3,7-iron headwind 10 mph
+46,wind_head,high,22,7-iron,115,20.0,8000,0,190,70,50,15,0,0,29.92,159,0,4,7-iron headwind 15 mph
+47,wind_tail,low,4,driver,168,11.2,2600,0,273,70,50,5,180,0,29.92,282,0,3,Tailwind 5 mph: expect +3.5%
+48,wind_tail,low,4,driver,168,11.2,2600,0,273,70,50,10,180,0,29.92,292,0,4,Tailwind 10 mph: expect +7% (TrackMan)
 49,wind_tail,low,4,driver,168,11.2,2600,0,273,70,50,15,180,0,29.92,298,0,5,Tailwind 15 mph: expect +10%
-50,wind_tail,low,4,driver,168,11.2,2600,0,273,70,50,20,180,0,29.92,301,0,6,Tailwind 20 mph: expect +12% (TrackMan)
+50,wind_tail,low,4,driver,168,11.2,2600,0,273,70,50,20,180,0,29.92,305,0,6,Tailwind 20 mph: expect +12% (TrackMan)
 51,wind_tail,mid,14,5-iron,132,16.0,5800,0,217,70,50,10,180,0,29.92,232,0,3,5-iron tailwind 10 mph
-52,wind_tail,mid,14,5-iron,132,16.0,5800,0,217,70,50,20,180,0,29.92,236,0,5,5-iron tailwind 20 mph
-53,wind_tail,high,22,7-iron,115,20.0,8000,0,190,70,50,10,180,0,29.92,204,0,3,7-iron tailwind 10 mph
+52,wind_tail,mid,14,5-iron,132,16.0,5800,0,217,70,50,20,180,0,29.92,243,0,5,5-iron tailwind 20 mph
+53,wind_tail,high,22,7-iron,115,20.0,8000,0,190,70,50,10,180,0,29.92,203,0,3,7-iron tailwind 10 mph
 54,wind_cross,low,4,driver,168,11.2,2600,0,273,70,50,10,90,0,29.92,273,35,4,Crosswind 10 mph L-R: minimal carry effect
 55,wind_cross,low,4,driver,168,11.2,2600,0,273,70,50,10,270,0,29.92,273,-35,4,Crosswind 10 mph R-L: minimal carry effect
 56,wind_cross,low,4,driver,168,11.2,2600,0,273,70,50,20,90,0,29.92,273,71,6,Crosswind 20 mph L-R
 57,wind_cross,mid,14,5-iron,132,16.0,5800,0,217,70,50,10,90,0,29.92,217,28,3,5-iron crosswind 10 mph
 58,wind_cross,mid,14,5-iron,132,16.0,5800,0,217,70,50,15,270,0,29.92,217,-42,4,5-iron crosswind 15 mph R-L
 59,wind_cross,high,22,7-iron,115,20.0,8000,0,190,70,50,10,90,0,29.92,190,25,3,7-iron crosswind 10 mph
-60,wind_quarter,low,4,driver,168,11.2,2600,0,273,70,50,10,45,0,29.92,254,25,5,Quartering headwind 10mph from left (45deg)
-61,wind_quarter,low,4,driver,168,11.2,2600,0,273,70,50,10,315,0,29.92,254,-25,5,Quartering headwind 10mph from right (315deg)
-62,wind_quarter,low,4,driver,168,11.2,2600,0,273,70,50,10,135,0,29.92,288,25,4,Quartering tailwind 10mph from left (135deg)
-63,wind_quarter,low,4,driver,168,11.2,2600,0,273,70,50,10,225,0,29.92,288,-25,4,Quartering tailwind 10mph from right (225deg)
+60,wind_quarter,low,4,driver,168,11.2,2600,0,273,70,50,10,45,0,29.92,253,25,5,Quartering headwind 10mph from left (45deg)
+61,wind_quarter,low,4,driver,168,11.2,2600,0,273,70,50,10,315,0,29.92,253,-25,5,Quartering headwind 10mph from right (315deg)
+62,wind_quarter,low,4,driver,168,11.2,2600,0,273,70,50,10,135,0,29.92,286,25,4,Quartering tailwind 10mph from left (135deg)
+63,wind_quarter,low,4,driver,168,11.2,2600,0,273,70,50,10,225,0,29.92,286,-25,4,Quartering tailwind 10mph from right (225deg)
 64,wind_quarter,low,4,driver,168,11.2,2600,0,273,70,50,15,45,0,29.92,243,38,6,Quartering headwind 15mph
 65,wind_quarter,mid,14,5-iron,132,16.0,5800,0,217,70,50,10,315,0,29.92,202,-20,4,5-iron quartering headwind
-66,combined,low,3,driver,170,10.8,2500,-1,275,55,40,15,0,0,29.92,226,0,6,Cold (55F) + 15mph headwind
-67,combined,low,5,driver,165,12.0,2700,3,270,95,80,0,0,5000,29.42,291,0,5,Hot (95F) + altitude 5000ft
-68,combined,low,1,driver,175,9.8,2300,-3,280,70,50,20,45,0,29.92,239,51,7,20mph quartering headwind
-69,combined,mid,15,driver,152,13.5,3200,0,248,85,70,15,180,0,29.85,272,0,5,Warm (85F) + 15mph tailwind
-70,combined,mid,11,driver,160,12.2,2850,-2,260,50,35,20,0,0,30.05,193,0,7,Cold (50F) + high pressure + 20mph headwind
-71,combined,mid,12,5-iron,135,15.5,5600,-1,222,90,75,5,180,3000,29.92,242,0,5,Warm + tailwind + altitude 3000ft
-72,combined,high,32,driver,132,17.0,4000,-8,215,100,90,0,0,6500,29.05,236,0,5,Hot (100F) + altitude 6500ft
-73,combined,high,24,driver,142,15.0,3600,5,232,70,50,20,0,0,29.92,177,0,6,Pure 20mph headwind
-74,combined,high,30,driver,135,16.5,3900,0,221,85,70,12,180,2000,29.72,245,0,6,Warm + tailwind + altitude 2000ft
-75,combined,high,25,7-iron,110,21.5,8400,-2,181,88,72,6,180,2200,29.7,197,0,4,Warm + tailwind + altitude 2200ft
-76,extreme,low,1,driver,178,9.5,2250,-2,285,70,50,25,0,0,29.92,197,0,8,Elite driver 25mph headwind
-77,extreme,low,3,driver,173,10.0,2350,0,277,105,90,0,0,7000,28.95,308,0,7,Very hot (105F) + extreme altitude 7000ft
-78,extreme,low,2,3-wood,166,11.2,3050,-1,270,35,25,5,180,0,30.2,276,0,5,Very cold (35F) + 5mph tailwind
-79,extreme,mid,14,5-iron,134,15.8,5700,-1,221,70,50,25,180,0,29.92,241,0,6,Strong 25mph tailwind
-80,extreme,mid,18,7-iron,120,18.5,7600,3,198,102,92,0,0,4800,29.42,213,0,5,Very hot (102F) + altitude 4800ft
+66,combined,low,3,driver,170,10.8,2500,-1,275,55,40,15,0,0,29.92,228,0,6,Cold (55F) + 15mph headwind
+67,combined,low,5,driver,165,12.0,2700,3,270,95,80,0,0,5000,29.42,293,0,5,Hot (95F) + altitude 5000ft
+68,combined,low,1,driver,175,9.8,2300,-3,280,70,50,20,45,0,29.92,238,51,7,20mph quartering headwind
+69,combined,mid,15,driver,152,13.5,3200,0,248,85,70,15,180,0,29.85,275,0,5,Warm (85F) + 15mph tailwind
+70,combined,mid,11,driver,160,12.2,2850,-2,260,50,35,20,0,0,30.05,199,0,7,Cold (50F) + high pressure + 20mph headwind
+71,combined,mid,12,5-iron,135,15.5,5600,-1,222,90,75,5,180,3000,29.92,241,0,5,Warm + tailwind + altitude 3000ft
+72,combined,high,32,driver,132,17.0,4000,-8,215,100,90,0,0,6500,29.05,238,0,5,Hot (100F) + altitude 6500ft
+73,combined,high,24,driver,142,15.0,3600,5,232,70,50,20,0,0,29.92,181,0,6,Pure 20mph headwind
+74,combined,high,30,driver,135,16.5,3900,0,221,85,70,12,180,2000,29.72,247,0,6,Warm + tailwind + altitude 2000ft
+75,combined,high,25,7-iron,110,21.5,8400,-2,181,88,72,6,180,2200,29.7,196,0,4,Warm + tailwind + altitude 2200ft
+76,extreme,low,1,driver,178,9.5,2250,-2,285,70,50,25,0,0,29.92,205,0,8,Elite driver 25mph headwind
+77,extreme,low,3,driver,173,10.0,2350,0,277,105,90,0,0,7000,28.95,311,0,7,Very hot (105F) + extreme altitude 7000ft
+78,extreme,low,2,3-wood,166,11.2,3050,-1,270,35,25,5,180,0,30.2,272,0,5,Very cold (35F) + 5mph tailwind
+79,extreme,mid,14,5-iron,134,15.8,5700,-1,221,70,50,25,180,0,29.92,253,0,6,Strong 25mph tailwind
+80,extreme,mid,18,7-iron,120,18.5,7600,3,198,102,92,0,0,4800,29.42,214,0,5,Very hot (102F) + altitude 4800ft
 81,asymmetry,low,4,driver,168,11.2,2600,0,273,70,50,10,0,0,29.92,245,0,4,10mph headwind: -10%
-82,asymmetry,low,4,driver,168,11.2,2600,0,273,70,50,10,180,0,29.92,293,0,4,10mph tailwind: +7% (asymmetric!)
-83,asymmetry,low,4,driver,168,11.2,2600,0,273,70,50,20,0,0,29.92,209,0,6,20mph headwind: -22%
-84,asymmetry,low,4,driver,168,11.2,2600,0,273,70,50,20,180,0,29.92,301,0,6,20mph tailwind: +12% (asymmetric!)
-85,club_wind,low,4,driver,168,11.2,2600,0,273,70,50,15,0,0,29.92,228,0,5,Driver 15mph headwind
-86,club_wind,low,5,5-iron,142,14.5,5200,0,234,70,50,15,0,0,29.92,194,0,4,5-iron 15mph headwind
-87,club_wind,low,3,9-iron,112,22.0,8500,0,187,70,50,15,0,0,29.92,148,0,4,9-iron 15mph headwind
-88,club_wind,low,4,PW,102,26.0,9800,0,168,70,50,15,0,0,29.92,130,0,3,PW 15mph headwind
+82,asymmetry,low,4,driver,168,11.2,2600,0,273,70,50,10,180,0,29.92,292,0,4,10mph tailwind: +7% (asymmetric!)
+83,asymmetry,low,4,driver,168,11.2,2600,0,273,70,50,20,0,0,29.92,213,0,6,20mph headwind: -22%
+84,asymmetry,low,4,driver,168,11.2,2600,0,273,70,50,20,180,0,29.92,305,0,6,20mph tailwind: +12% (asymmetric!)
+85,club_wind,low,4,driver,168,11.2,2600,0,273,70,50,15,0,0,29.92,229,0,5,Driver 15mph headwind
+86,club_wind,low,5,5-iron,142,14.5,5200,0,234,70,50,15,0,0,29.92,197,0,4,5-iron 15mph headwind
+87,club_wind,low,3,9-iron,112,22.0,8500,0,187,70,50,15,0,0,29.92,157,0,4,9-iron 15mph headwind
+88,club_wind,low,4,PW,102,26.0,9800,0,168,70,50,15,0,0,29.92,142,0,3,PW 15mph headwind
 89,handicap_comp,low,2,driver,171,10.5,2450,0,275,70,50,10,180,0,29.92,295,0,4,Low handicap driver +7% tailwind
 90,handicap_comp,mid,12,driver,158,12.5,2900,0,257,70,50,10,180,0,29.92,275,0,4,Mid handicap driver +7% tailwind
 91,handicap_comp,high,22,driver,145,14.5,3500,0,237,70,50,10,180,0,29.92,254,0,4,High handicap driver +7% tailwind
-92,real_world,low,4,driver,168,11.2,2600,0,273,72,55,8,45,500,29.88,260,20,5,Morning round: light quartering wind + slight altitude
-93,real_world,mid,14,5-iron,132,16.0,5800,0,217,85,65,12,180,1200,29.82,238,0,4,Afternoon: warm + helping wind + mild altitude
+92,real_world,low,4,driver,168,11.2,2600,0,273,72,55,8,45,500,29.88,259,20,5,Morning round: light quartering wind + slight altitude
+93,real_world,mid,14,5-iron,132,16.0,5800,0,217,85,65,12,180,1200,29.82,240,0,4,Afternoon: warm + helping wind + mild altitude
 94,real_world,high,22,7-iron,115,20.0,8000,0,190,62,48,6,270,0,29.95,189,-15,3,Cool evening: light crosswind R-L
 95,real_world,low,3,driver,170,10.8,2500,0,275,78,60,10,0,2500,29.7,257,0,5,Denver area: altitude helps but headwind hurts
-96,real_world,mid,12,driver,158,12.5,2900,0,257,68,45,5,135,0,29.92,265,12,3,Light quartering tailwind from left
-97,real_world,high,20,5-iron,125,17.5,6200,0,205,88,75,15,0,800,29.85,175,0,5,Warm day with moderate headwind
-98,real_world,low,5,5-iron,142,14.5,5200,0,234,55,35,8,180,0,30.05,248,0,4,Cool day with tailwind
+96,real_world,mid,12,driver,158,12.5,2900,0,257,68,45,5,135,0,29.92,263,12,3,Light quartering tailwind from left
+97,real_world,high,20,5-iron,125,17.5,6200,0,205,88,75,15,0,800,29.85,176,0,5,Warm day with moderate headwind
+98,real_world,low,5,5-iron,142,14.5,5200,0,234,55,35,8,180,0,30.05,245,0,4,Cool day with tailwind
 99,real_world,mid,11,7-iron,122,18.0,7400,0,201,75,55,10,90,1500,29.8,206,26,4,Light crosswind + altitude
-100,real_world,high,28,driver,138,16.0,3800,0,227,82,68,18,225,0,29.88,246,-38,6,Warm with strong quartering tailwind
+100,real_world,high,28,driver,138,16.0,3800,0,227,82,68,18,225,0,29.88,247,-38,6,Warm with strong quartering tailwind

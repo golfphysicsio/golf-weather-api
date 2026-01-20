@@ -511,13 +511,13 @@ def calculate_impact_breakdown(
         crosswind_mps=0,
     )
 
-    # Calculate temperature/humidity density effect (without altitude)
+    # Calculate temperature/humidity/pressure density effect (without altitude)
     # Altitude effect is applied separately using empirical formula
-    temp_humid_density = calculate_air_density(
+    temp_humid_pressure_density = calculate_air_density(
         conditions.temperature_f,
         0,  # Sea level - altitude handled separately
         conditions.humidity_pct,
-        29.92,  # Standard pressure - altitude handled separately
+        conditions.pressure_inhg,  # Use actual pressure for density calculation
     )
     headwind, crosswind = calculate_wind_components(
         conditions.wind_speed_mph, conditions.wind_direction_deg
@@ -530,7 +530,7 @@ def calculate_impact_breakdown(
         spin_rate_rpm=shot.spin_rate_rpm,
         spin_axis_deg=shot.spin_axis_deg,
         direction_deg=shot.direction_deg,
-        air_density=temp_humid_density,
+        air_density=temp_humid_pressure_density,
         headwind_mps=headwind,
         crosswind_mps=crosswind,
     )
@@ -542,7 +542,7 @@ def calculate_impact_breakdown(
         spin_rate_rpm=shot.spin_rate_rpm,
         spin_axis_deg=shot.spin_axis_deg,
         direction_deg=shot.direction_deg,
-        air_density=temp_humid_density,
+        air_density=temp_humid_pressure_density,
         headwind_mps=0,
         crosswind_mps=0,
     )["carry_yards"]
@@ -557,13 +557,17 @@ def calculate_impact_breakdown(
 
     # CRITICAL: Different wind handling based on api_type
     if api_type == "professional":
-        # Professional API: Use pure physics simulation
-        # This shows realistic lift loss at extreme tailwinds
-        physics_wind_effect = physics_adjusted["carry_yards"] - no_wind_carry
-        adjusted_carry = no_wind_carry + physics_wind_effect
+        # Professional API: Use empirical wind formula (TrackMan benchmarks)
+        # This ensures accurate wind effects matching industry data
+        empirical_effect, empirical_lateral = calculate_empirical_wind_effect(
+            baseline_result["carry_yards"],
+            conditions.wind_speed_mph,
+            conditions.wind_direction_deg,
+        )
+        adjusted_carry = no_wind_carry + empirical_effect
         adjusted_carry = adjusted_carry * altitude_multiplier
-        wind_distance_effect = physics_wind_effect
-        wind_lateral_drift = physics_adjusted["lateral_drift_yards"]
+        wind_distance_effect = empirical_effect
+        wind_lateral_drift = empirical_lateral
 
     else:  # api_type == "gaming"
         # Gaming API: Smart capping for extreme conditions
