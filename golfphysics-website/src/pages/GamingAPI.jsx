@@ -474,110 +474,55 @@ const data = await response.json();
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Gaming API Pricing
+              Simple, Unified Pricing
             </h2>
-            <p className="text-gray-600">Per-venue pricing with ROI that pays for itself</p>
+            <p className="text-gray-600">Everything included. Professional + Gaming APIs together.</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {/* Venue */}
-            <div className="bg-white rounded-xl p-8 border border-gray-200 shadow-sm">
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Venue</h3>
-              <p className="text-3xl font-bold text-gray-900 mb-1">
-                $1,499<span className="text-base font-normal text-gray-500">/month</span>
+          <div className="max-w-2xl mx-auto bg-white rounded-xl p-8 border-4 border-gaming-orange shadow-lg">
+            <div className="text-center mb-6">
+              <div className="inline-block bg-gaming-orange text-white px-4 py-1 rounded-full text-sm font-semibold mb-4">
+                EVERYTHING INCLUDED
+              </div>
+              <p className="text-4xl font-bold text-gaming-orange mb-2">
+                $299<span className="text-xl text-gray-600">/month</span>
               </p>
-              <p className="text-gray-500 text-sm mb-6">per location</p>
-              <ul className="space-y-3 text-sm text-gray-600 mb-8">
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-gaming-orange" />
-                  5 standard game modes
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-gaming-orange" />
-                  50,000 requests/day
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-gaming-orange" />
-                  Handicap-based gameplay
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-gaming-orange" />
-                  Basic analytics
-                </li>
-              </ul>
-              <Link to="/contact" className="btn-gaming-outline w-full text-center block">
-                Get Started
+              <p className="text-gray-600">per facility • Volume discounts available</p>
+            </div>
+            <ul className="grid md:grid-cols-2 gap-3 text-sm text-gray-600 mb-8">
+              <li className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-gaming-orange" />
+                All 10 game modes
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-gaming-orange" />
+                Professional API included
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-gaming-orange" />
+                750,000 API calls/month
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-gaming-orange" />
+                99.9% uptime SLA
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-gaming-orange" />
+                Handicap-based gameplay
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-gaming-orange" />
+                Email + chat support
+              </li>
+            </ul>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link to="/contact" className="btn-gaming flex-1 text-center">
+                Get Started - $299/month
+              </Link>
+              <Link to="/pricing" className="btn-gaming-outline flex-1 text-center">
+                View Full Pricing
               </Link>
             </div>
-
-            {/* Venue Pro */}
-            <div className="bg-white rounded-xl p-8 border-2 border-gaming-orange shadow-lg relative">
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gaming-orange text-white text-xs px-3 py-1 rounded-full">
-                Most Popular
-              </span>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Venue Pro</h3>
-              <p className="text-3xl font-bold text-gray-900 mb-1">
-                $2,499<span className="text-base font-normal text-gray-500">/month</span>
-              </p>
-              <p className="text-gray-500 text-sm mb-6">per location</p>
-              <ul className="space-y-3 text-sm text-gray-600 mb-8">
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-gaming-orange" />
-                  All 9 game modes
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-gaming-orange" />
-                  150,000 requests/day
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-gaming-orange" />
-                  Leaderboard integration
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-gaming-orange" />
-                  Custom branding options
-                </li>
-              </ul>
-              <Link to="/contact" className="btn-gaming w-full text-center block">
-                Get Started
-              </Link>
-            </div>
-
-            {/* Enterprise */}
-            <div className="bg-white rounded-xl p-8 border border-gray-200 shadow-sm">
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Enterprise</h3>
-              <p className="text-3xl font-bold text-gray-900 mb-1">
-                $3,999+<span className="text-base font-normal text-gray-500">/month</span>
-              </p>
-              <p className="text-gray-500 text-sm mb-6">multi-location chains</p>
-              <ul className="space-y-3 text-sm text-gray-600 mb-8">
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-gaming-orange" />
-                  Everything in Pro
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-gaming-orange" />
-                  Multi-venue management
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-gaming-orange" />
-                  Custom game modes
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-gaming-orange" />
-                  Dedicated support
-                </li>
-              </ul>
-              <Link to="/contact" className="btn-gaming-outline w-full text-center block">
-                Contact Sales
-              </Link>
-            </div>
-          </div>
-
-          <div className="text-center mt-8">
-            <Link to="/pricing" className="text-gaming-orange font-medium hover:underline inline-flex items-center gap-2">
-              View Full Pricing & ROI Calculator <ArrowRight className="w-4 h-4" />
-            </Link>
           </div>
         </div>
       </section>

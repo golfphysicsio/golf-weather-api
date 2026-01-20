@@ -381,108 +381,55 @@ const data = await response.json();
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Professional API Pricing
+              Simple, Unified Pricing
             </h2>
-            <p className="text-gray-600">Simple, transparent pricing per facility</p>
+            <p className="text-gray-600">Everything included. Professional + Gaming APIs together.</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {/* Starter */}
-            <div className="bg-white rounded-xl p-8 border border-gray-200 shadow-sm">
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Starter</h3>
-              <p className="text-3xl font-bold text-gray-900 mb-1">
-                $299<span className="text-base font-normal text-gray-500">/month</span>
+          <div className="max-w-2xl mx-auto bg-white rounded-xl p-8 border-4 border-pro-blue shadow-lg">
+            <div className="text-center mb-6">
+              <div className="inline-block bg-pro-blue text-white px-4 py-1 rounded-full text-sm font-semibold mb-4">
+                EVERYTHING INCLUDED
+              </div>
+              <p className="text-4xl font-bold text-pro-blue mb-2">
+                $299<span className="text-xl text-gray-600">/month</span>
               </p>
-              <p className="text-gray-500 text-sm mb-6">per facility</p>
-              <ul className="space-y-3 text-sm text-gray-600 mb-8">
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-pro-blue" />
-                  25,000 requests/day
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-pro-blue" />
-                  Real-time weather
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-pro-blue" />
-                  Custom conditions
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-pro-blue" />
-                  99.9% uptime SLA
-                </li>
-              </ul>
-              <Link to="/contact" className="btn-pro-outline w-full text-center block">
-                Get Started
+              <p className="text-gray-600">per facility • Volume discounts available</p>
+            </div>
+            <ul className="grid md:grid-cols-2 gap-3 text-sm text-gray-600 mb-8">
+              <li className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-pro-blue" />
+                Tour-accurate physics
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-pro-blue" />
+                Gaming API included
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-pro-blue" />
+                750,000 API calls/month
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-pro-blue" />
+                99.9% uptime SLA
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-pro-blue" />
+                Real-time weather integration
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-pro-blue" />
+                Email + chat support
+              </li>
+            </ul>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link to="/contact" className="btn-pro flex-1 text-center">
+                Get Started - $299/month
+              </Link>
+              <Link to="/pricing" className="btn-pro-outline flex-1 text-center">
+                View Full Pricing
               </Link>
             </div>
-
-            {/* Professional */}
-            <div className="bg-white rounded-xl p-8 border-2 border-pro-blue shadow-lg relative">
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-pro-blue text-white text-xs px-3 py-1 rounded-full">
-                Most Popular
-              </span>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Professional</h3>
-              <p className="text-3xl font-bold text-gray-900 mb-1">
-                $599<span className="text-base font-normal text-gray-500">/month</span>
-              </p>
-              <p className="text-gray-500 text-sm mb-6">per facility</p>
-              <ul className="space-y-3 text-sm text-gray-600 mb-8">
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-pro-blue" />
-                  100,000 requests/day
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-pro-blue" />
-                  Everything in Starter
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-pro-blue" />
-                  Priority support
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-pro-blue" />
-                  Volume discounts available
-                </li>
-              </ul>
-              <Link to="/contact" className="btn-pro w-full text-center block">
-                Get Started
-              </Link>
-            </div>
-
-            {/* Enterprise */}
-            <div className="bg-white rounded-xl p-8 border border-gray-200 shadow-sm">
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Enterprise</h3>
-              <p className="text-3xl font-bold text-gray-900 mb-1">Custom</p>
-              <p className="text-gray-500 text-sm mb-6">tailored to your needs</p>
-              <ul className="space-y-3 text-sm text-gray-600 mb-8">
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-pro-blue" />
-                  Unlimited requests
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-pro-blue" />
-                  Dedicated infrastructure
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-pro-blue" />
-                  99.99% uptime SLA
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-pro-blue" />
-                  Custom integrations
-                </li>
-              </ul>
-              <Link to="/contact" className="btn-pro-outline w-full text-center block">
-                Contact Sales
-              </Link>
-            </div>
-          </div>
-
-          <div className="text-center mt-8">
-            <Link to="/pricing" className="text-pro-blue font-medium hover:underline inline-flex items-center gap-2">
-              View Full Pricing Details <ArrowRight className="w-4 h-4" />
-            </Link>
           </div>
         </div>
       </section>

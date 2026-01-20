@@ -339,47 +339,39 @@ export default function Home() {
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Ready To Enhance The Experience?
             </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              One API. Everything included. Professional physics + Gaming modes.
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {/* Professional CTA */}
-            <div className="bg-white rounded-xl p-8 border-2 border-pro-blue shadow-sm">
-              <div className="flex items-center gap-3 mb-4">
-                <Target className="w-8 h-8 text-pro-blue" />
-                <h3 className="text-xl font-bold text-gray-900">Professional API</h3>
+          <div className="max-w-2xl mx-auto bg-white rounded-xl p-8 border-4 border-golf-green shadow-lg">
+            <div className="text-center mb-6">
+              <div className="inline-block bg-golf-green text-white px-4 py-1 rounded-full text-sm font-semibold mb-4">
+                EVERYTHING INCLUDED
               </div>
-              <p className="text-gray-600 mb-4">Tour-accurate physics for serious improvement</p>
-              <p className="text-2xl font-bold text-gray-900 mb-6">
-                Starting at <span className="text-pro-blue">$299</span>/month per facility
+              <div className="flex items-center justify-center gap-6 mb-4">
+                <div className="flex items-center gap-2">
+                  <Target className="w-6 h-6 text-pro-blue" />
+                  <span className="font-medium">Professional</span>
+                </div>
+                <span className="text-gray-400">+</span>
+                <div className="flex items-center gap-2">
+                  <Gamepad2 className="w-6 h-6 text-gaming-orange" />
+                  <span className="font-medium">Gaming</span>
+                </div>
+              </div>
+              <p className="text-4xl font-bold text-golf-green mb-2">
+                $299<span className="text-xl text-gray-600">/month</span>
               </p>
-              <div className="flex gap-3">
-                <Link to="/professional" className="btn-pro flex-1 text-center text-sm py-2">
-                  Get Started
-                </Link>
-                <Link to="/pricing" className="btn-pro-outline flex-1 text-center text-sm py-2">
-                  View Pricing
-                </Link>
-              </div>
+              <p className="text-gray-600">per facility • Volume discounts available</p>
             </div>
-
-            {/* Gaming CTA */}
-            <div className="bg-white rounded-xl p-8 border-2 border-gaming-orange shadow-sm">
-              <div className="flex items-center gap-3 mb-4">
-                <Gamepad2 className="w-8 h-8 text-gaming-orange" />
-                <h3 className="text-xl font-bold text-gray-900">Gaming API</h3>
-              </div>
-              <p className="text-gray-600 mb-4">Extreme weather for viral moments</p>
-              <p className="text-2xl font-bold text-gray-900 mb-6">
-                Starting at <span className="text-gaming-orange">$1,499</span>/month per venue
-              </p>
-              <div className="flex gap-3">
-                <Link to="/gaming" className="btn-gaming flex-1 text-center text-sm py-2">
-                  Get Started
-                </Link>
-                <Link to="/gaming#modes" className="btn-gaming-outline flex-1 text-center text-sm py-2">
-                  View Game Modes
-                </Link>
-              </div>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link to="/contact" className="btn-primary flex-1 text-center py-3">
+                Get Started
+              </Link>
+              <Link to="/pricing" className="btn-outline flex-1 text-center py-3">
+                View Pricing
+              </Link>
             </div>
           </div>
 
