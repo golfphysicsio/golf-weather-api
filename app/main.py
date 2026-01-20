@@ -15,6 +15,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
+from fastapi.openapi.docs import get_swagger_ui_html, get_redoc_html
 import sentry_sdk
 
 from app.config import settings
@@ -73,8 +74,8 @@ async def lifespan(app: FastAPI):
     await close_db()
 
 
-# Always show docs - linked in website navigation
-show_docs = True
+# Docs are served explicitly via custom routes (before catch-all)
+# Set to None here to avoid conflicts with our explicit /docs route
 
 # OpenAPI servers configuration - use production URL for customer-facing docs
 openapi_servers = [
@@ -94,8 +95,8 @@ app = FastAPI(
         "and impact breakdown."
     ),
     version=settings.VERSION,
-    docs_url="/docs" if show_docs else None,
-    redoc_url="/redoc" if show_docs else None,
+    docs_url=None,  # Served explicitly via /docs route
+    redoc_url=None,  # Served explicitly via /redoc route
     lifespan=lifespan,
     servers=openapi_servers,
 )
@@ -296,6 +297,27 @@ if CLIENT_DOCS_PATH.exists():
         if docs_file.exists():
             return FileResponse(docs_file, media_type="text/html")
         return {"error": "Documentation not found"}
+
+
+# ==================== SWAGGER UI ROUTES ====================
+# Explicit routes to ensure they're not caught by the catch-all
+
+@app.get("/docs", include_in_schema=False)
+async def swagger_ui_html():
+    """Serve Swagger UI for API documentation."""
+    return get_swagger_ui_html(
+        openapi_url="/openapi.json",
+        title=f"{app.title} - Swagger UI",
+        swagger_ui_parameters={"defaultModelsExpandDepth": -1}
+    )
+
+@app.get("/redoc", include_in_schema=False)
+async def redoc_html():
+    """Serve ReDoc for API documentation."""
+    return get_redoc_html(
+        openapi_url="/openapi.json",
+        title=f"{app.title} - ReDoc"
+    )
 
 
 # ==================== WEBSITE CATCH-ALL ====================
