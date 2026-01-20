@@ -71,7 +71,7 @@ export default function About() {
               validated against professional-grade launch monitors.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link to="/science" className="btn-secondary">
+              <Link to="/science" className="bg-white text-golf-green px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
                 See the Science
               </Link>
               <Link to="/contact" className="text-white font-medium hover:underline flex items-center gap-2">

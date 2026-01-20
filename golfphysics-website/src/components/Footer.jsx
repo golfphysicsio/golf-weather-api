@@ -20,16 +20,13 @@ export default function Footer() {
       { label: 'Privacy Policy', path: '/privacy' },
       { label: 'Terms of Service', path: '/terms' },
     ],
-    connect: [
-      { label: 'Email', href: 'mailto:hello@golfphysics.io', external: true },
-    ],
   }
 
   return (
     <footer className="bg-gray-900 text-gray-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Top section */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-4">
@@ -95,25 +92,6 @@ export default function Footer() {
                   >
                     {link.label}
                   </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Connect */}
-          <div>
-            <h3 className="text-sm font-semibold text-white mb-4">Connect</h3>
-            <ul className="space-y-2">
-              {footerLinks.connect.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm hover:text-white transition-colors"
-                  >
-                    {link.label}
-                  </a>
                 </li>
               ))}
             </ul>
