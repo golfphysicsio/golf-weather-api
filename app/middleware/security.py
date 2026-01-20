@@ -45,10 +45,10 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         csp_connect_src = build_csp_connect_src()
         response.headers["Content-Security-Policy"] = (
             "default-src 'self'; "
-            "script-src 'self' 'unsafe-inline' https://accounts.google.com https://cdn.tailwindcss.com; "
-            "style-src 'self' 'unsafe-inline' https://accounts.google.com; "
+            "script-src 'self' 'unsafe-inline' https://accounts.google.com https://cdn.tailwindcss.com https://cdn.jsdelivr.net; "
+            "style-src 'self' 'unsafe-inline' https://accounts.google.com https://cdn.jsdelivr.net https://fonts.googleapis.com; "
             "img-src 'self' data: https:; "
-            "font-src 'self'; "
+            "font-src 'self' https://fonts.gstatic.com; "
             f"connect-src {csp_connect_src}; "
             "frame-src https://accounts.google.com; "
             "frame-ancestors 'none';"
