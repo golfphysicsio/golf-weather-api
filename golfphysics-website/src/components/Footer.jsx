@@ -13,7 +13,6 @@ export default function Footer() {
     resources: [
       { label: 'Documentation', path: '/docs' },
       { label: 'Science', path: '/science' },
-      { label: 'SDKs', path: '/docs#sdks' },
     ],
     company: [
       { label: 'About', path: '/about' },

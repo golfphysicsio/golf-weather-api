@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Copy, Check, Zap, Shield, Code, Book, BarChart3, Gamepad2, Target, Building2 } from 'lucide-react'
+import { Copy, Check, Zap, Shield, Code, BarChart3, Gamepad2, Target, Building2 } from 'lucide-react'
 
 export default function Docs() {
   const [activeSection, setActiveSection] = useState('quickstart')
@@ -19,7 +19,6 @@ export default function Docs() {
     { id: 'enterprise-metadata', label: 'Enterprise Metadata', icon: Building2, category: 'professional' },
     { id: 'gaming-presets', label: 'Gaming Presets', icon: Gamepad2, category: 'gaming' },
     { id: 'game-modes', label: 'Game Modes', icon: Gamepad2, category: 'gaming' },
-    { id: 'sdks', label: 'SDKs', icon: Book },
     { id: 'errors', label: 'Error Handling', icon: BarChart3 },
   ]
 
@@ -41,16 +40,16 @@ export default function Docs() {
   )
 
   const gameModes = [
-    { name: 'hurricane_hero', wind: '40-60 mph tailwind', temp: '75°F', description: 'Maximum distance mode' },
-    { name: 'arctic_assault', wind: '20-30 mph headwind', temp: '-10°F', description: 'Frozen conditions' },
-    { name: 'desert_inferno', wind: '15 mph crosswind', temp: '115°F', description: 'Extreme heat' },
-    { name: 'monsoon_madness', wind: '35 mph variable', temp: '85°F', humidity: '95%', description: 'Storm conditions' },
-    { name: 'mountain_challenge', wind: '10 mph', altitude: '8,500 ft', description: 'Thin air golf' },
-    { name: 'maximum_tailwind', wind: '80 mph tailwind', temp: '85°F', description: 'Record-breaking distances' },
-    { name: 'hurricane_apocalypse', wind: '100+ mph tailwind', temp: '85°F', description: 'Category 5 winds' },
-    { name: 'everest_challenge', wind: '25 mph', altitude: '14,000 ft', description: 'Extreme altitude' },
-    { name: 'crosswind_chaos', wind: '50 mph crosswind', temp: '70°F', description: 'Lateral control test' },
-    { name: 'death_valley_heat', wind: '5 mph', temp: '130°F', description: 'Maximum heat' },
+    { name: 'calm_day', wind: '3 mph', temp: '72°F', description: 'Perfect baseline conditions' },
+    { name: 'hurricane_hero', wind: '65 mph tailwind', temp: '78°F', humidity: '95%', description: 'Category 3 hurricane' },
+    { name: 'arctic_assault', wind: '30 mph headwind', temp: '-15°F', description: 'Polar conditions' },
+    { name: 'desert_inferno', wind: '20 mph crosswind', temp: '115°F', altitude: '3,500 ft', description: 'Scorching heat' },
+    { name: 'sweet_spot_tailwind', wind: '35 mph tailwind', temp: '75°F', description: 'Optimal distance boost' },
+    { name: 'monsoon_madness', wind: '45 mph variable', temp: '85°F', humidity: '98%', description: 'Tropical storm' },
+    { name: 'mountain_challenge', wind: '15 mph tailwind', temp: '58°F', altitude: '8,500 ft', description: 'High altitude thin air' },
+    { name: 'polar_vortex', wind: '40 mph headwind', temp: '-25°F', description: 'Extreme Arctic cold' },
+    { name: 'dust_bowl', wind: '25 mph crosswind', temp: '95°F', altitude: '2,200 ft', description: 'Hot dry plains' },
+    { name: 'wind_surfer', wind: '150 mph tailwind', temp: '85°F', description: 'Surf the hurricane!' },
   ]
 
   return (
@@ -641,95 +640,6 @@ const response = await fetch('https://api.golfphysics.io/v1/trajectory', {
     handicap: 18
   })
 });`}
-                />
-              </div>
-            )}
-
-            {/* SDKs */}
-            {activeSection === 'sdks' && (
-              <div className="prose max-w-none">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">SDKs & Client Libraries</h2>
-                <p className="text-gray-600 mb-6">Official SDKs for popular platforms.</p>
-
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">JavaScript / TypeScript</h3>
-                <CodeBlock
-                  id="sdk-js-install"
-                  code={`npm install @golfphysics/sdk`}
-                />
-                <CodeBlock
-                  id="sdk-js-usage"
-                  code={`import { GolfPhysicsClient } from '@golfphysics/sdk';
-
-const client = new GolfPhysicsClient({
-  apiKey: process.env.GOLF_PHYSICS_API_KEY
-});
-
-// Professional API: Custom conditions
-const proResult = await client.trajectory({
-  shot: {
-    ball_speed_mph: 150,
-    launch_angle_deg: 12,
-    spin_rate_rpm: 2500
-  },
-  conditions: {
-    temperature_f: 72,
-    wind_speed_mph: 10
-  }
-});
-
-// Gaming API: Use presets
-const gameResult = await client.trajectory({
-  shot: {
-    ball_speed_mph: 165,
-    launch_angle_deg: 11,
-    spin_rate_rpm: 2200
-  },
-  preset: 'hurricane_hero',
-  handicap: 15
-});
-
-console.log(\`Pro carry: \${proResult.adjusted.carry.yards} yards\`);
-console.log(\`Game carry: \${gameResult.adjusted.carry.yards} yards\`);`}
-                />
-
-                <h3 className="text-lg font-semibold text-gray-900 mt-8 mb-3">Python</h3>
-                <CodeBlock
-                  id="sdk-py-install"
-                  code={`pip install golf-physics`}
-                />
-                <CodeBlock
-                  id="sdk-py-usage"
-                  code={`from golf_physics import GolfPhysicsClient
-import os
-
-client = GolfPhysicsClient(api_key=os.environ['GOLF_PHYSICS_API_KEY'])
-
-# Professional API
-pro_result = client.trajectory(
-    shot={
-        'ball_speed_mph': 150,
-        'launch_angle_deg': 12,
-        'spin_rate_rpm': 2500
-    },
-    conditions={
-        'temperature_f': 72,
-        'wind_speed_mph': 10
-    }
-)
-
-# Gaming API
-game_result = client.trajectory(
-    shot={
-        'ball_speed_mph': 165,
-        'launch_angle_deg': 11,
-        'spin_rate_rpm': 2200
-    },
-    preset='hurricane_hero',
-    handicap=15
-)
-
-print(f"Pro carry: {pro_result['adjusted']['carry']['yards']} yards")
-print(f"Game carry: {game_result['adjusted']['carry']['yards']} yards")`}
                 />
               </div>
             )}
