@@ -20,8 +20,10 @@ BALL_DIAMETER_M = 0.04267  # 1.68 inches
 BALL_RADIUS_M = BALL_DIAMETER_M / 2
 BALL_AREA_M2 = math.pi * BALL_RADIUS_M**2
 
-# Standard conditions for baseline
-STANDARD_AIR_DENSITY = 1.225  # kg/m³ at sea level, 59°F (15°C)
+# Standard conditions for baseline (70°F, 50% RH, 29.92 inHg, sea level)
+# Calculated using ideal gas law with humid air correction
+# This matches our reference conditions used in test data and documentation
+STANDARD_AIR_DENSITY = 1.194  # kg/m³ at sea level, 70°F (21.1°C), 50% RH
 
 # Conversion factors
 MPH_TO_MPS = 0.44704

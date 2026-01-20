@@ -1,0 +1,101 @@
+shot_id,handicap_category,handicap,club,ball_speed_mph,launch_angle_deg,spin_rate_rpm,spin_axis_deg,baseline_carry_yards,temperature_f,humidity_pct,wind_speed_mph,wind_direction_deg,altitude_ft,air_pressure_inhg,weather_adjusted_carry_yards,adjustment_yards,notes
+1,low,2,driver,171,10.5,2450,-2,289,70,50,0,0,0,29.92,289,0,Baseline - ideal conditions (70F sea level no wind)
+2,low,4,driver,168,11.2,2600,1,282,70,50,10,180,0,29.92,302,20,Pure 10mph tailwind (+7% per TrackMan)
+3,low,3,driver,170,10.8,2500,-1,286,55,40,15,0,0,29.92,232,-54,Cold (-2yd) + 15mph headwind (-19%)
+4,low,5,driver,165,12.0,2700,3,275,95,80,0,0,5000,29.42,292,17,Pure altitude test (+6% at 5000ft)
+5,low,1,driver,175,9.8,2300,-3,295,70,50,20,0,0,29.92,230,-65,Pure 20mph headwind (-22%)
+6,low,6,3-wood,162,11.5,3200,2,253,70,50,0,0,0,29.92,253,0,3-wood baseline - ideal conditions
+7,low,4,3-wood,160,12.0,3400,-1,248,40,30,10,0,0,30.15,208,-40,Cold (-4yd) + 10mph headwind (-10%)
+8,low,2,3-wood,164,11.0,3100,0,258,90,70,5,180,1000,29.82,275,17,Warm (+3) + tailwind (+3.5%) + altitude (+1.2%)
+9,low,5,5-iron,142,14.5,5200,1,195,70,50,0,0,0,29.92,195,0,5-iron baseline
+10,low,3,5-iron,144,14.0,5000,-2,198,70,50,18,0,0,29.92,155,-43,Pure 18mph headwind (-21.6%)
+11,low,7,5-iron,140,15.0,5400,2,191,100,85,0,0,6000,29.12,205,14,Hot (+4) + high altitude (+7.2%)
+12,low,4,7-iron,132,16.5,6800,-1,172,70,50,0,0,0,29.92,172,0,7-iron baseline
+13,low,2,7-iron,135,16.0,6500,1,177,70,50,10,180,0,29.92,189,12,Pure 10mph tailwind (+7%)
+14,low,6,7-iron,130,17.0,7000,0,168,45,35,8,0,0,30.10,147,-21,Cold (-4yd) + 8mph headwind (-8%)
+15,low,3,9-iron,112,22.0,8500,2,142,70,50,0,0,0,29.92,142,0,9-iron baseline
+16,low,5,9-iron,115,21.5,8200,-1,147,90,75,10,180,2500,29.65,164,17,Warm (+2) + tailwind (+7%) + altitude (+3%)
+17,low,4,PW,102,26.0,9800,0,128,70,50,0,0,0,29.92,128,0,PW baseline
+18,low,2,PW,105,25.5,9500,1,133,55,40,15,0,0,29.95,105,-28,Cold (-2) + 15mph headwind (-19%)
+19,mid,12,driver,158,12.5,2900,4,258,70,50,0,0,0,29.92,258,0,Mid-handicap driver baseline
+20,mid,14,driver,155,13.0,3100,-3,250,70,50,8,180,0,29.92,264,14,Pure 8mph tailwind (+5.6%)
+21,mid,10,driver,162,11.8,2750,2,268,70,50,12,0,0,29.92,236,-32,Pure 12mph headwind (-12%)
+22,mid,16,driver,150,14.0,3300,5,238,95,80,0,0,4000,29.52,254,16,Hot + humidity + altitude (+4.8% alt + ~2% temp)
+23,mid,11,driver,160,12.2,2850,-2,263,50,35,20,0,0,30.05,200,-63,Cold (-3) + 20mph headwind (-22%)
+24,mid,15,driver,152,13.5,3200,0,243,85,70,15,180,0,29.85,271,28,Warm (+2) + 15mph tailwind (+10%)
+25,mid,13,3-wood,152,12.5,3600,3,235,70,50,0,0,0,29.92,235,0,Mid-handicap 3-wood baseline
+26,mid,18,3-wood,145,14.0,4000,-2,218,70,50,10,90,500,29.88,219,1,Pure crosswind - minimal carry effect
+27,mid,10,3-wood,156,12.0,3450,1,243,60,45,7,0,0,29.92,226,-17,Cool (-1) + 7mph headwind (-7%)
+28,mid,14,5-iron,132,16.0,5800,2,175,70,50,0,0,0,29.92,175,0,Mid-handicap 5-iron baseline
+29,mid,12,5-iron,135,15.5,5600,-1,180,90,75,5,180,3000,29.70,197,17,Warm (+3) + tailwind (+3.5%) + altitude (+3.6%)
+30,mid,16,5-iron,128,17.0,6200,3,167,45,30,14,0,0,30.12,131,-36,Cold (-4) + 14mph headwind (-14%)
+31,mid,11,7-iron,122,18.0,7400,0,155,70,50,0,0,0,29.92,155,0,Mid-handicap 7-iron baseline
+32,mid,15,7-iron,118,19.0,7800,-2,148,85,65,8,180,0,29.88,159,11,Warm (+2) + 8mph tailwind (+5.6%)
+33,mid,13,7-iron,125,17.5,7200,1,160,55,40,12,0,0,29.98,138,-22,Cool (-2) + 12mph headwind (-12%)
+34,mid,17,9-iron,105,24.0,9200,2,130,70,50,0,0,0,29.92,130,0,Mid-handicap 9-iron baseline
+35,mid,10,9-iron,110,23.0,8800,-1,138,100,85,10,180,5500,29.22,163,25,Hot (+4) + tailwind (+7%) + altitude (+6.6%)
+36,mid,14,9-iron,102,25.0,9500,0,126,40,25,18,0,0,30.18,92,-34,Very cold (-5) + 18mph headwind (-21.6%)
+37,mid,12,PW,95,28.0,10200,1,118,70,50,0,0,0,29.92,118,0,Mid-handicap PW baseline
+38,mid,16,PW,90,29.5,10800,-2,110,80,60,6,180,1500,29.78,120,10,Warm (+1) + tailwind (+4.2%) + altitude (+1.8%)
+39,mid,18,PW,88,30.0,11000,3,106,60,50,10,0,0,29.90,94,-12,Cool (-1) + 10mph headwind (-10%)
+40,high,22,driver,145,14.5,3500,6,225,70,50,0,0,0,29.92,225,0,High-handicap driver baseline
+41,high,28,driver,138,16.0,3800,-5,208,70,50,5,180,0,29.92,215,7,Pure 5mph tailwind (+3.5%)
+42,high,20,driver,148,14.0,3400,4,232,90,80,10,0,0,29.85,212,-20,Warm but 10mph headwind (-10% + temp offset)
+43,high,25,driver,140,15.5,3700,7,212,55,40,15,180,0,30.00,223,11,Cold (-3) but 15mph tailwind (+10%)
+44,high,32,driver,132,17.0,4000,-8,195,100,90,0,0,6500,29.05,213,18,Hot (+4) + high altitude (+7.8%)
+45,high,24,driver,142,15.0,3600,5,218,70,50,20,0,0,29.92,170,-48,Pure 20mph headwind (-22%)
+46,high,30,driver,135,16.5,3900,0,200,85,70,12,180,2000,29.72,224,24,Warm (+3) + tailwind (+8.4%) + altitude (+2.4%)
+47,high,21,3-wood,142,14.0,4200,4,210,70,50,0,0,0,29.92,210,0,High-handicap 3-wood baseline
+48,high,26,3-wood,135,15.5,4600,-3,195,80,65,7,180,0,29.88,207,12,Warm (+2) + 7mph tailwind (+4.9%)
+49,high,23,3-wood,138,14.5,4400,2,202,50,35,10,0,0,30.05,177,-25,Cold (-3) + 10mph headwind (-10%)
+50,high,29,3-wood,130,16.0,4800,5,185,95,85,0,0,4500,29.48,198,13,Hot (+3) + altitude (+5.4%)
+51,high,20,5-iron,125,17.5,6200,3,162,70,50,0,0,0,29.92,162,0,High-handicap 5-iron baseline
+52,high,27,5-iron,118,19.0,6800,-2,148,85,70,8,180,1000,29.82,163,15,Warm (+2) + tailwind (+5.6%) + altitude (+1.2%)
+53,high,24,5-iron,122,18.0,6500,4,155,45,30,12,0,0,30.10,131,-24,Cold (-4) + 12mph headwind (-12%)
+54,high,31,5-iron,115,20.0,7200,0,142,100,90,15,180,5000,29.30,168,26,Hot (+4) + tailwind (+10%) + altitude (+6%)
+55,high,22,7-iron,115,20.0,8000,2,145,70,50,0,0,0,29.92,145,0,High-handicap 7-iron baseline
+56,high,28,7-iron,108,22.0,8600,-3,132,70,50,10,180,0,29.90,141,9,Pure 10mph tailwind (+7%)
+57,high,25,7-iron,112,21.0,8300,1,138,55,40,8,0,0,29.98,125,-13,Cool (-2) + 8mph headwind (-8%)
+58,high,33,7-iron,105,23.0,9000,4,125,95,85,0,0,3500,29.58,135,10,Hot (+3) + altitude (+4.2%)
+59,high,21,9-iron,98,26.0,9800,2,120,70,50,0,0,0,29.92,120,0,High-handicap 9-iron baseline
+60,high,26,9-iron,92,28.0,10400,-1,110,70,50,6,180,0,29.88,115,5,Pure 6mph tailwind (+4.2%)
+61,high,30,9-iron,95,27.0,10100,3,115,40,25,15,0,0,30.15,88,-27,Very cold (-4) + 15mph headwind (-19%)
+62,high,23,PW,88,30.0,10800,1,108,70,50,0,0,0,29.92,108,0,High-handicap PW baseline
+63,high,27,PW,82,32.0,11500,-2,98,90,80,8,180,2500,29.68,111,13,Warm (+2) + tailwind (+5.6%) + altitude (+3%)
+64,high,35,PW,78,33.0,12000,4,92,60,45,10,0,0,29.90,82,-10,Cool (-1) + 10mph headwind (-10%)
+65,low,3,driver,172,10.2,2400,-1,292,72,52,6,225,1500,29.78,282,-10,Quartering headwind (cos 45 = 0.71 so ~4.3mph effective)
+66,low,5,driver,166,11.5,2650,2,277,68,48,14,15,0,29.92,237,-40,Mostly headwind (cos 15 = 0.97 so ~13.5mph effective)
+67,low,4,5-iron,143,14.2,5100,0,196,78,58,4,180,800,29.85,205,9,Mild warm (+1) + tailwind (+2.8%) + altitude (+1%)
+68,low,6,7-iron,131,16.8,6900,-2,170,92,78,9,210,3200,29.62,180,10,Warm (+3) + mostly tailwind + altitude (+3.8%)
+69,low,2,9-iron,114,21.8,8300,1,145,58,42,11,330,0,29.95,137,-8,Cool (-2) + quartering headwind (~8mph effective = -6)
+70,mid,11,driver,161,12.0,2800,3,266,72,52,3,180,200,29.90,275,9,Near ideal + light tailwind (+2.1%) + slight altitude
+71,mid,15,driver,153,13.2,3150,-4,245,88,72,16,0,0,29.82,188,-57,Warm (+2) but strong 16mph headwind (-16%)
+72,mid,13,3-wood,154,12.3,3500,1,240,62,46,9,270,0,29.94,240,0,Cool (-1) + pure crosswind (no carry effect)
+73,mid,17,5-iron,130,16.5,6000,2,170,96,82,7,180,4200,29.50,192,22,Hot (+4) + tailwind (+4.9%) + altitude (+5%)
+74,mid,10,7-iron,126,17.2,7100,-1,162,52,38,5,45,0,30.02,153,-9,Cold (-3) + quartering headwind (~3.5mph = -3.5%)
+75,mid,14,9-iron,108,23.5,9000,0,135,76,58,13,180,1800,29.75,155,20,Warm (+1) + tailwind (+9.1%) + altitude (+2.2%)
+76,mid,16,PW,92,28.5,10500,2,114,42,28,8,0,0,30.12,99,-15,Cold (-4) + 8mph headwind (-8%)
+77,high,24,driver,143,15.2,3550,5,220,84,68,11,180,0,29.86,240,20,Warm (+2) + 11mph tailwind (+7.7%)
+78,high,28,driver,136,16.2,3850,-6,205,48,32,7,0,0,30.08,185,-20,Cold (-3) + 7mph headwind (-7%)
+79,high,22,3-wood,140,14.2,4300,3,205,98,88,0,0,5800,29.18,222,17,Hot (+4) + high altitude (+7%)
+80,high,30,5-iron,120,18.5,6600,2,152,66,52,10,0,0,29.92,137,-15,10mph headwind (-10%)
+81,high,25,7-iron,110,21.5,8400,-2,135,88,72,6,180,2200,29.70,149,14,Warm (+3) + tailwind (+4.2%) + altitude (+2.6%)
+82,high,32,9-iron,94,27.5,10200,3,112,54,42,12,45,0,29.96,98,-14,Cool (-2) + quartering headwind (~8.5mph = -8.5%)
+83,low,1,driver,178,9.5,2250,-2,302,70,50,25,0,0,29.92,218,-84,Elite swing - 25mph headwind (-28%)
+84,low,3,driver,173,10.0,2350,0,295,105,90,0,0,7000,28.95,328,33,Very hot (+5) + extreme altitude (+8.4%)
+85,low,2,3-wood,166,11.2,3050,-1,262,35,25,5,180,0,30.20,262,0,Very cold (-5) offset by 5mph tailwind (+3.5%)
+86,mid,12,driver,159,12.4,2880,2,260,70,50,0,0,3000,29.68,269,9,Pure altitude test (+3.6%)
+87,mid,14,5-iron,134,15.8,5700,-1,178,70,50,25,180,0,29.92,200,22,Strong 25mph tailwind (+12.5% capped at diminishing returns)
+88,mid,18,7-iron,120,18.5,7600,3,152,102,92,0,0,4800,29.42,166,14,Very hot (+5) + altitude (+5.8%)
+89,high,26,driver,137,16.3,3820,4,207,70,50,0,0,0,29.92,207,0,High-handicap retest baseline
+90,high,20,5-iron,124,17.8,6300,-2,158,82,68,12,210,1200,29.80,156,-2,Mixed: warm (+2) + mostly tailwind offset by some head component
+91,low,4,driver,167,11.0,2580,1,280,62,44,8,315,0,29.95,264,-16,Cool (-1) + quartering headwind (~5.7mph = -5.7%)
+92,low,6,7-iron,129,17.2,7100,0,166,88,74,10,180,2800,29.65,185,19,Warm (+3) + tailwind (+7%) + altitude (+3.4%)
+93,mid,13,driver,157,12.8,2950,-3,255,78,62,6,0,0,29.88,241,-14,Warm (+1) but 6mph headwind (-6%)
+94,mid,11,3-wood,155,12.2,3450,2,242,56,40,14,180,0,29.98,259,17,Cool (-2) but strong 14mph tailwind (+9.8%)
+95,mid,15,9-iron,106,24.2,9100,-1,132,94,82,0,0,3800,29.55,144,12,Hot (+4) + altitude (+4.6%)
+96,high,23,driver,144,14.8,3480,6,222,70,50,18,180,0,29.92,248,26,Strong 18mph tailwind (+11.6%)
+97,high,29,3-wood,132,15.8,4700,-4,188,46,34,6,0,0,30.06,170,-18,Cold (-4) + 6mph headwind (-6%)
+98,high,27,7-iron,109,21.8,8500,2,133,86,70,8,180,1600,29.78,147,14,Warm (+2) + tailwind (+5.6%) + altitude (+1.9%)
+99,high,34,9-iron,90,28.5,10600,0,105,72,54,5,45,0,29.90,101,-4,Near neutral - slight quartering headwind (~3.5mph)
+100,low,5,driver,164,11.8,2720,-1,273,70,50,10,180,0,29.92,292,19,Control - pure 10mph tailwind (+7%)
