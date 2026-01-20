@@ -20,6 +20,7 @@ PUBLIC_PATHS = [
     "/openapi.json",
     "/api/v1/health",
     "/api/v1/admin",
+    "/api/v1/consumer",              # Consumer API (public, no API key required)
     "/admin-api",    # Admin dashboard API (uses Google OAuth)
     "/admin",        # Admin dashboard static files
     "/assets",       # Website static assets (JS, CSS)
