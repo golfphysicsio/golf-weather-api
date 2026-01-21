@@ -57,7 +57,20 @@
       "Bash(railway environment:*)",
       "Bash(railway service list:*)",
       "Bash(bash:*)",
-      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\Users\\\\Vtorr\\\\OneDrive\\\\GolfWeatherAPI\\\\audit\\\\check_production.ps1\")"
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\Users\\\\Vtorr\\\\OneDrive\\\\GolfWeatherAPI\\\\audit\\\\check_production.ps1\")",
+      "Bash(railway link:*)",
+      "Bash(railway deployments:*)",
+      "Bash(railway deployment:*)",
+      "Bash(gh run list:*)",
+      "Bash(railway logs:*)",
+      "Bash(railway up)",
+      "Bash(railway service:*)",
+      "Bash(railway list:*)",
+      "Bash(railway help:*)",
+      "Bash(railway up:*)",
+      "WebFetch(domain:railway.com)",
+      "WebFetch(domain:api.golfphysics.io)",
+      "WebFetch(domain:www.golfphysics.io)"
     ]
   }
 }
