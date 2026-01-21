@@ -112,7 +112,7 @@ export default function Privacy() {
               <li>Data portability</li>
             </ul>
             <p className="text-gray-600 mb-4">
-              To exercise these rights, contact us at <a href="mailto:privacy@golfphysics.io" className="text-golf-green hover:underline">privacy@golfphysics.io</a>.
+              To exercise these rights, contact us at <a href="mailto:golfphysicsio@gmail.com" className="text-golf-green hover:underline">golfphysicsio@gmail.com</a>.
             </p>
 
             <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">8. Cookies</h2>
@@ -144,8 +144,8 @@ export default function Privacy() {
               If you have questions about this Privacy Policy, please contact us at:
             </p>
             <ul className="list-none text-gray-600 mb-4 space-y-1">
-              <li>Email: <a href="mailto:privacy@golfphysics.io" className="text-golf-green hover:underline">privacy@golfphysics.io</a></li>
-              <li>Website: <Link to="/contact" className="text-golf-green hover:underline">golfphysics.io/contact</Link></li>
+              <li>Email: <a href="mailto:golfphysicsio@gmail.com" className="text-golf-green hover:underline">golfphysicsio@gmail.com</a></li>
+              <li>Website: <Link to="/contact#message" className="text-golf-green hover:underline">golfphysics.io/contact</Link></li>
             </ul>
 
           </div>

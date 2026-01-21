@@ -1,10 +1,11 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { Mail, MessageSquare, Handshake, Send, CheckCircle, Target, Gamepad2 } from 'lucide-react'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 
 export default function Contact() {
   const { executeRecaptcha } = useGoogleReCaptcha()
+  const location = useLocation()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -18,6 +19,13 @@ export default function Contact() {
   const [submitted, setSubmitted] = useState(false)
   const [formType, setFormType] = useState('apikey') // 'contact' or 'apikey'
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Handle hash-based tab switching (e.g., /contact#message)
+  useEffect(() => {
+    if (location.hash === '#message') {
+      setFormType('contact')
+    }
+  }, [location.hash])
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -189,7 +197,7 @@ export default function Contact() {
       </section>
 
       {/* Form Tabs */}
-      <section className="py-12 bg-gray-50">
+      <section id="message" className="py-12 bg-gray-50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Tab Buttons */}
           <div className="flex border-b border-gray-200 mb-8">

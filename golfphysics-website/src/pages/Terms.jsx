@@ -248,7 +248,7 @@ export default function Terms() {
             <p className="text-gray-600 mb-4">You may terminate your account at any time by:</p>
             <ul className="list-disc pl-6 text-gray-600 mb-4 space-y-2">
               <li>Canceling your subscription through the dashboard</li>
-              <li>Sending written notice to support@golfphysics.io</li>
+              <li>Sending written notice to golfphysicsio@gmail.com</li>
             </ul>
             <p className="text-gray-600 mb-4">Termination is effective at the end of your current billing period. No refunds for partial months.</p>
 
@@ -423,7 +423,7 @@ export default function Terms() {
 
             <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">11.1 Informal Resolution</h3>
             <p className="text-gray-600 mb-4">
-              Before filing any formal claim, you agree to contact us at legal@golfphysics.io and attempt to resolve the dispute informally. We will attempt to resolve the dispute through good faith negotiations within 30 days.
+              Before filing any formal claim, you agree to contact us at golfphysicsio@gmail.com and attempt to resolve the dispute informally. We will attempt to resolve the dispute through good faith negotiations within 30 days.
             </p>
 
             <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">11.2 Binding Arbitration</h3>
@@ -474,7 +474,7 @@ export default function Terms() {
 
             <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">11.6 Opt-Out Right</h3>
             <p className="text-gray-600 mb-4">
-              You may opt out of this arbitration agreement by sending written notice to legal@golfphysics.io within 30 days of first accepting these Terms. Your notice must include:
+              You may opt out of this arbitration agreement by sending written notice to golfphysicsio@gmail.com within 30 days of first accepting these Terms. Your notice must include:
             </p>
             <ul className="list-disc pl-6 text-gray-600 mb-4 space-y-2">
               <li>Your name and email address</li>
@@ -524,14 +524,14 @@ export default function Terms() {
             <div className="bg-gray-50 p-4 rounded-lg mb-4">
               <p className="text-gray-700">Golf Physics LLC</p>
               <p className="text-gray-700">Legal Department</p>
-              <p className="text-gray-700">Email: <a href="mailto:legal@golfphysics.io" className="text-golf-green hover:underline">legal@golfphysics.io</a></p>
+              <p className="text-gray-700">Email: <a href="mailto:golfphysicsio@gmail.com" className="text-golf-green hover:underline">golfphysicsio@gmail.com</a></p>
             </div>
 
             <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">13.2 Customer Support</h3>
             <p className="text-gray-600 mb-4">For support inquiries:</p>
             <ul className="list-none text-gray-600 mb-4 space-y-1">
-              <li>Email: <a href="mailto:support@golfphysics.io" className="text-golf-green hover:underline">support@golfphysics.io</a></li>
-              <li>Website: <Link to="/contact" className="text-golf-green hover:underline">golfphysics.io/contact</Link></li>
+              <li>Email: <a href="mailto:golfphysicsio@gmail.com" className="text-golf-green hover:underline">golfphysicsio@gmail.com</a></li>
+              <li>Website: <Link to="/contact#message" className="text-golf-green hover:underline">golfphysics.io/contact</Link></li>
             </ul>
 
             <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">13.3 Notices to You</h3>
